@@ -1,0 +1,34 @@
+{
+  "name": "aquas-app",
+  "version": "1.0.0",
+  "description": "an aquaponic automation and monitoring system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/github.com/anandaPamungkas.git"
+  },
+  "keywords": [
+    "iot",
+    "aquaponic",
+    "arduino",
+    "mqtt"
+  ],
+  "author": "ananda",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/github.com/anandaPamungkas/issues"
+  },
+  "homepage": "https://github.com/github.com/anandaPamungkas#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chart.js": "^2.9.4",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "mqtt": "^4.2.4",
+    "mysql": "^2.18.1",
+    "socket.io": "^2.3.0"
+  }
+}

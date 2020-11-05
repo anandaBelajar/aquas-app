@@ -1,0 +1,112 @@
+<%- include('partials/header') %>
+    <div class="container" class="my-auto">
+        <div class="card  my-3">
+            <div class="card-header text-center text-white bg-warning">
+                <strong>Intensitas Cahaya</strong>
+            </div>
+            <div class="card-body text-secondary">
+                <div class="d-flex justify-content-center current-data">
+                    <p>Intensitas cahaya saat ini :</p>
+                    <strong>
+                         <!--current light  sensor value-->
+                        <p id="aquas_light_current_value" style="margin: 0 0.3rem;" class="text-warning"></p>
+                    </strong>
+                    <p>lux</p>
+                    <p style="margin: 0 0.3rem 0 1rem;">Waktu saat ini :</p>
+                    <strong>
+                     <!--current time -->
+                        <p id="aquas_light_current_time" class="text-warning"></p>
+                    </strong>
+                </div>
+                <div class="chart-conatiner mx-auto">
+                    <!--chart holder-->
+                    <canvas id="aquas_light_chart"></canvas>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <a href="/light/detail" class="btn btn-primary">Detail Cahaya</a>
+                </div>
+            </div>
+        </div>
+        <div class="card  my-3">
+            <div class="card-header text-center text-white" style="background-color: #FFA07A;">
+                <strong>Persediaan Pakan</strong>
+            </div>
+            <div class="card-body text-secondary">
+                <div class="d-flex justify-content-center current-data">
+                    <p>Presediaan pakan saat ini :</p>
+                    <strong>
+                <!--current soil moisture sensor value-->
+                    <p id="aquas_feed_current_value" style="margin: 0 0.3rem;color:#FFA07A;"></p>
+                    </strong>
+                    <p>%</p>
+                    <p style="margin: 0 0.3rem 0 1rem;">wakktu saat ini :</p>
+                    <strong>
+                    <!--current time -->
+                        <p id="aquas_feed_current_time" style="color:#FFA07A;"></p>
+                    </strong>
+                </div>
+                <div class="chart-conatiner mx-auto">
+                    <!--chart holder-->
+                    <canvas id="aquas_feed_chart"></canvas>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <a href="/moisture/detail" class="btn btn-primary">Detail Cahaya</a>
+                </div>
+            </div>
+        </div>
+        <div class="card  my-3">
+            <div class="card-header text-center text-white" style="background-color: #FFA07A;">
+                <strong>Suhu Air</strong>
+            </div>
+            <div class="card-body text-secondary">
+                <div class="d-flex justify-content-center current-data">
+                    <p>Suhu Air saat ini :</p>
+                    <strong>
+                <!--current soil moisture sensor value-->
+                    <p id="aquas_temp_current_value" style="margin: 0 0.3rem;color:#FFA07A;"></p>
+                    </strong>
+                    <p>%</p>
+                    <p style="margin: 0 0.3rem 0 1rem;">Waktu saat ini :</p>
+                    <strong>
+                    <!--current time -->
+                        <p id="aquas_temp_current_time" style="color:#FFA07A;"></p>
+                    </strong>
+                </div>
+                <div class="chart-conatiner mx-auto">
+                    <!--chart holder-->
+                    <canvas id="aquas_temp_chart"></canvas>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <a href="/moisture/detail" class="btn btn-primary">Detail Suhu</a>
+                </div>
+            </div>
+        </div>
+        <div class="card  my-3">
+            <div class="card-header text-center text-white" style="background-color: #FFA07A;">
+                <strong>pH Air</strong>
+            </div>
+            <div class="card-body text-secondary">
+                <div class="d-flex justify-content-center current-data">
+                    <p>pH Air saat ini :</p>
+                    <strong>
+                <!--current soil moisture sensor value-->
+                    <p id="aquas_ph_current_value" style="margin: 0 0.3rem;color:#FFA07A;"></p>
+                    </strong>
+                    <p>%</p>
+                    <p style="margin: 0 0.3rem 0 1rem;">Waktu saat ini :</p>
+                    <strong>
+                    <!--current time -->
+                        <p id="aquas_ph_current_time" style="color:#FFA07A;"></p>
+                    </strong>
+                </div>
+                <div class="chart-conatiner mx-auto">
+                    <!--chart holder-->
+                    <canvas id="aquas_ph_chart"></canvas>
+                </div>
+                <div class="d-flex justify-content-center">
+                    <a href="/moisture/detail" class="btn btn-primary">Detail pH</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('partials/footer') %>
