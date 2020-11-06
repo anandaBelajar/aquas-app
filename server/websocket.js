@@ -46,21 +46,10 @@ module.exports = function(server, con) { //exports the function
         var dbDateTime = year + "-" + month + "-" + day + "- " + hour + ":" + minutes + ":" + seconds; //date time to save in database
 
         if (topic == 'aquas/feed') {
-            if (minutes % 60 == 0 && seconds == 0) {
-                //save the sensor value to database every 60 minutes
-                var sql = "INSERT INTO `light` (`value`, `date`) VALUES (";
-                sql += "'" + message.toString() + "',";
-                sql += "'" + dbDateTime + "')";
-                con.query(sql, function(err, result) {
-                    if (err) throw err;
-                });
-            }
             var feed = [message.toString(), time]; //save sensor value from mqtt message and current time 
             io.sockets.emit('aquas_feed_msg_arrive', feed); //send sensor value and current time to frontend websocket
         } else
         if (topic == 'aquas/light') {
-
-
             if (minutes % 60 == 0 && seconds == 0) {
                 //save the sensor value to database every 60 minutes
                 var sql = "INSERT INTO `data_cahaya` (`data`) VALUES (";
@@ -70,7 +59,6 @@ module.exports = function(server, con) { //exports the function
 
                 });
             }
-
             var light = [message.toString(), time]; //save sensor value from mqtt message and current time 
             io.sockets.emit('aquas_light_msg_arrive', light); //send sensor value and current time to frontend websocket
 

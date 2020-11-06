@@ -1,582 +1,298 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <!-- Meta, title, CSS, favicons, etc. -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="images/favicon.ico" type="image/ico" />
-
-    <title>Aquaponic Automation System</title>
-
-    <!-- Bootstrap -->
-    <link href="/public/gentelella/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link href="/public/gentelella/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <!-- NProgress -->
-    <link href="/public/gentelella/vendors/nprogress/nprogress.css" rel="stylesheet">
-    <!-- iCheck -->
-    <link href="/public/gentelella/vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-
-    <!-- bootstrap-progressbar -->
-    <link href="/public/gentelella/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
-    <!-- JQVMap -->
-    <link href="/public/gentelella/vendors/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
-    <!-- bootstrap-daterangepicker -->
-    <link href="/public/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-
-    <!-- Custom Theme Style -->
-    <link href="/public/gentelella/build/css/custom.min.css" rel="stylesheet">
-
-    <!--Ajax socket.io-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
-    <!--Aquas Main Script-->
-    <script src="/public/assets/js/main.js"></script>
-</head>
-
-<body class="nav-md">
+<%- include('partials/header') %>
     <div class="container body">
         <div class="main_container">
             <div class="col-md-3 left_col">
-                <div class="left_col scroll-view">
-                    <div class="navbar nav_title" style="border: 0;">
-                        <a href="index.html" class="site_title"><i class="fa fa-paw"></i> <span>AQUAS</span></a>
+                <%- include('partials/sidebar-menu') %>
+            </div>
+
+            <%- include('partials/top-navigation') %>
+
+                <!-- page content -->
+                <div class="right_col" role="main">
+                    <!-- top tiles -->
+                    <div class="row" style="display: inline-block;">
+                        <div class="tile_count">
+                            <div class="col-md-2 col-sm-4  tile_stats_count">
+                                <span class="count_top"><i class="fa fa-user"></i> Total Users</span>
+                                <div class="count">2500</div>
+                                <span class="count_bottom"><i class="green">4% </i> From last Week</span>
+                            </div>
+                            <div class="col-md-2 col-sm-4  tile_stats_count">
+                                <span class="count_top"><i class="fa fa-clock-o"></i> Average Time</span>
+                                <div class="count">123.50</div>
+                                <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span>
+                            </div>
+                            <div class="col-md-2 col-sm-4  tile_stats_count">
+                                <span class="count_top"><i class="fa fa-user"></i> Total Males</span>
+                                <div class="count green">2,500</div>
+                                <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
+                            </div>
+                            <div class="col-md-2 col-sm-4  tile_stats_count">
+                                <span class="count_top"><i class="fa fa-user"></i> Total Females</span>
+                                <div class="count">4,567</div>
+                                <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span>
+                            </div>
+                            <div class="col-md-2 col-sm-4  tile_stats_count">
+                                <span class="count_top"><i class="fa fa-user"></i> Total Collections</span>
+                                <div class="count">2,315</div>
+                                <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
+                            </div>
+                            <div class="col-md-2 col-sm-4  tile_stats_count">
+                                <span class="count_top"><i class="fa fa-user"></i> Total Connections</span>
+                                <div class="count">7,325</div>
+                                <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="clearfix"></div>
+                    <!-- /top tiles -->
+                    <!--Start Feed Chart-->
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 ">
+                            <div class="dashboard_graph">
 
-                    <!-- menu profile quick info -->
-                    <div class="profile clearfix">
-                        <div class="profile_pic">
-                            <img src="/public/gentelella/production/images/img.jpg" alt="..." class="img-circle profile_img">
+                                <div class="row x_title">
+                                    <div class="col-md-6">
+                                        <h3>Sisa Pakan</h3>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-9 col-sm-9 ">
+                                    <div class="progress">
+                                        <div id="aquas_feed_bar" class="progress-bar" role="progressbar" style="width: 75%;" aria-valuenow="75">75%</div>
+                                    </div>
+                                    <!--<div id="chart_plot_01" class="demo-placeholder"></div>-->
+                                </div>
+                                <div class="col-md-3 col-sm-3  bg-white">
+                                    <div class="x_title">
+                                        <h2>Top Campaign Performance</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 ">
+                                        <div>
+                                            <p>Facebook Campaign</p>
+                                            <div class="">
+                                                <div class="progress progress_sm" style="width: 76%;">
+                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="80"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
                         </div>
-                        <div class="profile_info">
-                            <span>Welcome,</span>
-                            <h2>John Doe</h2>
-                        </div>
+
                     </div>
-                    <!-- /menu profile quick info -->
-
+                    <!--End Feed Chart-->
                     <br />
 
-                    <!-- sidebar menu -->
-                    <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-                        <div class="menu_section">
-                            <h3>General</h3>
-                            <ul class="nav side-menu">
-                                <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="index.html">Dashboard</a></li>
-                                        <li><a href="index2.html">Dashboard2</a></li>
-                                        <li><a href="index3.html">Dashboard3</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="form.html">General Form</a></li>
-                                        <li><a href="form_advanced.html">Advanced Components</a></li>
-                                        <li><a href="form_validation.html">Form Validation</a></li>
-                                        <li><a href="form_wizards.html">Form Wizard</a></li>
-                                        <li><a href="form_upload.html">Form Upload</a></li>
-                                        <li><a href="form_buttons.html">Form Buttons</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-desktop"></i> UI Elements <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="general_elements.html">General Elements</a></li>
-                                        <li><a href="media_gallery.html">Media Gallery</a></li>
-                                        <li><a href="typography.html">Typography</a></li>
-                                        <li><a href="icons.html">Icons</a></li>
-                                        <li><a href="glyphicons.html">Glyphicons</a></li>
-                                        <li><a href="widgets.html">Widgets</a></li>
-                                        <li><a href="invoice.html">Invoice</a></li>
-                                        <li><a href="inbox.html">Inbox</a></li>
-                                        <li><a href="calendar.html">Calendar</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-table"></i> Tables <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="tables.html">Tables</a></li>
-                                        <li><a href="tables_dynamic.html">Table Dynamic</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-bar-chart-o"></i> Data Presentation <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="chartjs.html">Chart JS</a></li>
-                                        <li><a href="chartjs2.html">Chart JS2</a></li>
-                                        <li><a href="morisjs.html">Moris JS</a></li>
-                                        <li><a href="echarts.html">ECharts</a></li>
-                                        <li><a href="other_charts.html">Other Charts</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-clone"></i>Layouts <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="fixed_sidebar.html">Fixed Sidebar</a></li>
-                                        <li><a href="fixed_footer.html">Fixed Footer</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="menu_section">
-                            <h3>Live On</h3>
-                            <ul class="nav side-menu">
-                                <li><a><i class="fa fa-bug"></i> Additional Pages <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="e_commerce.html">E-commerce</a></li>
-                                        <li><a href="projects.html">Projects</a></li>
-                                        <li><a href="project_detail.html">Project Detail</a></li>
-                                        <li><a href="contacts.html">Contacts</a></li>
-                                        <li><a href="profile.html">Profile</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-windows"></i> Extras <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="page_403.html">403 Error</a></li>
-                                        <li><a href="page_404.html">404 Error</a></li>
-                                        <li><a href="page_500.html">500 Error</a></li>
-                                        <li><a href="plain_page.html">Plain Page</a></li>
-                                        <li><a href="login.html">Login Page</a></li>
-                                        <li><a href="pricing_tables.html">Pricing Tables</a></li>
-                                    </ul>
-                                </li>
-                                <li><a><i class="fa fa-sitemap"></i> Multilevel Menu <span class="fa fa-chevron-down"></span></a>
-                                    <ul class="nav child_menu">
-                                        <li><a href="#level1_1">Level One</a>
-                                            <li><a>Level One<span class="fa fa-chevron-down"></span></a>
-                                                <ul class="nav child_menu">
-                                                    <li class="sub_menu"><a href="level2.html">Level Two</a>
-                                                    </li>
-                                                    <li><a href="#level2_1">Level Two</a>
-                                                    </li>
-                                                    <li><a href="#level2_2">Level Two</a>
-                                                    </li>
-                                                </ul>
-                                            </li>
-                                            <li><a href="#level1_2">Level One</a>
-                                            </li>
-                                    </ul>
-                                    </li>
-                                    <li><a href="javascript:void(0)"><i class="fa fa-laptop"></i> Landing Page <span class="label label-success pull-right">Coming Soon</span></a></li>
-                            </ul>
+                    <!-- /top tiles -->
+                    <!--Start Light Chart-->
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 ">
+                            <div class="dashboard_graph">
+
+                                <div class="row x_title">
+                                    <div class="col-md-6">
+                                        <h3>Intensitas Cahaya</h3>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-9 col-sm-9 ">
+                                    <canvas id="aquas_light_chart"></canvas>
+                                    <!--<div id="chart_plot_01" class="demo-placeholder"></div>-->
+                                </div>
+                                <div class="col-md-3 col-sm-3  bg-white">
+                                    <div class="x_title">
+                                        <h2>Top Campaign Performance</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 ">
+                                        <div>
+                                            <p>Facebook Campaign</p>
+                                            <div class="">
+                                                <div class="progress progress_sm" style="width: 76%;">
+                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="80"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p>Twitter Campaign</p>
+                                            <div class="">
+                                                <div class="progress progress_sm" style="width: 76%;">
+                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 ">
+                                        <div>
+                                            <p>Conventional Media</p>
+                                            <div class="">
+                                                <div class="progress progress_sm" style="width: 76%;">
+                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="40"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p>Bill boards</p>
+                                            <div class="">
+                                                <div class="progress progress_sm" style="width: 76%;">
+                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
                         </div>
 
                     </div>
-                    <!-- /sidebar menu -->
+                    <!--End Light Chart-->
+                    <br />
 
-                    <!-- /menu footer buttons -->
-                    <div class="sidebar-footer hidden-small">
-                        <a data-toggle="tooltip" data-placement="top" title="Settings">
-                            <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-                        </a>
-                        <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                            <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-                        </a>
-                        <a data-toggle="tooltip" data-placement="top" title="Lock">
-                            <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-                        </a>
-                        <a data-toggle="tooltip" data-placement="top" title="Logout" href="login.html">
-                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-                        </a>
+                    <!--Start Temp Chart-->
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 ">
+                            <div class="dashboard_graph">
+
+                                <div class="row x_title">
+                                    <div class="col-md-6">
+                                        <h3>Suhu Air</h3>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-9 col-sm-9 ">
+                                    <canvas id="aquas_temp_chart"></canvas>
+                                </div>
+                                <div class="col-md-3 col-sm-3  bg-white">
+                                    <div class="x_title">
+                                        <h2>Top Campaign Performance</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 ">
+                                        <div>
+                                            <p>Facebook Campaign</p>
+                                            <div class="">
+                                                <div class="progress progress_sm" style="width: 76%;">
+                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="80"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p>Twitter Campaign</p>
+                                            <div class="">
+                                                <div class="progress progress_sm" style="width: 76%;">
+                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 ">
+                                        <div>
+                                            <p>Conventional Media</p>
+                                            <div class="">
+                                                <div class="progress progress_sm" style="width: 76%;">
+                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="40"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p>Bill boards</p>
+                                            <div class="">
+                                                <div class="progress progress_sm" style="width: 76%;">
+                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+
                     </div>
-                    <!-- /menu footer buttons -->
-                </div>
-            </div>
+                    <!--End Temp Chart-->
+                    <br />
 
-            <!-- top navigation -->
-            <div class="top_nav">
-                <div class="nav_menu">
-                    <div class="nav toggle">
-                        <a id="menu_toggle"><i class="fa fa-bars"></i></a>
+                    <!--Start pH Chart-->
+                    <div class="row">
+                        <div class="col-md-12 col-sm-12 ">
+                            <div class="dashboard_graph">
+
+                                <div class="row x_title">
+                                    <div class="col-md-6">
+                                        <h3>Derajat pH Air</h3>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-9 col-sm-9 ">
+                                    <canvas id="aquas_ph_chart"></canvas>
+                                </div>
+                                <div class="col-md-3 col-sm-3  bg-white">
+                                    <div class="x_title">
+                                        <h2>Top Campaign Performance</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 ">
+                                        <div>
+                                            <p>Facebook Campaign</p>
+                                            <div class="">
+                                                <div class="progress progress_sm" style="width: 76%;">
+                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="80"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p>Twitter Campaign</p>
+                                            <div class="">
+                                                <div class="progress progress_sm" style="width: 76%;">
+                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 ">
+                                        <div>
+                                            <p>Conventional Media</p>
+                                            <div class="">
+                                                <div class="progress progress_sm" style="width: 76%;">
+                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="40"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <p>Bill boards</p>
+                                            <div class="">
+                                                <div class="progress progress_sm" style="width: 76%;">
+                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+
                     </div>
-                    <nav class="nav navbar-nav">
-                        <ul class=" navbar-right">
-                            <li class="nav-item dropdown open" style="padding-left: 15px;">
-                                <a href="javascript:;" class="user-profile dropdown-toggle" aria-haspopup="true" id="navbarDropdown" data-toggle="dropdown" aria-expanded="false">
-                                    <img src="/public/gentelella/production/images/img.jpg" alt="">John Doe
-                                </a>
-                                <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="javascript:;"> Profile</a>
-                                    <a class="dropdown-item" href="javascript:;">
-                                        <span class="badge bg-red pull-right">50%</span>
-                                        <span>Settings</span>
-                                    </a>
-                                    <a class="dropdown-item" href="javascript:;">Help</a>
-                                    <a class="dropdown-item" href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a>
-                                </div>
-                            </li>
-
-                            <li role="presentation" class="nav-item dropdown open">
-                                <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1" data-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa fa-envelope-o"></i>
-                                    <span class="badge bg-green">6</span>
-                                </a>
-                                <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledby="navbarDropdown1">
-                                    <li class="nav-item">
-                                        <a class="dropdown-item">
-                                            <span class="image"><img src="/public/gentelella/production/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                          <span>John Smith</span>
-                                            <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item">
-                                            <span class="image"><img src="/public/gentelella/production/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                          <span>John Smith</span>
-                                            <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item">
-                                            <span class="image"><img src="/public/gentelella/production/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                          <span>John Smith</span>
-                                            <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="dropdown-item">
-                                            <span class="image"><img src="/public/gentelella/production/images/img.jpg" alt="Profile Image" /></span>
-                                            <span>
-                          <span>John Smith</span>
-                                            <span class="time">3 mins ago</span>
-                                            </span>
-                                            <span class="message">
-                          Film festivals used to be do-or-die moments for movie makers. They were where...
-                        </span>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <div class="text-center">
-                                            <a class="dropdown-item">
-                                                <strong>See All Alerts</strong>
-                                                <i class="fa fa-angle-right"></i>
-                                            </a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </nav>
+                    <!--End pH Chart-->
+                    <br />
                 </div>
-            </div>
-            <!-- /top navigation -->
+                <!-- /page content -->
 
-            <!-- page content -->
-            <div class="right_col" role="main">
-                <!-- top tiles -->
-                <div class="row" style="display: inline-block;">
-                    <div class="tile_count">
-                        <div class="col-md-2 col-sm-4  tile_stats_count">
-                            <span class="count_top"><i class="fa fa-user"></i> Total Users</span>
-                            <div class="count">2500</div>
-                            <span class="count_bottom"><i class="green">4% </i> From last Week</span>
-                        </div>
-                        <div class="col-md-2 col-sm-4  tile_stats_count">
-                            <span class="count_top"><i class="fa fa-clock-o"></i> Average Time</span>
-                            <div class="count">123.50</div>
-                            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>3% </i> From last Week</span>
-                        </div>
-                        <div class="col-md-2 col-sm-4  tile_stats_count">
-                            <span class="count_top"><i class="fa fa-user"></i> Total Males</span>
-                            <div class="count green">2,500</div>
-                            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
-                        </div>
-                        <div class="col-md-2 col-sm-4  tile_stats_count">
-                            <span class="count_top"><i class="fa fa-user"></i> Total Females</span>
-                            <div class="count">4,567</div>
-                            <span class="count_bottom"><i class="red"><i class="fa fa-sort-desc"></i>12% </i> From last Week</span>
-                        </div>
-                        <div class="col-md-2 col-sm-4  tile_stats_count">
-                            <span class="count_top"><i class="fa fa-user"></i> Total Collections</span>
-                            <div class="count">2,315</div>
-                            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
-                        </div>
-                        <div class="col-md-2 col-sm-4  tile_stats_count">
-                            <span class="count_top"><i class="fa fa-user"></i> Total Connections</span>
-                            <div class="count">7,325</div>
-                            <span class="count_bottom"><i class="green"><i class="fa fa-sort-asc"></i>34% </i> From last Week</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- /top tiles -->
-                <!--Start Light Chart-->
-                <div class="row">
-                    <div class="col-md-12 col-sm-12 ">
-                        <div class="dashboard_graph">
-
-                            <div class="row x_title">
-                                <div class="col-md-6">
-                                    <h3>Intensitas Cahaya</h3>
-                                </div>
-                            </div>
-
-                            <div class="col-md-9 col-sm-9 ">
-                                <canvas id="aquas_light_chart"></canvas>
-                                <!--<div id="chart_plot_01" class="demo-placeholder"></div>-->
-                            </div>
-                            <div class="col-md-3 col-sm-3  bg-white">
-                                <div class="x_title">
-                                    <h2>Top Campaign Performance</h2>
-                                    <div class="clearfix"></div>
-                                </div>
-
-                                <div class="col-md-12 col-sm-12 ">
-                                    <div>
-                                        <p>Facebook Campaign</p>
-                                        <div class="">
-                                            <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="80"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p>Twitter Campaign</p>
-                                        <div class="">
-                                            <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-sm-12 ">
-                                    <div>
-                                        <p>Conventional Media</p>
-                                        <div class="">
-                                            <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="40"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p>Bill boards</p>
-                                        <div class="">
-                                            <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-
-                </div>
-                <!--End Light Chart-->
-                <br />
-
-                <!--Start Temp Chart-->
-                <div class="row">
-                    <div class="col-md-12 col-sm-12 ">
-                        <div class="dashboard_graph">
-
-                            <div class="row x_title">
-                                <div class="col-md-6">
-                                    <h3>Suhu Air</h3>
-                                </div>
-                            </div>
-
-                            <div class="col-md-9 col-sm-9 ">
-                                <canvas id="aquas_temp_chart"></canvas>
-                            </div>
-                            <div class="col-md-3 col-sm-3  bg-white">
-                                <div class="x_title">
-                                    <h2>Top Campaign Performance</h2>
-                                    <div class="clearfix"></div>
-                                </div>
-
-                                <div class="col-md-12 col-sm-12 ">
-                                    <div>
-                                        <p>Facebook Campaign</p>
-                                        <div class="">
-                                            <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="80"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p>Twitter Campaign</p>
-                                        <div class="">
-                                            <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-sm-12 ">
-                                    <div>
-                                        <p>Conventional Media</p>
-                                        <div class="">
-                                            <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="40"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p>Bill boards</p>
-                                        <div class="">
-                                            <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-
-                </div>
-                <!--End Temp Chart-->
-                <br />
-
-                <!--Start pH Chart-->
-                <div class="row">
-                    <div class="col-md-12 col-sm-12 ">
-                        <div class="dashboard_graph">
-
-                            <div class="row x_title">
-                                <div class="col-md-6">
-                                    <h3>Derajat pH Air</h3>
-                                </div>
-                            </div>
-
-                            <div class="col-md-9 col-sm-9 ">
-                                <canvas id="aquas_ph_chart"></canvas>
-                            </div>
-                            <div class="col-md-3 col-sm-3  bg-white">
-                                <div class="x_title">
-                                    <h2>Top Campaign Performance</h2>
-                                    <div class="clearfix"></div>
-                                </div>
-
-                                <div class="col-md-12 col-sm-12 ">
-                                    <div>
-                                        <p>Facebook Campaign</p>
-                                        <div class="">
-                                            <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="80"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p>Twitter Campaign</p>
-                                        <div class="">
-                                            <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-sm-12 ">
-                                    <div>
-                                        <p>Conventional Media</p>
-                                        <div class="">
-                                            <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="40"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <p>Bill boards</p>
-                                        <div class="">
-                                            <div class="progress progress_sm" style="width: 76%;">
-                                                <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="clearfix"></div>
-                        </div>
-                    </div>
-
-                </div>
-                <!--End pH Chart-->
-                <br />
-            </div>
-            <!-- /page content -->
-
-            <!-- footer content -->
-            <footer>
-                <div class="pull-right">
-                    AQUAS v1.0.0 - Aquaponic Automation System by <a href="https://github.com/anandaPamungkas">Ananda</a>
-                </div>
-                <div class="clearfix"></div>
-            </footer>
-            <!-- /footer content -->
-        </div>
-    </div>
-
-    <!-- jQuery -->
-    <script src="/public/gentelella/vendors/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap -->
-    <script src="/public/gentelella/vendors/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- FastClick -->
-    <script src="/public/gentelella/vendors/fastclick/lib/fastclick.js"></script>
-    <!-- NProgress -->
-    <script src="/public/gentelella/vendors/nprogress/nprogress.js"></script>
-    <!-- Gantella Chart.js -->
-    <!--<script src="/public/gentelella/vendors/Chart.js/dist/Chart.min.js"></script>-->
-    <!-- gauge.js -->
-    <script src="/public/gentelella/vendors/gauge.js/dist/gauge.min.js"></script>
-    <!-- bootstrap-progressbar -->
-    <script src="/public/gentelella/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
-    <!-- iCheck -->
-    <script src="/public/gentelella/vendors/iCheck/icheck.min.js"></script>
-    <!-- Skycons -->
-    <script src="/public/gentelella/vendors/skycons/skycons.js"></script>
-    <!-- Flot -->
-    <script src="/public/gentelella/vendors/Flot/jquery.flot.js"></script>
-    <script src="/public/gentelella/vendors/Flot/jquery.flot.pie.js"></script>
-    <script src="/public/gentelella/vendors/Flot/jquery.flot.time.js"></script>
-    <script src="/public/gentelella/vendors/Flot/jquery.flot.stack.js"></script>
-    <script src="/public/gentelella/vendors/Flot/jquery.flot.resize.js"></script>
-    <!-- Flot plugins -->
-    <script src="/public/gentelella/vendors/flot.orderbars/js/jquery.flot.orderBars.js"></script>
-    <script src="/public/gentelella/vendors/flot-spline/js/jquery.flot.spline.min.js"></script>
-    <script src="/public/gentelella/vendors/flot.curvedlines/curvedLines.js"></script>
-    <!-- DateJS -->
-    <script src="/public/gentelella/vendors/DateJS/build/date.js"></script>
-    <!-- JQVMap -->
-    <script src="/public/gentelella/vendors/jqvmap/dist/jquery.vmap.js"></script>
-    <script src="/public/gentelella/vendors/jqvmap/dist/maps/jquery.vmap.world.js"></script>
-    <script src="/public/gentelella/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
-    <!-- bootstrap-daterangepicker -->
-    <script src="/public/gentelella/vendors/moment/min/moment.min.js"></script>
-    <script src="/public/gentelella/vendors/bootstrap-daterangepicker/daterangepicker.js"></script>
-
-    <!-- Custom Theme Scripts -->
-    <script src="/public/gentelella/build/js/custom.min.js"></script>
-
-    <!--Aquas-->
-    <!--include chartjs library-->
-    <script src="/chartjs"></script>
-    <!--include sensorSocket.js from public folder to configure websocket form client side-->
-    <script src="/public/assets/js/sensor-socket.js"></script>
-</body>
-
-</html>
+                <%- include('partials/footer') %>

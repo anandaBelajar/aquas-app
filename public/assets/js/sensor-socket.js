@@ -14,6 +14,19 @@ var aquas_temp_current_time = document.getElementById('aquas_temp_current_time')
 var aquas_ph_current_value = document.getElementById('aquas_ph_current_value');
 var aquas_ph_current_time = document.getElementById('aquas_ph_current_time');
 
+var aquas_feed_bar = $('#aquas_feed_bar')
+
+console.log(aquas_feed_bar)
+    //Start aquas feed bar
+
+socket.on('aquas_feed_msg_arrive', function(msg) {
+    //get the sensor and time value from backend websocket
+    aquas_feed_bar.css({ "width": msg[0] + "%" }).text(msg[0] + "%").attr("aria-valuenow", msg[0]);
+
+});
+
+//End aquas feed bar
+
 var old_light_value = []; //['1000', '1101', '1130', '1190', '1200']; //emtpy array to hold chart data
 var old_light_label = []; //['08:01:01', '08:01:02', '08:01:03', '08:01:04', '08:01:05']; //empty array to hold chart label
 
