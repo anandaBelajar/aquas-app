@@ -46,6 +46,10 @@
     font-size: 20px;
 }
 
+.aquas-button {
+    border-radius: 5px;
+}
+
 .aquas_feed_bar_wrapper {
     border-radius: 25px;
     height: 45px;

@@ -138,6 +138,16 @@ module.exports = function(server, con) { //exports the function
             client.publish(aquas_servo_topic, 'manual'); //publish the messsage
         });
         //End servo socket event
+
+        //Start pump event Socket
+        socket.on('pump_on', function() {
+            client.publish(aquas_pump_topic, 'on'); //publish the messsage
+        });
+
+        socket.on('pump_off', function() {
+            client.publish(aquas_pump_topic, 'off'); //publish the messsage
+        });
+        //End pump event Socket
     });
 
 

@@ -21,7 +21,10 @@ var aquas_light_current_value = $('#aquas_light_current_value'),
     aquas_temp_current_time = $('#aquas_temp_current_time'),
     aquas_ph_current_value = $('#aquas_ph_current_value'),
     aquas_ph_current_time = $('#aquas_ph_current_time'),
-    aquas_feed_bar = $('#aquas_feed_bar')
+    aquas_feed_bar = $('#aquas_feed_bar'),
+    aquas_manual_pump_toggle_container = $('.aquas_manual_pump_toggle_container'),
+    aquas_manual_pump_toggle = $('#aquas_manual_pump_toggle')
+
 
 //Start feed console
 aquas_auto_feed_toggle.change(function() {
@@ -49,6 +52,20 @@ aquas_manual_feed_toggle.change(function() {
 });
 
 //End feed console
+
+//Start pump console
+aquas_manual_pump_toggle.change(function() {
+    // this will contain a reference to the checkbox   
+    if (this.checked) {
+
+        aquas_manual_pump_toggle_container.find('label').text('On')
+        socket.emit('pump_on');
+    } else {
+        aquas_manual_pump_toggle_container.find('label').text('Off')
+        socket.emit('pump_off');
+    }
+});
+//End pump console
 
 //Start light console
 aquas_auto_light_toggle.change(function() {
