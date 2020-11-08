@@ -46,6 +46,19 @@
     font-size: 20px;
 }
 
+.aquas_feed_bar_wrapper {
+    border-radius: 25px;
+    height: 45px;
+}
+
+.pump_icon_wrapper {
+    text-align: center;
+}
+
+.aquas_pump_icon {
+    font-size: 35px;
+}
+
 
 /*Start Light Chart*/
 
