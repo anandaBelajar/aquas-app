@@ -1,10 +1,15 @@
 var express = require('express'); //express package
 var mysql = require('mysql'); //mysql package
+const path = require('path');
 
 var app = express(); //express function
 
 app.set('view engine', 'ejs'); //view engine
-app.set('views', __dirname + './../views');
+//app.set('views', __dirname + './../views');
+
+app.set('views', [path.join(__dirname, './../views'),
+    path.join(__dirname, './../views/single/'),
+]);
 
 var port = process.env.SERVER_PORT //server port
 

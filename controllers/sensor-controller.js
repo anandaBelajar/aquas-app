@@ -19,6 +19,18 @@ module.exports = function(app, con) { //exports the function
         res.render('index-backup'); //render the ejs view for index page
     });
 
+    app.get('/single-feed', function(req, res) {
+        //light detail page route
+        //con.query("SELECT * FROM `light` ORDER BY `date` DESC", function(err, result) {
+        //select all light sensor value and time from the database
+        //if (err) throw err;
+        res.render('single-feed', {
+            //render the ejs view for light detail page
+            //items: result, //send the data from database to the light detail page
+        });
+        //});
+    });
+
     app.get('/light/detail', function(req, res) {
         //light detail page route
         con.query("SELECT * FROM `light` ORDER BY `date` DESC", function(err, result) {
