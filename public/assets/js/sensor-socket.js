@@ -13,23 +13,54 @@ var aquas_light_current_value = $('#aquas_light_current_value'),
     aquas_manual_light_toggle_container = $('.aquas_manual_light_toggle_container'),
     aquas_feed_current_value = $('#aquas_feed_current_value'),
     aquas_feed_current_time = $('#aquas_feed_current_time'),
+    aquas_auto_feed_toggle = $('#aquas_auto_feed_toggle'),
+    aquas_auto_feed_toggle_container = $('.aquas_auto_feed_toggle_container'),
+    aquas_manual_feed_toggle = $('#aquas_manual_feed_toggle'),
+    aquas_manual_feed_toggle_container = $('.aquas_manual_feed_toggle_container'),
     aquas_temp_current_value = $('#aquas_temp_current_value'),
     aquas_temp_current_time = $('#aquas_temp_current_time'),
     aquas_ph_current_value = $('#aquas_ph_current_value'),
     aquas_ph_current_time = $('#aquas_ph_current_time'),
     aquas_feed_bar = $('#aquas_feed_bar')
 
-//Start aquas feed bar
+//Start feed console
+aquas_auto_feed_toggle.change(function() {
+    // this will contain a reference to the checkbox   
+    if (this.checked) {
+        aquas_manual_feed_toggle_container.slideUp();
+        aquas_auto_feed_toggle_container.find('label').text('Auto')
+        socket.emit('servo_auto');
+    } else {
+        aquas_manual_feed_toggle_container.slideDown();
+        aquas_auto_feed_toggle_container.find('label').text('Manual')
+        socket.emit('servo_manual');
+    }
+});
+
+aquas_manual_feed_toggle.change(function() {
+    // this will contain a reference to the checkbox   
+    if (this.checked) {
+        aquas_manual_feed_toggle_container.find('label').text('Buka')
+        socket.emit('servo_open');
+    } else {
+        aquas_manual_feed_toggle_container.find('label').text('Tutup')
+        socket.emit('servo_close');
+    }
+});
+
+//End feed console
+
+//Start light console
 aquas_auto_light_toggle.change(function() {
     // this will contain a reference to the checkbox   
     if (this.checked) {
         aquas_manual_light_toggle_container.slideUp();
         aquas_auto_light_toggle_container.find('label').text('Auto')
-        socket.emit('grow_liight_auto');
+        socket.emit('grow_light_auto');
     } else {
         aquas_manual_light_toggle_container.slideDown();
         aquas_auto_light_toggle_container.find('label').text('Manual')
-        socket.emit('grow_liight_manual');
+        socket.emit('grow_light_manual');
     }
 });
 
@@ -37,13 +68,16 @@ aquas_manual_light_toggle.change(function() {
     // this will contain a reference to the checkbox   
     if (this.checked) {
         aquas_manual_light_toggle_container.find('label').text('On')
-        socket.emit('grow_liight_on');
+        socket.emit('grow_light_on');
     } else {
         aquas_manual_light_toggle_container.find('label').text('Off')
-        socket.emit('grow_liight_off');
+        socket.emit('grow_light_off');
     }
 });
 
+//End light console
+
+//Start aquas feed bar
 socket.on('aquas_feed_msg_arrive', function(msg) {
     //get the sensor and time value from backend websocket
     aquas_feed_bar.css({ "width": msg[0] + "%" }).text(msg[0] + "%").attr("aria-valuenow", msg[0]);
@@ -209,9 +243,9 @@ var temp_chart = new Chart(temp_ctx, { //make the chart
         datasets: [{
             label: 'Suhu dalam celcius', //dataset 1 legenda
             data: old_temp_value,
-            backgroundColor: ['rgba(255, 160, 122, 0.5)'], //chart bacground color
+            backgroundColor: ['rgba(110, 193, 248, 0.5)'], //chart bacground color
             borderColor: [
-                'rgb(126, 46, 31)' //chart borde color
+                'rgb(48, 129, 238)' //chart borde color
             ],
             borderWidth: 1
         }, ]
@@ -329,20 +363,31 @@ socket.on('aquas_ph_msg_arrive', function(msg) {
 
 //End ph chart
 
-socket.on('grow_light_on', function() {
-    connsole.log('grow_light_on')
-})
-
 $(function() {
     // Handler for .ready() called.
+    //Start light console
     if (aquas_auto_light_toggle.prop('checked')) {
         aquas_auto_light_toggle_container.find('label').text('Auto')
         aquas_manual_light_toggle_container.css({ 'display': 'none' })
-        socket.emit('grow_light_auto');
+            //socket.emit('grow_light_auto');
     }
 
     if (aquas_manual_light_toggle.prop('checked')) {
         aquas_manual_light_toggle_container.find('label').text('On')
-        socket.emit('grow_light_on');
+            //socket.emit('grow_light_on');
     }
+    //End light console
+
+    //Start feed console
+    if (aquas_auto_feed_toggle.prop('checked')) {
+        aquas_auto_feed_toggle_container.find('label').text('Auto')
+        aquas_manual_feed_toggle_container.css({ 'display': 'none' })
+            //socket.emit('servo_auto');
+    }
+
+    if (aquas_manual_feed_toggle.prop('checked')) {
+        aquas_manual_feed_toggle_container.find('label').text('Buka')
+            //socket.emit('servo_open');
+    }
+    //End feed console
 });

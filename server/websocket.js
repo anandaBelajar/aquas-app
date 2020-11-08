@@ -103,18 +103,41 @@ module.exports = function(server, con) { //exports the function
     })
 
     io.on('connection', function(socket) {
-        console.log('on connection')
+        //Start light socket event
         socket.on('grow_light_on', function() {
-            //when pumpOn event emitted publih the message
-            console.log('growlight on emitted')
             client.publish(aquas_growlight_topic, 'on'); //publish the messsage
         });
 
         socket.on('grow_light_off', function() {
-            //when pumpOff event emitted publih the message
-            console.log('growlight off emitted')
             client.publish(aquas_growlight_topic, 'off'); //publish the messsage
         });
+
+        socket.on('grow_light_auto', function() {
+            client.publish(aquas_growlight_topic, 'auto'); //publish the messsage
+        });
+
+        socket.on('grow_light_manual', function() {
+            client.publish(aquas_growlight_topic, 'manual'); //publish the messsage
+        });
+        //End light socket event
+
+        //Start servo socket event
+        socket.on('servo_open', function() {
+            client.publish(aquas_servo_topic, 'open'); //publish the messsage
+        });
+
+        socket.on('servo_close', function() {
+            client.publish(aquas_servo_topic, 'close'); //publish the messsage
+        });
+
+        socket.on('servo_auto', function() {
+            client.publish(aquas_servo_topic, 'auto'); //publish the messsage
+        });
+
+        socket.on('servo_manual', function() {
+            client.publish(aquas_servo_topic, 'manual'); //publish the messsage
+        });
+        //End servo socket event
     });
 
 
