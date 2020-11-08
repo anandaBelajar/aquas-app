@@ -47,7 +47,7 @@
 
                     <!-- /top tiles -->
                     <!--Start Feed Chart-->
-                    <div class="row">
+                    <div class="row feed_info_container">
                         <div class="col-md-12 col-sm-12 ">
                             <div class="dashboard_graph">
 
@@ -92,7 +92,7 @@
 
                     <!-- /top tiles -->
                     <!--Start Light Chart-->
-                    <div class="row">
+                    <div class="row light_info_container">
                         <div class="col-md-12 col-sm-12 ">
                             <div class="dashboard_graph">
 
@@ -108,45 +108,38 @@
                                 </div>
                                 <div class="col-md-3 col-sm-3  bg-white">
                                     <div class="x_title">
-                                        <h2>Top Campaign Performance</h2>
+                                        <h2>Intensitas Cahaya Realtime</h2>
                                         <div class="clearfix"></div>
                                     </div>
 
                                     <div class="col-md-12 col-sm-12 ">
                                         <div>
-                                            <p>Facebook Campaign</p>
-                                            <div class="">
-                                                <div class="progress progress_sm" style="width: 76%;">
-                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="80"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <p>Twitter Campaign</p>
-                                            <div class="">
-                                                <div class="progress progress_sm" style="width: 76%;">
-                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
-                                                </div>
+                                            <div class="current_value_wrapper">
+                                                <span id="aquas_light_current_value" class='aquas_current_value'></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-12 col-sm-12 ">
-                                        <div>
-                                            <p>Conventional Media</p>
-                                            <div class="">
-                                                <div class="progress progress_sm" style="width: 76%;">
-                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="40"></div>
-                                                </div>
-                                            </div>
+
+                                        <div class="x_title">
+                                            <h2>Konsol Pencahayaan</h2>
+                                            <div class="clearfix"></div>
                                         </div>
-                                        <div>
-                                            <p>Bill boards</p>
-                                            <div class="">
-                                                <div class="progress progress_sm" style="width: 76%;">
-                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
-                                                </div>
+                                        <div class="aquas_auto_light_toggle_container">
+                                            <div class="custom-control custom-switch custom-switch-md">
+                                                <input type="checkbox" class="custom-control-input" id="aquas_auto_light_toggle">
+                                                <label class="custom-control-label" for="aquas_auto_light_toggle">Manual</label>
                                             </div>
+                                            <p class="control_description">Aktifkan kontrol pencahyaan otomatis</p>
                                         </div>
+                                        <div class="aquas_manual_light_toggle_container">
+                                            <div class="custom-control custom-switch custom-switch-md">
+                                                <input type="checkbox" class="custom-control-input" id="aquas_manual_light_toggle">
+                                                <label class="custom-control-label" for="aquas_manual_light_toggle">Off</label>
+                                            </div>
+                                            <p class="control_description">Hidupkan atau matikan growlight</p>
+                                        </div>
+
                                     </div>
 
                                 </div>
@@ -160,7 +153,7 @@
                     <br />
 
                     <!--Start Temp Chart-->
-                    <div class="row">
+                    <div class="row temp_info_container">
                         <div class="col-md-12 col-sm-12 ">
                             <div class="dashboard_graph">
 
@@ -175,25 +168,14 @@
                                 </div>
                                 <div class="col-md-3 col-sm-3  bg-white">
                                     <div class="x_title">
-                                        <h2>Top Campaign Performance</h2>
+                                        <h2>Suhu Air Realtime</h2>
                                         <div class="clearfix"></div>
                                     </div>
 
                                     <div class="col-md-12 col-sm-12 ">
                                         <div>
-                                            <p>Facebook Campaign</p>
-                                            <div class="">
-                                                <div class="progress progress_sm" style="width: 76%;">
-                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="80"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <p>Twitter Campaign</p>
-                                            <div class="">
-                                                <div class="progress progress_sm" style="width: 76%;">
-                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
-                                                </div>
+                                            <div class="current_value_wrapper">
+                                                <span id="aquas_temp_current_value" class='aquas_current_value'></span>
                                             </div>
                                         </div>
                                     </div>
@@ -206,17 +188,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div>
-                                            <p>Bill boards</p>
-                                            <div class="">
-                                                <div class="progress progress_sm" style="width: 76%;">
-                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                     </div>
 
                                 </div>
+
 
                                 <div class="clearfix"></div>
                             </div>
@@ -227,7 +203,7 @@
                     <br />
 
                     <!--Start pH Chart-->
-                    <div class="row">
+                    <div class="row ph_info_container">
                         <div class="col-md-12 col-sm-12 ">
                             <div class="dashboard_graph">
 
@@ -242,25 +218,14 @@
                                 </div>
                                 <div class="col-md-3 col-sm-3  bg-white">
                                     <div class="x_title">
-                                        <h2>Top Campaign Performance</h2>
+                                        <h2>pH Air Realtime</h2>
                                         <div class="clearfix"></div>
                                     </div>
 
                                     <div class="col-md-12 col-sm-12 ">
                                         <div>
-                                            <p>Facebook Campaign</p>
-                                            <div class="">
-                                                <div class="progress progress_sm" style="width: 76%;">
-                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="80"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <p>Twitter Campaign</p>
-                                            <div class="">
-                                                <div class="progress progress_sm" style="width: 76%;">
-                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="60"></div>
-                                                </div>
+                                            <div class="current_value_wrapper">
+                                                <span id="aquas_ph_current_value" class='aquas_current_value'></span>
                                             </div>
                                         </div>
                                     </div>
@@ -273,17 +238,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div>
-                                            <p>Bill boards</p>
-                                            <div class="">
-                                                <div class="progress progress_sm" style="width: 76%;">
-                                                    <div class="progress-bar bg-green" role="progressbar" data-transitiongoal="50"></div>
-                                                </div>
-                                            </div>
-                                        </div>
+
                                     </div>
 
                                 </div>
+
 
                                 <div class="clearfix"></div>
                             </div>

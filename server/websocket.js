@@ -13,13 +13,15 @@ module.exports = function(server, con) { //exports the function
     var io = socket(server); //pass the server as socket parameter
 
     var topic = [
-        'aquas/feed',
-        'aquas/light',
-        'aquas/temp',
-        'aquas/ph',
-    ]; //mqtt topic
+            'aquas/feed',
+            'aquas/light',
+            'aquas/temp',
+            'aquas/ph',
+        ],
+        aquas_pump_topic = 'aquas/pump',
+        aquas_growlight_topic = 'aquas/growlight',
+        aquas_servo_topic = 'aquas/servo'
 
-    var pubTopic = 'garden/monitor/system/pump';
 
     client.on('connect', function() {
         console.log('connected to a broker...'); //console log whe connection to broker success
@@ -101,14 +103,17 @@ module.exports = function(server, con) { //exports the function
     })
 
     io.on('connection', function(socket) {
-        socket.on('pumpOn', function() {
+        console.log('on connection')
+        socket.on('grow_light_on', function() {
             //when pumpOn event emitted publih the message
-            client.publish(pubTopic, 'on'); //publish the messsage
+            console.log('growlight on emitted')
+            client.publish(aquas_growlight_topic, 'on'); //publish the messsage
         });
 
-        socket.on('pumpOff', function() {
+        socket.on('grow_light_off', function() {
             //when pumpOff event emitted publih the message
-            client.publish(pubTopic, 'off'); //publish the messsage
+            console.log('growlight off emitted')
+            client.publish(aquas_growlight_topic, 'off'); //publish the messsage
         });
     });
 

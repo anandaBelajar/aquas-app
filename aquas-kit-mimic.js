@@ -8,7 +8,7 @@ var topic = [
         //'aquas/temp',
         'aquas/pump',
         'aquas/growlight',
-        'aquas/debug',
+        'aquas/servo',
     ] //set the topic
 
 client.on('connect', function() {

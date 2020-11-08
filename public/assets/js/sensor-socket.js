@@ -5,19 +5,44 @@
 var socket = io.connect("http://localhost:3000"); //Make connection between frontend and backend websocket
 
 //Query DOM
-var aquas_light_current_value = document.getElementById('aquas_light_current_value');
-var aquas_light_current_time = document.getElementById('aquas_light_current_time');
-var aquas_feed_current_value = document.getElementById('aquas_feed_current_value');
-var aquas_feed_current_time = document.getElementById('aquas_feed_current_time');
-var aquas_temp_current_value = document.getElementById('aquas_temp_current_value');
-var aquas_temp_current_time = document.getElementById('aquas_temp_current_time');
-var aquas_ph_current_value = document.getElementById('aquas_ph_current_value');
-var aquas_ph_current_time = document.getElementById('aquas_ph_current_time');
+var aquas_light_current_value = $('#aquas_light_current_value'),
+    aquas_light_current_time = $('#aquas_light_current_time'),
+    aquas_auto_light_toggle = $('#aquas_auto_light_toggle'),
+    aquas_auto_light_toggle_container = $('.aquas_auto_light_toggle_container'),
+    aquas_manual_light_toggle = $('#aquas_manual_light_toggle'),
+    aquas_manual_light_toggle_container = $('.aquas_manual_light_toggle_container'),
+    aquas_feed_current_value = $('#aquas_feed_current_value'),
+    aquas_feed_current_time = $('#aquas_feed_current_time'),
+    aquas_temp_current_value = $('#aquas_temp_current_value'),
+    aquas_temp_current_time = $('#aquas_temp_current_time'),
+    aquas_ph_current_value = $('#aquas_ph_current_value'),
+    aquas_ph_current_time = $('#aquas_ph_current_time'),
+    aquas_feed_bar = $('#aquas_feed_bar')
 
-var aquas_feed_bar = $('#aquas_feed_bar')
+//Start aquas feed bar
+aquas_auto_light_toggle.change(function() {
+    // this will contain a reference to the checkbox   
+    if (this.checked) {
+        aquas_manual_light_toggle_container.slideUp();
+        aquas_auto_light_toggle_container.find('label').text('Auto')
+        socket.emit('grow_liight_auto');
+    } else {
+        aquas_manual_light_toggle_container.slideDown();
+        aquas_auto_light_toggle_container.find('label').text('Manual')
+        socket.emit('grow_liight_manual');
+    }
+});
 
-console.log(aquas_feed_bar)
-    //Start aquas feed bar
+aquas_manual_light_toggle.change(function() {
+    // this will contain a reference to the checkbox   
+    if (this.checked) {
+        aquas_manual_light_toggle_container.find('label').text('On')
+        socket.emit('grow_liight_on');
+    } else {
+        aquas_manual_light_toggle_container.find('label').text('Off')
+        socket.emit('grow_liight_off');
+    }
+});
 
 socket.on('aquas_feed_msg_arrive', function(msg) {
     //get the sensor and time value from backend websocket
@@ -31,8 +56,6 @@ var old_light_value = []; //['1000', '1101', '1130', '1190', '1200']; //emtpy ar
 var old_light_label = []; //['08:01:01', '08:01:02', '08:01:03', '08:01:04', '08:01:05']; //empty array to hold chart label
 
 var light_ctx = document.getElementById('aquas_light_chart').getContext('2d'); //get the chart holder from canvas tag in html
-console.log(light_ctx)
-console.log('............')
 var light_chart = new Chart(light_ctx, { //make the chart
     type: 'line', //chart type
     responsive: true,
@@ -80,7 +103,7 @@ var light_chart_counter = 0; //chart dataset update counter
 socket.on('aquas_light_msg_arrive', function(msg) {
     //get the sensor and time value from backend websocket
     light_chart_add_value(msg); //add value to light chart
-    //aquas_light_current_value.innerHTML = msg[0]; //display current sensor value to inner html
+    aquas_light_current_value.text(msg[0]); //display current sensor value to inner html
     //aquas_light_current_time.innerHTML = msg[1]; //display current time to inner html
     light_chart_counter = light_chart_counter + 1; //add counter every receive the new sensor value
     if (light_chart_counter > 10) {
@@ -226,7 +249,7 @@ socket.on('aquas_temp_msg_arrive', function(msg) {
 
     temp_chart_add_value(msg); //add value to chart
 
-    //aquas_temp_current_value.innerHTML = msg[0]; //display current sensor value to inner html
+    aquas_temp_current_value.text(msg[0]); //display current sensor value to inner html
     //aquas_temp_current_time.innerHTML = msg[1]; //display current time to inner html
 
     temp_chart_counter = temp_chart_counter + 1;
@@ -293,7 +316,7 @@ socket.on('aquas_ph_msg_arrive', function(msg) {
 
     ph_chart_add_value(msg); //add value to chart
 
-    //aquas_ph_current_value.innerHTML = msg[0]; //display current sensor value to inner html
+    aquas_ph_current_value.text(msg[0]); //display current sensor value to inner html
     //aquas_ph_current_time.innerHTML = msg[1]; //display current time to inner html
 
     ph_chart_counter = ph_chart_counter + 1;
@@ -305,3 +328,21 @@ socket.on('aquas_ph_msg_arrive', function(msg) {
 });
 
 //End ph chart
+
+socket.on('grow_light_on', function() {
+    connsole.log('grow_light_on')
+})
+
+$(function() {
+    // Handler for .ready() called.
+    if (aquas_auto_light_toggle.prop('checked')) {
+        aquas_auto_light_toggle_container.find('label').text('Auto')
+        aquas_manual_light_toggle_container.css({ 'display': 'none' })
+        socket.emit('grow_light_auto');
+    }
+
+    if (aquas_manual_light_toggle.prop('checked')) {
+        aquas_manual_light_toggle_container.find('label').text('On')
+        socket.emit('grow_light_on');
+    }
+});
