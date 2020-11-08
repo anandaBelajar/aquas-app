@@ -63,6 +63,11 @@
     font-size: 35px;
 }
 
+.temp_info_container .aquas_button_container,
+.ph_info_container .aquas_button_container {
+    margin-top: 10%;
+}
+
 
 /*Start Light Chart*/
 

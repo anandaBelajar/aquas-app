@@ -382,6 +382,13 @@ socket.on('aquas_ph_msg_arrive', function(msg) {
 
 $(function() {
     // Handler for .ready() called.
+    //Start pump console
+    if (aquas_manual_pump_toggle.prop('checked')) {
+        aquas_manual_pump_toggle_container.find('label').text('On')
+            //socket.emit('grow_light_on');
+    }
+    //End pump console
+
     //Start light console
     if (aquas_auto_light_toggle.prop('checked')) {
         aquas_auto_light_toggle_container.find('label').text('Auto')
