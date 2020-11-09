@@ -27,7 +27,7 @@ var con = mysql.createConnection({
     database: process.env.DB_NAME
 });
 
-var sensor_controller = require('./../controllers/sensor-controller.js'); //sensor controller
+var main_controller = require('./../controllers/main-controller.js'); //sensor controller
 var websocket = require(__dirname + '/websocket.js'); //websocket
 
 //Static files
@@ -35,5 +35,5 @@ app.use(express.static('./../public'));
 app.use('/chartjs', express.static(__dirname + './../node_modules/chart.js/dist/Chart.min.js')); //chartjs library
 app.use('/public', express.static(__dirname + './../public'));
 
-sensor_controller(app, con); //call sensorController
+main_controller(app, con); //call sensorController
 websocket(server, con); //call websocket

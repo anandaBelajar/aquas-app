@@ -1,0 +1,128 @@
+<%- include('partials/header') %>
+    <div class="container body">
+
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <%- include('partials/sidebar-menu') %>
+            </div>
+
+            <%- include('partials/top-navigation') %>
+
+                <!-- page content -->
+                <div class="right_col" role="main">
+                    <!-- top tiles -->
+                    <div class="page-title">
+                        <div class="title_left">
+                            <h3>Detail Pencahayaan</h3>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+
+                    <!-- /top tiles -->
+                    <!--Start Light Chart-->
+                    <div class="row light_info_container">
+                        <div class="col-md-12 col-sm-12 ">
+                            <div class="dashboard_graph">
+
+                                <div class="row x_title">
+                                    <div class="col-md-6">
+                                        <h3>Intensitas Cahaya</h3>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-9 col-sm-9 ">
+                                    <canvas id="aquas_light_chart"></canvas>
+                                    <!--<div id="chart_plot_01" class="demo-placeholder"></div>-->
+                                </div>
+                                <div class="col-md-3 col-sm-3  bg-white">
+                                    <div class="x_title">
+                                        <h2>Intensitas Cahaya Realtime</h2>
+                                        <div class="clearfix"></div>
+                                    </div>
+
+                                    <div class="col-md-12 col-sm-12 ">
+                                        <div>
+                                            <div class="current_value_wrapper">
+                                                <span id="aquas_light_current_value" class='aquas_current_value'></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-sm-12 ">
+
+                                        <div class="x_title">
+                                            <h2>Konsol Pencahayaan</h2>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                        <div class="aquas_auto_light_toggle_container">
+                                            <div class="custom-control custom-switch custom-switch-md">
+                                                <input type="checkbox" class="custom-control-input" id="aquas_auto_light_toggle">
+                                                <label class="custom-control-label" for="aquas_auto_light_toggle">Manual</label>
+                                            </div>
+                                            <p class="control_description">Aktifkan kontrol pencahyaan otomatis</p>
+                                        </div>
+                                        <div class="aquas_manual_light_toggle_container">
+                                            <div class="custom-control custom-switch custom-switch-md">
+                                                <input type="checkbox" class="custom-control-input" id="aquas_manual_light_toggle">
+                                                <label class="custom-control-label" for="aquas_manual_light_toggle">Off</label>
+                                            </div>
+                                            <p class="control_description">Hidupkan atau matikan growlight</p>
+                                        </div>
+                                        <div class="d-flex justify-content-center aquas_button_container">
+                                            <a href="/single-light" id="aquas_light_detail" class="btn btn-primary aquas-button">Detail Pencahayaan</a>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--End Light Chart-->
+                    <br />
+                    <div class="row light_data_table_container">
+                        <div class="col-md-12 col-sm-12 ">
+                            <div class="dashboard_graph">
+
+                                <div class="row x_title">
+                                    <div class="col-md-6">
+                                        <h3>Tabel Data Cahaya</h3>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12 ">
+                                    <% if (items.length > 0) {%>
+                                        <table id="aquas_light_data_table" class="table table-striped table-bordered" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Data</th>
+                                                    <th>Waktu</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% items.forEach((item, index) => { %>
+                                                    <tr>
+                                                        <td>
+                                                            <%= item.data %>
+                                                        </td>
+                                                        <td>
+                                                            <%= item.waktu %>
+                                                        </td>
+                                                    </tr>
+                                                    <% }) %>
+                                            </tbody>
+                                        </table>
+                                        <% } else { %>
+                                            <p class="text-center">No data found</p>
+                                            <% } %>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                    <!-- /top tiles -->
+
+                </div>
+                <!-- /page content -->
+
+                <%- include('partials/footer') %>
