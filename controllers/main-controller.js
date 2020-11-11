@@ -93,12 +93,14 @@ module.exports = function(app, con) { //exports the function
 
     app.get('/admins', function(req, res) {
         //light detail page route
-        con.query("SELECT * FROM `administrator`", function(err, result) {
+        con.query("SELECT `id`, `nama`, `email` FROM `administrator`", function(err, result) {
             //select all light sensor value and time from the database
-            // if (err) throw err;
-            res.render('single-feed', {
+            if (err) throw err;
+            console.log(result)
+            res.render('admin-manage', {
                 //render the ejs view for light detail page
                 items: result, //send the data from database to the light detail page
+
             });
         });
     });

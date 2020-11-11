@@ -32,7 +32,8 @@ var aquas_light_chart = $('#aquas_light_chart'),
     aquas_manual_pump_toggle = $('#aquas_manual_pump_toggle'),
     waktu_pakan_pagi = $('#waktu_pakan_pagi'),
     waktu_pakan_siang = $('#waktu_pakan_siang'),
-    waktu_pakan_sore = $('#waktu_pakan_sore')
+    waktu_pakan_sore = $('#waktu_pakan_sore'),
+    admins_data_table = $('#admins_data_table')
 
 var pakan_pagi_options = {
         //hh:mm 24 hour format only, defaults to current time
@@ -327,6 +328,8 @@ aquas_temp_data_table.DataTable({
 aquas_ph_data_table.DataTable({
     ordering: false
 })
+
+admins_data_table.DataTable()
 
 
 

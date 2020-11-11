@@ -9,6 +9,7 @@ app.set('view engine', 'ejs'); //view engine
 
 app.set('views', [path.join(__dirname, './../views'),
     path.join(__dirname, './../views/single/'),
+    path.join(__dirname, './../views/administrators/'),
 ]);
 
 var port = process.env.SERVER_PORT //server port
