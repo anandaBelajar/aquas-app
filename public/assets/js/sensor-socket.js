@@ -29,7 +29,69 @@ var aquas_light_chart = $('#aquas_light_chart'),
     aquas_ph_data_table = $('#aquas_ph_data_table'),
     aquas_feed_bar = $('#aquas_feed_bar'),
     aquas_manual_pump_toggle_container = $('.aquas_manual_pump_toggle_container'),
-    aquas_manual_pump_toggle = $('#aquas_manual_pump_toggle')
+    aquas_manual_pump_toggle = $('#aquas_manual_pump_toggle'),
+    waktu_pakan_pagi = $('#waktu_pakan_pagi'),
+    waktu_pakan_siang = $('#waktu_pakan_siang'),
+    waktu_pakan_sore = $('#waktu_pakan_sore')
+
+var pakan_pagi_options = {
+        //hh:mm 24 hour format only, defaults to current time
+        twentyFour: true, //Display 24 hour format, defaults to false
+        close: 'wickedpicker__close', //The close class selector to use, for custom CSS
+        title: 'Waktu Pakan Pagi', //The Wickedpicker's title,
+        showSeconds: false, //Whether or not to show seconds,
+    },
+    pakan_siang_options = {
+        //hh:mm 24 hour format only, defaults to current time
+        twentyFour: true, //Display 24 hour format, defaults to false
+        close: 'wickedpicker__close', //The close class selector to use, for custom CSS
+        title: 'Waktu Pakan Siang', //The Wickedpicker's title,
+        showSeconds: false, //Whether or not to show seconds,
+    },
+    pakan_sore_options = {
+        //hh:mm 24 hour format only, defaults to current time
+        twentyFour: true, //Display 24 hour format, defaults to false
+        close: 'wickedpicker__close', //The close class selector to use, for custom CSS
+        title: 'Waktu Pakan Sore', //The Wickedpicker's title,
+        showSeconds: false, //Whether or not to show seconds,
+    }
+
+// console.log('jenis_jadwal_pakan lies here')
+// console.log(waktu_pakan_pagi.val())
+
+waktu_pakan_pagi.wickedpicker({
+    now: waktu_pakan_pagi.data('waktu'),
+    twentyFour: true, //Display 24 hour format, defaults to false
+    title: 'Waktu Pakan Pagi', //The Wickedpicker's title,
+    showSeconds: false, //Whether or not to show seconds,
+});
+waktu_pakan_siang.wickedpicker({
+    now: waktu_pakan_siang.data('waktu'),
+    twentyFour: true, //Display 24 hour format, defaults to false
+    title: 'Waktu Pakan Siang', //The Wickedpicker's title,
+    showSeconds: false, //Whether or not to show seconds,
+});
+waktu_pakan_sore.wickedpicker({
+    now: waktu_pakan_sore.data('waktu'),
+    twentyFour: true, //Display 24 hour format, defaults to false
+    title: 'Waktu Pakan Sore', //The Wickedpicker's title,
+    showSeconds: false, //Whether or not to show seconds,
+});
+
+$('#wa').wickedpicker({
+    now: waktu_pakan_pagi.data('waktu'),
+    twentyFour: true, //Display 24 hour format, defaults to false
+    title: 'Waktu Pakan Sore', //The Wickedpicker's title,
+    showSeconds: false, //Whether or not to show seconds,
+});
+
+$('#wb').wickedpicker({
+    now: waktu_pakan_siang.data('waktu'),
+    twentyFour: true, //Display 24 hour format, defaults to false
+    title: 'Waktu Pakan Sore', //The Wickedpicker's title,
+    showSeconds: false, //Whether or not to show seconds,
+});
+
 
 
 //Start feed console

@@ -66,8 +66,6 @@
                                 <div class="clearfix"></div>
                             </div>
                         </div>
-
-
                     </div>
                     <!--End Feed Chart-->
                     <br />
@@ -83,51 +81,42 @@
                                             </div>
                                         </div>
                                         <div class="x_content">
-                                            <form class="" action="" method="post" novalidate>
+                                            <form action="/single-feed" method="post">
                                                 <p>Tentukan jadwal pemberian pakan ikan pada form ini</p>
-                                                <div class="field item form-group">
-                                                    <label class="col-form-label col-md-3 col-sm-3  label-align">Jenis<span class="required">*</span></label>
-                                                    <div class="col-md-6 col-sm-6">
-                                                        <input class="form-control" data-validate-length-range="6" data-validate-words="2" name="name" placeholder="ex. John f. Kennedy" required="required" />
-                                                    </div>
-                                                </div>
-                                                <div class="field item form-group">
-                                                    <label class="col-form-label col-md-3 col-sm-3  label-align">Waktu<span class="required">*</span></label>
-                                                    <div class="col-md-6 col-sm-6">
-                                                        <input class="form-control" class='time' type="time" name="time" required='required'></div>
-                                                </div>
-
-                                                <div class="field item form-group">
-                                                    <label class="col-form-label col-md-3 col-sm-3  label-align">Jenis<span class="required">*</span></label>
-                                                    <div class="col-md-6 col-sm-6">
-                                                        <input class="form-control" data-validate-length-range="6" data-validate-words="2" name="name" placeholder="ex. John f. Kennedy" required="required" />
-                                                    </div>
-                                                </div>
-                                                <div class="field item form-group">
-                                                    <label class="col-form-label col-md-3 col-sm-3  label-align">Waktu<span class="required">*</span></label>
-                                                    <div class="col-md-6 col-sm-6">
-                                                        <input class="form-control" class='time' type="time" name="time" required='required'></div>
-                                                </div>
-
-                                                <div class="field item form-group">
-                                                    <label class="col-form-label col-md-3 col-sm-3  label-align">Jenis<span class="required">*</span></label>
-                                                    <div class="col-md-6 col-sm-6">
-                                                        <input class="form-control" data-validate-length-range="6" data-validate-words="2" name="name" placeholder="ex. John f. Kennedy" required="required" />
-                                                    </div>
-                                                </div>
-                                                <div class="field item form-group">
-                                                    <label class="col-form-label col-md-3 col-sm-3  label-align">waktu<span class="required">*</span></label>
-                                                    <div class="col-md-6 col-sm-6">
-                                                        <input class="form-control" class='time' type="time" name="time" required='required'></div>
-                                                </div>
-                                                <div class="ln_solid">
-                                                    <div class="form-group">
-                                                        <div class="col-md-6 offset-md-3">
-                                                            <button type='submit' class="btn btn-primary">Submit</button>
-                                                            <button type='reset' class="btn btn-success">Reset</button>
+                                                <% if (items.length > 0) {%>
+                                                    <% items.forEach((item, index) => { %>
+                                                        <div class="field item form-group">
+                                                            <label class="col-form-label col-md-3 col-sm-3  label-align">Waktu Pakan <%= item.jenis %><span class="required">*</span></label>
+                                                            <div class="col-md-6 col-sm-6">
+                                                                <input class="form-control" type="text" id="waktu_pakan_<%= item.jenis %>" name="waktu_pakan_<%= item.jenis %>" data-waktu="<%= item.waktu %>" required='required'></div>
                                                         </div>
-                                                    </div>
-                                                </div>
+                                                        <% }) %>
+                                                            <% } else { %>
+                                                                <div class="field item form-group">
+                                                                    <label class="col-form-label col-md-3 col-sm-3  label-align">Waktu Pakan Pagi<span class="required">*</span></label>
+                                                                    <div class="col-md-6 col-sm-6">
+                                                                        <input class="form-control" type="text" id="waktu_pakan_pagi" name="waktu_pakan_pagi" data-waktu="08:00" required='required'></div>
+                                                                </div>
+                                                                <div class="field item form-group">
+                                                                    <label class="col-form-label col-md-3 col-sm-3  label-align">Waktu Pakan Siang<span class="required">*</span></label>
+                                                                    <div class="col-md-6 col-sm-6">
+                                                                        <input class="form-control" type="text" id="waktu_pakan_siang" name="waktu_pakan_siang" data-waktu="12:00" required='required'></div>
+                                                                </div>
+                                                                <div class="field item form-group">
+                                                                    <label class="col-form-label col-md-3 col-sm-3  label-align">Waktu Pakan Sore<span class="required">*</span></label>
+                                                                    <div class="col-md-6 col-sm-6">
+                                                                        <input class="form-control" type="text" id="waktu_pakan_sore" name="waktu_pakan_sore" data-waktu="16:00" required='required'></div>
+                                                                </div>
+                                                                <% } %>
+
+
+                                                                    <div class="ln_solid">
+                                                                        <div class="form-group">
+                                                                            <div class="col-md-6 offset-md-3">
+                                                                                <button type='submit' class="btn btn-primary">Submit</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                             </form>
                                         </div>
                                     </div>
