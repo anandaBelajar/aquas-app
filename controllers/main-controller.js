@@ -105,4 +105,10 @@ module.exports = function(app, con) { //exports the function
         });
     });
 
+    app.get('/login', function(req, res) {
+
+        res.render('login');
+
+    });
+
 }
