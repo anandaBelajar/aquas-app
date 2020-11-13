@@ -68,6 +68,11 @@
     margin-top: 10%;
 }
 
+#add_admin_button i,
+#add_admin_button span {
+    color: #ffff;
+}
+
 
 /*Start Light Chart*/
 
