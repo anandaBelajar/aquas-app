@@ -1,5 +1,9 @@
-var bodyParser = require('body-parser')
-var async = require('async')
+var bodyParser = require('body-parser'),
+    async = require('async'),
+    jwt = require('jsonwebtoken'),
+    bcrypt = require('bcryptjs')
+
+
 
 module.exports = function(app, con) { //exports the function
 
@@ -108,47 +112,44 @@ module.exports = function(app, con) { //exports the function
 
     app.get('/add-admin', function(req, res) {
         //light detail page route
-        res.render('admin-add');
+        res.render('admin-add', {
+            name: '',
+            message: '',
+        });
     });
 
     app.post('/add-admin', function(req, res) {
         console.log('request was made : ' + req.url);
 
-        var check_email_query = "SELECT email FROM `administrator` WHERE email = '" + req.body.input_email + "'",
-            qery = "INSERT INTO `asministrator` (`nama`, `email`, `foto`,  `password`) VALUES (";
-        query += "'" + req.body.input_nama + "',";
-        query += "'" + req.body.input_email + "',";
-        query += "'" + "/uploads/default-avatar.png" + "',";
-        query += "'" + req.body.password + "')";
+        var check_email_query = "SELECT email FROM `administrator` WHERE email = '" + req.body.email + "'",
+            query = "INSERT INTO `administrator` (`nama`, `email`, `foto`,  `password`) VALUES (";
 
-        con.query(check_email_query, function(err, result) {
+        con.query(check_email_query, async function(err, result) {
             if (err) throw err;
             console.log(result);
-            if (result.length < 1) {
-                con.query(query, function(err, result) {
-                    if (err) throw err;
-                    console.log("1 record changed");
-                    res.redirect('/admin-manage');
-                });
+            if (result.length > 0) {
+                return res.render('admin-add', {
+                    name: req.body.name,
+                    message: 'Email tersebut sudah digunakan'
+                })
             }
-        });
 
+            let hashedPassword = await bcrypt.hash(req.body.password, 8)
+            query += "'" + req.body.name + "',";
+            query += "'" + req.body.email + "',";
+            query += "'" + "/uploads/default-avatar.png" + "',";
+            query += "'" + hashedPassword + "')";
 
-        /*
-        var query = "INSERT INTO `asministrator` (`nama`, `email`, `foto`,  `password`) VALUES (";
-        query += "'" + req.body.input_nama + "',";
-        query += "'" + req.body.input_email + "',";
-        query += "'" + "/uploads/default-avatar.png" + "',";
-        query += "'" + req.body.password + "')";
-
-
-        con.query(query, function(err, result) {
-            if (err) throw err;
-            console.log("1 record inserted");
-            res.redirect('/admin-manage');
-        });
-        */
-
+            // console.log(hashedPassword)
+            //     // res.render('admin-add', {
+            //     //     message: 'Email tersebut sudah digunakan'
+            //     // })
+            con.query(query, function(err, result) {
+                if (err) throw err;
+                console.log("1 record changed");
+                res.redirect('/admins');
+            });
+        })
     });
 
     app.get('/login', function(req, res) {
