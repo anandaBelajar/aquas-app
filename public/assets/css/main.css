@@ -73,6 +73,51 @@
     color: #ffff;
 }
 
+.dropdown-item button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+
+/** Start admin profile */
+
+.edit_admin_form_container .profile_img .crop-avatar img {
+    max-width: 260px;
+}
+
+.edit_admin_form_container .btn-sm.btn-primary.row {
+    margin: auto;
+}
+
+
+/**End admin profile*/
+
+
+/**Start 404 */
+
+.container-404 {
+    background: linear-gradient(to right, #0062E6, #33AEFF);
+}
+
+.page-wrap-404 {
+    color: #fff;
+    min-height: 100vh;
+}
+
+.page-wrap-404 a,
+.page-wrap-404 a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+
+/**END 404 */
+
 
 /*Start Light Chart*/
 

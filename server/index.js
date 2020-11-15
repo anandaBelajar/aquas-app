@@ -1,6 +1,11 @@
+const { urlencoded } = require('body-parser');
 var express = require('express'); //express package
 var mysql = require('mysql'); //mysql package
-const path = require('path');
+const passport = require('passport');
+const flash = require('express-flash')
+const session = require('express-session')
+const path = require('path')
+const cookieParser = require('cookie-parser')
 
 var app = express(); //express function
 
@@ -29,13 +34,26 @@ var con = mysql.createConnection({
     multipleStatements: true
 });
 
+
 var main_controller = require('./../controllers/main-controller.js'); //sensor controller
 var websocket = require(__dirname + '/websocket.js'); //websocket
+const initializePassport = require(__dirname + '/passport-config.js');
+initializePassport(passport, con)
 
 //Static files
 app.use(express.static('./../public'));
 app.use('/chartjs', express.static(__dirname + './../node_modules/chart.js/dist/Chart.min.js')); //chartjs library
 app.use('/public', express.static(__dirname + './../public'));
+app.use(flash())
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
+    //app.use(express.urlencode({ extended: false }))
+app.use(cookieParser())
 
-main_controller(app, con); //call sensorController
+main_controller(app, con, path, passport); //call sensorController
 websocket(server, con); //call websocket
