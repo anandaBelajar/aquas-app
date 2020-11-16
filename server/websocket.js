@@ -7,8 +7,8 @@ let mqtt = require('mqtt'); //require mqtt package
 
 module.exports = function(server, con) { //exports the function
 
-    let client = mqtt.connect(process.env.MQTT_BROKER); //connect to online broker
-    //let client = mqtt.connect(process.env.LOCAL_BROKER); //connect to local broker
+    //let client = mqtt.connect(process.env.MQTT_BROKER); //connect to online broker
+    let client = mqtt.connect(process.env.MQTT_LOCAL_BROKER); //connect to local broker
 
     var io = socket(server); //pass the server as socket parameter
 
@@ -54,8 +54,9 @@ module.exports = function(server, con) { //exports the function
         if (topic == 'aquas/light') {
             if (minutes % 60 == 0 && seconds == 0) {
                 //save the sensor value to database every 60 minutes
-                var sql = "INSERT INTO `data_cahaya` (`data`) VALUES (";
-                sql += "'" + message.toString() + "')";
+                var sql = "INSERT INTO `data_cahaya` (`data`, `waktu`) VALUES (";
+                sql += "'" + message.toString() + "',";
+                sql += "'" + dbDateTime + "')";
                 con.query(sql, function(err, result) {
                     if (err) throw err;
 
@@ -78,8 +79,9 @@ module.exports = function(server, con) { //exports the function
         } else if (topic == 'aquas/temp') {
             if (minutes % 60 == 0 && seconds == 0) {
                 //save the sensor value to database every 60 minutes
-                var sql = "INSERT INTO `data_suhu` (`data`) VALUES (";
-                sql += "'" + message.toString() + "')";
+                var sql = "INSERT INTO `data_suhu` (`data`, `waktu`) VALUES (";
+                sql += "'" + message.toString() + "',";
+                sql += "'" + dbDateTime + "')";
                 con.query(sql, function(err, result) {
                     if (err) throw err;
 
@@ -90,8 +92,9 @@ module.exports = function(server, con) { //exports the function
         } else if (topic == 'aquas/ph') {
             if (minutes % 60 == 0 && seconds == 0) {
                 //save the sensor value to database every 60 minutes
-                var sql = "INSERT INTO `data_ph` (`data`) VALUES (";
-                sql += "'" + message.toString() + "')";
+                var sql = "INSERT INTO `data_ph` (`data`, `waktu`) VALUES (";
+                sql += "'" + message.toString() + "',";
+                sql += "'" + dbDateTime + "')";
                 con.query(sql, function(err, result) {
                     if (err) throw err;
 
@@ -105,46 +108,56 @@ module.exports = function(server, con) { //exports the function
     io.on('connection', function(socket) {
         //Start light socket event
         socket.on('grow_light_on', function() {
+            io.sockets.emit('grow_light_on');
             client.publish(aquas_growlight_topic, 'on'); //publish the messsage
         });
 
         socket.on('grow_light_off', function() {
+            io.sockets.emit('grow_light_off');
             client.publish(aquas_growlight_topic, 'off'); //publish the messsage
         });
 
         socket.on('grow_light_auto', function() {
+            io.sockets.emit('grow_light_auto');
             client.publish(aquas_growlight_topic, 'auto'); //publish the messsage
         });
 
         socket.on('grow_light_manual', function() {
+            io.sockets.emit('grow_light_manual');
             client.publish(aquas_growlight_topic, 'manual'); //publish the messsage
         });
         //End light socket event
 
         //Start servo socket event
         socket.on('servo_open', function() {
+            io.sockets.emit('servo_open');
             client.publish(aquas_servo_topic, 'open'); //publish the messsage
         });
 
         socket.on('servo_close', function() {
+            io.sockets.emit('servo_close');
             client.publish(aquas_servo_topic, 'close'); //publish the messsage
         });
 
         socket.on('servo_auto', function() {
+            io.sockets.emit('servo_auto');
             client.publish(aquas_servo_topic, 'auto'); //publish the messsage
         });
 
         socket.on('servo_manual', function() {
+            io.sockets.emit('servo_manual');
             client.publish(aquas_servo_topic, 'manual'); //publish the messsage
         });
         //End servo socket event
 
         //Start pump event Socket
         socket.on('pump_on', function() {
+            io.sockets.emit('pump_on');
             client.publish(aquas_pump_topic, 'on'); //publish the messsage
         });
 
         socket.on('pump_off', function() {
+            io.sockets.emit('pump_off');
             client.publish(aquas_pump_topic, 'off'); //publish the messsage
         });
         //End pump event Socket

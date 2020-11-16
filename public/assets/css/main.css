@@ -98,6 +98,21 @@
 /**End admin profile*/
 
 
+/** Start Sidebar profile photo*/
+
+.profile_pic .img-circle.profile_img {
+    width: 85px;
+    height: 85px;
+}
+
+.profile .profile_info {
+    padding: 25px 25px 10px;
+}
+
+
+/** End sidebar progile picture */
+
+
 /**Start 404 */
 
 .container-404 {

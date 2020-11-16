@@ -1,5 +1,6 @@
 let mqtt = require('mqtt'); //require mqtt package
-let client = mqtt.connect('mqtt://mqtt.eclipse.org:1883'); //setup the broker
+//let client = mqtt.connect('mqtt://mqtt.eclipse.org:1883'); //setup the broker
+let client = mqtt.connect('mqtt://192.168.1.15:5000'); //connect to local broker
 
 var topic = [
         //'aquas/ultrasonic',
@@ -46,4 +47,9 @@ setInterval(function() {
     client.publish('aquas/light', light_value)
     client.publish('aquas/temp', temp_value)
     client.publish('aquas/ph', ph_value)
+
+    // client.publish('aquas/feed', 'apreciate it irancell')
+    // client.publish('aquas/light', 'apreciate it irancell')
+    // client.publish('aquas/temp', 'apreciate it irancell')
+    // client.publish('aquas/ph', 'apreciate it irancell')
 }, 1000);

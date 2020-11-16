@@ -97,14 +97,9 @@ $('#wb').wickedpicker({
 
 //Start feed console
 aquas_auto_feed_toggle.change(function() {
-    // this will contain a reference to the checkbox   
     if (this.checked) {
-        aquas_manual_feed_toggle_container.slideUp();
-        aquas_auto_feed_toggle_container.find('label').text('Auto')
         socket.emit('servo_auto');
     } else {
-        aquas_manual_feed_toggle_container.slideDown();
-        aquas_auto_feed_toggle_container.find('label').text('Manual')
         socket.emit('servo_manual');
     }
 });
@@ -112,10 +107,8 @@ aquas_auto_feed_toggle.change(function() {
 aquas_manual_feed_toggle.change(function() {
     // this will contain a reference to the checkbox   
     if (this.checked) {
-        aquas_manual_feed_toggle_container.find('label').text('Buka')
         socket.emit('servo_open');
     } else {
-        aquas_manual_feed_toggle_container.find('label').text('Tutup')
         socket.emit('servo_close');
     }
 });
@@ -126,11 +119,8 @@ aquas_manual_feed_toggle.change(function() {
 aquas_manual_pump_toggle.change(function() {
     // this will contain a reference to the checkbox   
     if (this.checked) {
-
-        aquas_manual_pump_toggle_container.find('label').text('On')
         socket.emit('pump_on');
     } else {
-        aquas_manual_pump_toggle_container.find('label').text('Off')
         socket.emit('pump_off');
     }
 });
@@ -140,12 +130,8 @@ aquas_manual_pump_toggle.change(function() {
 aquas_auto_light_toggle.change(function() {
     // this will contain a reference to the checkbox   
     if (this.checked) {
-        aquas_manual_light_toggle_container.slideUp();
-        aquas_auto_light_toggle_container.find('label').text('Auto')
         socket.emit('grow_light_auto');
     } else {
-        aquas_manual_light_toggle_container.slideDown();
-        aquas_auto_light_toggle_container.find('label').text('Manual')
         socket.emit('grow_light_manual');
     }
 });
@@ -153,10 +139,10 @@ aquas_auto_light_toggle.change(function() {
 aquas_manual_light_toggle.change(function() {
     // this will contain a reference to the checkbox   
     if (this.checked) {
-        aquas_manual_light_toggle_container.find('label').text('On')
+        //aquas_manual_light_toggle_container.find('label').text('On')
         socket.emit('grow_light_on');
     } else {
-        aquas_manual_light_toggle_container.find('label').text('Off')
+        //aquas_manual_light_toggle_container.find('label').text('Off')
         socket.emit('grow_light_off');
     }
 });
@@ -234,88 +220,6 @@ if (typeof aquas_light_chart[0] !== 'undefined') {
         }
     });
 }
-
-// var old_feed_value = []; //['56', '55', '57', '57', '55']; //emtpy array to hold chart data
-// var old_feed_label = []; //['08:01:01', '08:01:02', '08:01:03', '08:01:04', '08:01:05']; //empty array to hold chart label
-
-
-// var feed_ctx = document.getElementById('aquas_feed_chart').getContext('2d'); //get the chart holder from canvas tag in html
-// var feed_chart = new Chart(feed_ctx, { //make the chart
-//     type: 'line', //chart type
-//     responsive: true,
-//     data: {
-//         labels: old_feed_label, //labels
-//         datasets: [{
-//             label: 'Soil Moisture in percentage', //dataset 1 legenda
-//             data: old_feed_value,
-//             backgroundColor: ['rgba(255, 160, 122, 0.5)'], //chart bacground color
-//             borderColor: [
-//                 'rgb(126, 46, 31)' //chart borde color
-//             ],
-//             borderWidth: 1
-//         }, ]
-//     },
-//     options: {
-//         scales: {
-//             yAxes: [{
-//                 ticks: {
-//                     beginAtZero: true
-//                 }
-//             }]
-//         }
-//     }
-// });
-
-
-
-// function feed_chart_add_value(data) {
-//     //add sensor value to the mositure chart
-//     feed_chart.data.labels.push(data[1]); //pushing current time to chart
-//     feed_chart.data.datasets[0].data.push(data[0]); //pushing current sensor value to chart
-//     feed_chart.update(); //update the chart
-// }
-
-// function feed_chart_remove_value() {
-//     feed_chart.data.labels.shift(); //shifting hide first oldest value of time from the chart
-//     feed_chart.data.datasets[0].data.shift(); //shifting first oldest value of sensor value from the chart
-//     feed_chart.update(); //update the chart
-// };
-
-// var feed_chart_counter = 0; //chart dataset update counter
-
-// socket.on('aquas_feed_msg_arrive', function(msg) {
-//     //get the sensor and time value from backend websocket
-//     feed_chart_add_value(msg); //add value to chart
-
-//     aquas_feed_current_value.innerHTML = msg[0]; //display current sensor value to inner html
-//     aquas_feed_current_time.innerHTML = msg[1]; //display current time to inner html
-
-//     feed_chart_counter = feed_chart_counter + 1;
-//     if (feed_chart_counter > 10) {
-//         //shift hide the first value if 10 data already exist in the chart
-//         feed_chart_remove_value();
-//     }
-
-// });
-
-// var pumpState = 0; //pump state
-
-// function turnPump() {
-//     //function to turn on/off pump
-
-//     if (pumpState == 0) {
-//         pumpState = 1;
-//         socket.emit('pumpOn'); //emit pumpOn event
-//         document.getElementById('pump_publish').innerText = 'Turn Off Pump'; //change the button text
-//     } else if (pumpState == 1) {
-//         pumpState = 0;
-//         document.getElementById('pump_publish').innerText = 'Turn On Pump'; //change the button text
-//         socket.emit('pumpOff'); //emit pumpOff event
-//     }
-
-
-//     return true;
-// }
 
 aquas_light_data_table.DataTable({
     ordering: false
@@ -474,37 +378,72 @@ if (typeof aquas_ph_chart[0] !== 'undefined') {
 //End ph chart
 
 $(function() {
-    // Handler for .ready() called.
-    //Start pump console
-    if (aquas_manual_pump_toggle.prop('checked')) {
-        aquas_manual_pump_toggle_container.find('label').text('On')
-            //socket.emit('grow_light_on');
-    }
-    //End pump console
-
-    //Start light console
-    if (aquas_auto_light_toggle.prop('checked')) {
-        aquas_auto_light_toggle_container.find('label').text('Auto')
-        aquas_manual_light_toggle_container.css({ 'display': 'none' })
-            //socket.emit('grow_light_auto');
-    }
-
-    if (aquas_manual_light_toggle.prop('checked')) {
-        aquas_manual_light_toggle_container.find('label').text('On')
-            //socket.emit('grow_light_on');
-    }
-    //End light console
-
-    //Start feed console
-    if (aquas_auto_feed_toggle.prop('checked')) {
+    //Start feed toggle event
+    socket.on('servo_auto', function() {
+        aquas_auto_feed_toggle.prop('checked', true);
         aquas_auto_feed_toggle_container.find('label').text('Auto')
-        aquas_manual_feed_toggle_container.css({ 'display': 'none' })
-            //socket.emit('servo_auto');
-    }
+        aquas_manual_feed_toggle_container.slideUp();
+    })
 
-    if (aquas_manual_feed_toggle.prop('checked')) {
+    socket.on('servo_manual', function() {
+        aquas_auto_feed_toggle.prop('checked', false);
+        aquas_auto_feed_toggle_container.find('label').text('Manual')
+        aquas_manual_feed_toggle_container.slideDown();
+    })
+
+    socket.on('servo_open', function() {
+        aquas_manual_feed_toggle.prop('checked', true)
         aquas_manual_feed_toggle_container.find('label').text('Buka')
-            //socket.emit('servo_open');
-    }
-    //End feed console
+    })
+
+    socket.on('servo_close', function() {
+        aquas_manual_feed_toggle.prop('checked', false)
+        aquas_manual_feed_toggle_container.find('label').text('Tutup')
+    })
+
+
+    // End feed toggle event
+
+    //Start pump pump toggle event
+
+    socket.on('pump_on', function() {
+        aquas_manual_pump_toggle.prop('checked', true)
+        aquas_manual_pump_toggle_container.find('label').text('On')
+    })
+
+    socket.on('pump_off', function() {
+        aquas_manual_pump_toggle.prop('checked', false)
+        aquas_manual_pump_toggle_container.find('label').text('Off')
+    })
+
+    //End pump toggle event
+
+    //Start light toggle event
+
+    socket.on('grow_light_auto', function() {
+        aquas_auto_light_toggle.prop('checked', true)
+        aquas_manual_light_toggle_container.slideUp();
+        aquas_auto_light_toggle_container.find('label').text('Auto')
+    })
+
+    socket.on('grow_light_manual', function() {
+        aquas_auto_light_toggle.prop('checked', false)
+        aquas_manual_light_toggle_container.slideDown();
+        aquas_auto_light_toggle_container.find('label').text('Manual')
+    })
+
+    socket.on('grow_light_on', function() {
+        aquas_manual_light_toggle.prop('checked', true)
+        aquas_manual_light_toggle_container.find('label').text('On')
+    })
+
+    socket.on('grow_light_off', function() {
+        aquas_manual_light_toggle.prop('checked', false)
+        aquas_manual_light_toggle_container.find('label').text('Off')
+    })
+
+    //End light toggle event
+
+
+
 });

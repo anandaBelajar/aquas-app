@@ -97,14 +97,14 @@ module.exports = function(passport, con) {
     const authenticateUser = async function(email, password, done) {
         const user = getUserByEmail(email)
         if (user == null) {
-            return done(null, false, { message: 'akun belum terdaftar' })
+            return done(null, false, { message: 'Akun belum terdaftar' })
         }
 
         try {
             if (await bcrypt.compare(password, result[0].password)) {
                 return done(null, user)
             } else {
-                return done(null, false, { message: 'email dan password tidak sesuai' })
+                return done(null, false, { message: 'Email dan password tidak sesuai' })
             }
         } catch (error) {
             return done(error)
