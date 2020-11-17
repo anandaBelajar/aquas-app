@@ -59,14 +59,17 @@ module.exports = function(app, con, path, passport) { //exports the function
     //Start Single Route
     app.get('/single-feed', checkAuthenticated, function(req, res) {
         //light detail page route
-        con.query("SELECT * FROM `jadwal_pakan`", function(err, result) {
+        var query = "SELECT * FROM `status_aktuator`; "
+        query += "SELECT * FROM `jadwal_pakan`"
+        con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             // if (err) throw err;
             console.log(result)
             res.render('single-feed', {
                 //render the ejs view for light detail page
                 name: req.user.nama,
-                items: result, //send the data from database to the light detail page
+                input_items: result[0],
+                form_items: result[1], //send the data from database to the light detail page
                 photo: req.user.foto,
 
             });
@@ -99,13 +102,18 @@ module.exports = function(app, con, path, passport) { //exports the function
 
     app.get('/single-light', checkAuthenticated, function(req, res) {
         //light detail page route
-        con.query("SELECT * FROM `data_cahaya` ORDER BY `waktu` DESC", function(err, result) {
+        //var query = "SELECT * FROM `data_cahaya` ORDER BY `waktu` DESC"
+        var query = "SELECT * FROM `status_aktuator`; "
+        query += "SELECT * FROM `data_cahaya` ORDER BY `waktu` DESC"
+
+        con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
             res.render('single-light', {
                 //render the ejs view for light detail page
                 name: req.user.nama,
-                table_items: result, //send the data from database to the light detail page
+                input_items: result[0],
+                table_items: result[1], //send the data from database to the light detail page
                 photo: req.user.foto,
             });
         });

@@ -396,6 +396,7 @@ $(function() {
         aquas_manual_feed_toggle_container.find('label').text('Buka')
     })
 
+
     socket.on('servo_close', function() {
         aquas_manual_feed_toggle.prop('checked', false)
         aquas_manual_feed_toggle_container.find('label').text('Tutup')

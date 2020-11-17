@@ -46,17 +46,19 @@
                                         </div>
                                         <div class="aquas_auto_feed_toggle_container">
                                             <div class="custom-control custom-switch custom-switch-md">
-                                                <input type="checkbox" class="custom-control-input" id="aquas_auto_feed_toggle">
-                                                <label class="custom-control-label" for="aquas_auto_feed_toggle">Manual</label>
+                                                <input type="checkbox" class="custom-control-input" id="aquas_auto_feed_toggle" <% if(input_items[0].status=='auto' ){ %> checked
+                                                <%}%> >
+                                                    <label class="custom-control-label" for="aquas_auto_feed_toggle"><% if(input_items[0].status=='auto' ){ %> Auto <%}else{%> Manual <%}%></label>
                                             </div>
                                             <p class="control_description">Aktifkan kontrol pakan otomatis</p>
                                         </div>
-                                        <div class="aquas_manual_feed_toggle_container">
-                                            <div class="custom-control custom-switch custom-switch-md">
-                                                <input type="checkbox" class="custom-control-input" id="aquas_manual_feed_toggle">
-                                                <label class="custom-control-label" for="aquas_manual_feed_toggle">tutup</label>
-                                            </div>
-                                            <p class="control_description">Buka atau tutup container pakan</p>
+                                        <div class="aquas_manual_feed_toggle_container" <% if(input_items[0].status=='auto' ){ %> style="display:none"
+                                            <%}%> >
+                                                <div class="custom-control custom-switch custom-switch-md">
+                                                    <input type="checkbox" class="custom-control-input" id="aquas_manual_feed_toggle">
+                                                    <label class="custom-control-label" for="aquas_manual_feed_toggle">tutup</label>
+                                                </div>
+                                                <p class="control_description">Buka atau tutup container pakan</p>
                                         </div>
 
                                     </div>
@@ -83,8 +85,8 @@
                                         <div class="x_content">
                                             <form action="/single-feed" method="post">
                                                 <p>Tentukan jadwal pemberian pakan ikan pada form ini</p>
-                                                <% if (items.length > 0) {%>
-                                                    <% items.forEach((item, index) => { %>
+                                                <% if (form_items.length > 0) {%>
+                                                    <% form_items.forEach((item, index) => { %>
                                                         <div class="field item form-group">
                                                             <label class="col-form-label col-md-3 col-sm-3  label-align">Waktu Pakan <%= item.jenis %><span class="required">*</span></label>
                                                             <div class="col-md-6 col-sm-6">

@@ -144,13 +144,17 @@ module.exports = function(server, con) { //exports the function
             //servo open close status doesn't need to be saved in database because it using javascript interval timer
             io.sockets.emit('servo_open');
             client.publish(aquas_servo_topic, 'open'); //publish the messsage
+            setTimeout(function() {
+                io.sockets.emit('servo_close');
+                client.publish(aquas_servo_topic, 'close'); //publish the messsage
+            }, 3000)
         });
 
-        socket.on('servo_close', function() {
-            //servo open close status doesn't need to be saved in database because it using javascript interval timer
-            io.sockets.emit('servo_close');
-            client.publish(aquas_servo_topic, 'close'); //publish the messsage
-        });
+        // socket.on('servo_close', function() {
+        //     //servo open close status doesn't need to be saved in database because it using javascript interval timer
+        //     //io.sockets.emit('servo_close');
+        //     client.publish(aquas_servo_topic, 'close'); //publish the messsage
+        // });
         //End servo socket event
 
         //Start pump event Socket
