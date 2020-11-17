@@ -36,11 +36,19 @@ module.exports = function(app, con, path, passport) { //exports the function
     }
 
     app.get('/', checkAuthenticated, function(req, res) {
-        //index route
-        res.render('index', {
-            name: req.user.nama,
-            photo: req.user.foto,
-        }); //render the ejs view for index page
+
+
+        con.query("SELECT * FROM `status_aktuator`", function(err, result) {
+            //select all light sensor value and time from the database
+            if (err) throw err;
+            //index route
+            console.log(result)
+            res.render('index', {
+                name: req.user.nama,
+                photo: req.user.foto,
+                items: result,
+            }); //render the ejs view for index page
+        });
     });
 
     app.get('/gentelella', function(req, res) {
@@ -97,7 +105,7 @@ module.exports = function(app, con, path, passport) { //exports the function
             res.render('single-light', {
                 //render the ejs view for light detail page
                 name: req.user.nama,
-                items: result, //send the data from database to the light detail page
+                table_items: result, //send the data from database to the light detail page
                 photo: req.user.foto,
             });
         });

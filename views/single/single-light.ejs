@@ -90,7 +90,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-sm-12 ">
-                                    <% if (items.length > 0) {%>
+                                    <% if (table_items.length > 0) {%>
                                         <table id="aquas_light_data_table" class="table table-striped table-bordered" style="width:100%">
                                             <thead>
                                                 <tr>
@@ -99,7 +99,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <% items.forEach((item, index) => { %>
+                                                <% table_items.forEach((item, index) => { %>
                                                     <tr>
                                                         <td>
                                                             <%= item.data %>

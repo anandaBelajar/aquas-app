@@ -422,6 +422,7 @@ $(function() {
 
     socket.on('grow_light_auto', function() {
         aquas_auto_light_toggle.prop('checked', true)
+        aquas_manual_light_toggle.prop('checked', false)
         aquas_manual_light_toggle_container.slideUp();
         aquas_auto_light_toggle_container.find('label').text('Auto')
     })

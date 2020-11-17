@@ -106,61 +106,157 @@ module.exports = function(server, con) { //exports the function
     })
 
     io.on('connection', function(socket) {
-        //Start light socket event
-        socket.on('grow_light_on', function() {
-            io.sockets.emit('grow_light_on');
-            client.publish(aquas_growlight_topic, 'on'); //publish the messsage
-        });
-
-        socket.on('grow_light_off', function() {
-            io.sockets.emit('grow_light_off');
-            client.publish(aquas_growlight_topic, 'off'); //publish the messsage
-        });
-
-        socket.on('grow_light_auto', function() {
-            io.sockets.emit('grow_light_auto');
-            client.publish(aquas_growlight_topic, 'auto'); //publish the messsage
-        });
-
-        socket.on('grow_light_manual', function() {
-            io.sockets.emit('grow_light_manual');
-            client.publish(aquas_growlight_topic, 'manual'); //publish the messsage
-        });
-        //End light socket event
 
         //Start servo socket event
-        socket.on('servo_open', function() {
-            io.sockets.emit('servo_open');
-            client.publish(aquas_servo_topic, 'open'); //publish the messsage
-        });
-
-        socket.on('servo_close', function() {
-            io.sockets.emit('servo_close');
-            client.publish(aquas_servo_topic, 'close'); //publish the messsage
-        });
-
         socket.on('servo_auto', function() {
+            var status_type = 'servo_auto',
+                check_query = "SELECT * FROM  `status_aktuator` WHERE jenis = '" + status_type + "'",
+                query = "UPDATE `status_aktuator` SET";
+            query += "`status` = '" + 'auto' + "'";
+            query += " WHERE `jenis` = '" + status_type + "'";
+            con.query(check_query, function(err, result) {
+                if (err) throw err;
+                if (result.length) {
+                    con.query(query);
+                }
+            });
             io.sockets.emit('servo_auto');
             client.publish(aquas_servo_topic, 'auto'); //publish the messsage
         });
 
         socket.on('servo_manual', function() {
+            var status_type = 'servo_auto',
+                check_query = "SELECT * FROM  `status_aktuator` WHERE jenis = '" + status_type + "'",
+                query = "UPDATE `status_aktuator` SET";
+            query += "`status` = '" + 'manual' + "'";
+            query += " WHERE `jenis` = '" + status_type + "'";
+            con.query(check_query, function(err, result) {
+                if (err) throw err;
+                if (result.length) {
+                    con.query(query);
+                }
+            });
             io.sockets.emit('servo_manual');
             client.publish(aquas_servo_topic, 'manual'); //publish the messsage
+        });
+
+        socket.on('servo_open', function() {
+            //servo open close status doesn't need to be saved in database because it using javascript interval timer
+            io.sockets.emit('servo_open');
+            client.publish(aquas_servo_topic, 'open'); //publish the messsage
+        });
+
+        socket.on('servo_close', function() {
+            //servo open close status doesn't need to be saved in database because it using javascript interval timer
+            io.sockets.emit('servo_close');
+            client.publish(aquas_servo_topic, 'close'); //publish the messsage
         });
         //End servo socket event
 
         //Start pump event Socket
         socket.on('pump_on', function() {
+            var status_type = 'pump_manual',
+                check_query = "SELECT * FROM  `status_aktuator` WHERE jenis = '" + status_type + "'",
+                query = "UPDATE `status_aktuator` SET";
+            query += "`status` = '" + 'on' + "'";
+            query += " WHERE `jenis` = '" + status_type + "'";
+            con.query(check_query, function(err, result) {
+                if (err) throw err;
+                if (result.length) {
+                    con.query(query);
+                }
+            });
             io.sockets.emit('pump_on');
             client.publish(aquas_pump_topic, 'on'); //publish the messsage
         });
 
         socket.on('pump_off', function() {
+            var status_type = 'pump_manual',
+                check_query = "SELECT * FROM  `status_aktuator` WHERE jenis = '" + status_type + "'",
+                query = "UPDATE `status_aktuator` SET";
+            query += "`status` = '" + 'off' + "'";
+            query += " WHERE `jenis` = '" + status_type + "'";
+            con.query(check_query, function(err, result) {
+                if (err) throw err;
+                if (result.length) {
+                    con.query(query);
+                }
+            });
             io.sockets.emit('pump_off');
             client.publish(aquas_pump_topic, 'off'); //publish the messsage
         });
         //End pump event Socket
+
+        //Start light socket event
+        socket.on('grow_light_auto', function() {
+            var status_type = 'grow_light_auto',
+                check_query = "SELECT * FROM  `status_aktuator` WHERE jenis = '" + status_type + "'",
+                query = "UPDATE `status_aktuator` SET";
+            query += "`status` = '" + 'auto' + "'";
+            query += " WHERE `jenis` = '" + status_type + "';";
+            query += "UPDATE `status_aktuator` SET";
+            query += "`status` = '" + 'off' + "'";
+            query += " WHERE `jenis` = 'grow_light_manual';";
+            con.query(check_query, function(err, result) {
+                if (err) throw err;
+                if (result.length) {
+                    con.query(query);
+                }
+            });
+            io.sockets.emit('grow_light_auto');
+            client.publish(aquas_growlight_topic, 'auto'); //publish the messsage
+        });
+
+        socket.on('grow_light_manual', function() {
+            var status_type = 'grow_light_auto',
+                check_query = "SELECT * FROM  `status_aktuator` WHERE jenis = '" + status_type + "'",
+                query = "UPDATE `status_aktuator` SET";
+            query += "`status` = '" + 'manual' + "'";
+            query += " WHERE `jenis` = '" + status_type + "'";
+            con.query(check_query, function(err, result) {
+                if (err) throw err;
+                if (result.length) {
+                    con.query(query);
+                }
+            });
+            io.sockets.emit('grow_light_manual');
+            client.publish(aquas_growlight_topic, 'manual'); //publish the messsage
+        });
+
+        socket.on('grow_light_on', function() {
+            var status_type = 'grow_light_manual',
+                check_query = "SELECT * FROM  `status_aktuator` WHERE jenis = '" + status_type + "'",
+                query = "UPDATE `status_aktuator` SET";
+            query += "`status` = '" + 'on' + "'";
+            query += " WHERE `jenis` = '" + status_type + "'";
+            con.query(check_query, function(err, result) {
+                if (err) throw err;
+                if (result.length) {
+                    con.query(query);
+                }
+            });
+            io.sockets.emit('grow_light_on');
+            client.publish(aquas_growlight_topic, 'on'); //publish the messsage
+        });
+
+        socket.on('grow_light_off', function() {
+            var status_type = 'grow_light_manual',
+                check_query = "SELECT * FROM  `status_aktuator` WHERE jenis = '" + status_type + "'",
+                query = "UPDATE `status_aktuator` SET";
+            query += "`status` = '" + 'off' + "'";
+            query += " WHERE `jenis` = '" + status_type + "'";
+            con.query(check_query, function(err, result) {
+                if (err) throw err;
+                if (result.length) {
+                    con.query(query);
+                }
+            });
+            io.sockets.emit('grow_light_off');
+            client.publish(aquas_growlight_topic, 'off'); //publish the messsage
+        });
+        //End light socket event
+
+
     });
 
 
