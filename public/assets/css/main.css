@@ -131,6 +131,53 @@
 }
 
 
+/** Start Top Bar */
+
+.fa-exclamation-circle,
+.fa-check-circle {
+    margin-left: 3px;
+}
+
+.fa-check-circle {
+    color: #1fce1f;
+    ;
+}
+
+.fa-exclamation-circle {
+    color: #FF5C00;
+    ;
+}
+
+.dropdown-menu.top-notification.msg_list span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/**End Top bar */
+
+
+/** Start notifications page */
+
+.btn.btn-primary.btn-sm.btn-notif-detail {
+    margin-left: 20px;
+    color: #fff;
+}
+
+.dashboard_graph.notification-detail-container {
+    height: 400px;
+}
+
+.notification-full-description {
+    font-size: 18px;
+    padding: 20px 30px;
+}
+
+
+/** End notification page */
+
+
 /**END 404 */
 
 

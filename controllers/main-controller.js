@@ -37,16 +37,57 @@ module.exports = function(app, con, path, passport) { //exports the function
 
     app.get('/', checkAuthenticated, function(req, res) {
 
-
-        con.query("SELECT * FROM `status_aktuator`", function(err, result) {
+        var query = "SELECT * FROM `status_aktuator`;"
+        query += "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5 "
+        con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
             //index route
-            console.log(result)
+            console.log(result[1])
             res.render('index', {
                 name: req.user.nama,
                 photo: req.user.foto,
-                items: result,
+                items: result[0],
+                notifikasi: result[1],
+            }); //render the ejs view for index page
+        });
+    });
+
+    app.get('/notifications', checkAuthenticated, function(req, res) {
+
+        var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+        query += "SELECT * FROM `notifikasi` WHERE id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC'"
+
+        con.query(query, function(err, result) {
+            //select all light sensor value and time from the database
+            if (err) throw err;
+            //index route
+            console.log(result[1])
+            res.render('notifications', {
+                name: req.user.nama,
+                photo: req.user.foto,
+                notifikasi: result[0],
+                items: result[1],
+            }); //render the ejs view for index page
+        });
+    });
+
+    app.get('/notification-detail/:id', checkAuthenticated, function(req, res) {
+
+        var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+        query += "SELECT * FROM `notifikasi` WHERE id ='" + req.params.id + "';"
+        query += "UPDATE `notifikasi` set status = 'read' WHERE id ='" + req.params.id + "';"
+
+        con.query(query, function(err, result) {
+            //select all light sensor value and time from the database
+            if (err) throw err;
+            //index route
+            console.log(result[1])
+            res.render('notification-detail', {
+                name: req.user.nama,
+                photo: req.user.foto,
+                notifikasi: result[0],
+                item: result[1],
             }); //render the ejs view for index page
         });
     });
@@ -59,17 +100,18 @@ module.exports = function(app, con, path, passport) { //exports the function
     //Start Single Route
     app.get('/single-feed', checkAuthenticated, function(req, res) {
         //light detail page route
-        var query = "SELECT * FROM `status_aktuator`; "
+        var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+        query += "SELECT * FROM `status_aktuator`; "
         query += "SELECT * FROM `jadwal_pakan`"
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
-            // if (err) throw err;
-            console.log(result)
+            if (err) throw err;
             res.render('single-feed', {
                 //render the ejs view for light detail page
                 name: req.user.nama,
-                input_items: result[0],
-                form_items: result[1], //send the data from database to the light detail page
+                notifikasi: result[0],
+                input_items: result[1],
+                form_items: result[2], //send the data from database to the light detail page
                 photo: req.user.foto,
 
             });
@@ -103,7 +145,8 @@ module.exports = function(app, con, path, passport) { //exports the function
     app.get('/single-light', checkAuthenticated, function(req, res) {
         //light detail page route
         //var query = "SELECT * FROM `data_cahaya` ORDER BY `waktu` DESC"
-        var query = "SELECT * FROM `status_aktuator`; "
+        var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+        query += "SELECT * FROM `status_aktuator`; "
         query += "SELECT * FROM `data_cahaya` ORDER BY `waktu` DESC"
 
         con.query(query, function(err, result) {
@@ -112,8 +155,9 @@ module.exports = function(app, con, path, passport) { //exports the function
             res.render('single-light', {
                 //render the ejs view for light detail page
                 name: req.user.nama,
-                input_items: result[0],
-                table_items: result[1], //send the data from database to the light detail page
+                notifikasi: result[0],
+                input_items: result[1],
+                table_items: result[2], //send the data from database to the light detail page
                 photo: req.user.foto,
             });
         });
@@ -121,13 +165,17 @@ module.exports = function(app, con, path, passport) { //exports the function
 
     app.get('/single-temp', checkAuthenticated, function(req, res) {
         //light detail page route
-        con.query("SELECT * FROM `data_suhu` ORDER BY `waktu` DESC", function(err, result) {
+        var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+        query += "SELECT * FROM `data_suhu` ORDER BY `waktu` DESC"
+
+        con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
             res.render('single-temp', {
                 //render the ejs view for light detail page
                 name: req.user.nama,
-                items: result, //send the data from database to the light detail page
+                notifikasi: result[0],
+                items: result[1], //send the data from database to the light detail page
                 photo: req.user.foto,
             });
         });
@@ -135,13 +183,16 @@ module.exports = function(app, con, path, passport) { //exports the function
 
     app.get('/single-ph', checkAuthenticated, function(req, res) {
         //light detail page route
-        con.query("SELECT * FROM `data_ph` ORDER BY `waktu` DESC", function(err, result) {
+        var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+        query += "SELECT * FROM `data_ph` ORDER BY `waktu` DESC"
+        con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
             res.render('single-ph', {
                 //render the ejs view for light detail page
                 name: req.user.nama,
-                items: result, //send the data from database to the light detail page
+                notifikasi: result[0],
+                items: result[1], //send the data from database to the light detail page
                 photo: req.user.foto,
             });
         });
@@ -152,102 +203,110 @@ module.exports = function(app, con, path, passport) { //exports the function
 
     app.get('/admins', checkAuthenticated, function(req, res) {
         //light detail page route
-        con.query("SELECT `id`, `nama`, `email` FROM `administrator`", function(err, result) {
+        var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+        query += "SELECT `id`, `nama`, `email` FROM `administrator`"
+        con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
             console.log(result)
             res.render('admin-manage', {
                 //render the ejs view for light detail page
                 name: req.user.nama,
-                items: result, //send the data from database to the light detail page
+                notifikasi: result[0],
+                items: result[1], //send the data from database to the light detail page
                 photo: req.user.foto,
             });
         });
     });
 
     app.get('/add-admin', checkAuthenticated, function(req, res) {
-        //light detail page route
-        res.render('admin-add', {
-            name: req.user.nama,
-            input_name: '',
-            message: '',
-            photo: req.user.foto,
+        var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+        con.query(query, function(err, result) {
+            //select all light sensor value and time from the database
+            if (err) throw err;
+            console.log(result)
+            res.render('admin-add', {
+                notifikasi: result,
+                name: req.user.nama,
+                input_name: '',
+                message: '',
+                photo: req.user.foto,
+            });
         });
     });
 
     app.post('/add-admin', checkAuthenticated, function(req, res) {
         console.log('request was made : ' + req.url);
 
-        var check_email_query = "SELECT email FROM `administrator` WHERE email = '" + req.body.email + "'",
-            query = "INSERT INTO `administrator` (`nama`, `email`, `foto`,  `password`) VALUES (";
+        var query = "SELECT email FROM `administrator` WHERE email = '" + req.body.email + "';",
+            insert_query = "INSERT INTO `administrator` (`nama`, `email`, `foto`,  `password`) VALUES (",
+            error_message = "",
+            can_check_email = true
+
+        query += " SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
 
         if (!req.body.name || !req.body.email || !req.body.password) {
-            return res.render('admin-add', {
-                message: 'Semua data harus diisi',
-                id: req.user.id,
-                name: req.user.nama,
-                input_name: req.body.name,
-                photo: req.user.foto,
-            })
+            error_message = "semua data harus diisi"
+            can_check_email = false
         }
 
         if (req.body.name.length > 100) {
-            return res.render('admin-add', {
-                message: 'nama maksimal 100 karakter',
-                id: req.user.id,
-                name: req.user.nama,
-                input_name: req.body.name,
-                photo: req.user.foto,
-            })
+            error_message = 'nama maksimal 100 karakter'
+            can_check_email = false
         }
 
         if (req.body.email.length > 100) {
-            return res.render('admin-add', {
-                message: 'email maksimal 100 karakter',
-                id: req.user.id,
-                name: req.user.nama,
-                input_name: req.body.name,
-                photo: req.user.foto,
-            })
+            error_message = 'email maksimal 100 karakter'
+            can_check_email = false
         }
 
         if (req.body.password.length > 50) {
-            return res.render('admin-add', {
-                message: 'Password maksimal 50 karakter',
-                id: req.user.id,
-                name: req.user.nama,
-                input_name: req.body.name,
-                photo: req.user.foto,
-            })
+            error_message = 'Password maksimal 50 karakter'
+            can_check_email = false
         }
 
-        con.query(check_email_query, async function(err, result) {
-            if (err) throw err;
-            console.log(result);
-            if (result.length > 0) {
-                return res.render('admin-add', {
-                    name: req.user.nama,
-                    input_name: req.body.name,
-                    message: 'Email tersebut sudah digunakan'
-                })
-            }
-
-            let hashedPassword = await bcrypt.hash(req.body.password, 8)
-            query += "'" + req.body.name + "',";
-            query += "'" + req.body.email + "',";
-            query += "'" + "/uploads/default-avatar.png" + "',";
-            query += "'" + hashedPassword + "')";
-
-            // console.log(hashedPassword)
-            //     // res.render('admin-add', {
-            //     //     message: 'Email tersebut sudah digunakan'
-            //     // })
+        if (error_message.length) {
             con.query(query, function(err, result) {
                 if (err) throw err;
-                console.log("1 record changed");
-                res.redirect('/admins');
-            });
-        })
+                return res.render('admin-add', {
+                    message: error_message,
+                    id: req.user.id,
+                    name: req.user.nama,
+                    input_name: req.body.name,
+                    photo: req.user.foto,
+                    notifikasi: result[1],
+                })
+            })
+        } else {
+            con.query(query, async function(err, result) {
+                if (err) throw err;
+                if (result[0].length > 0) {
+                    return con.query(query, function(err, result) {
+                        if (err) throw err;
+                        res.render('admin-add', {
+                            message: 'Email sudah digunakan',
+                            id: req.user.id,
+                            name: req.user.nama,
+                            input_name: req.body.name,
+                            photo: req.user.foto,
+                            notifikasi: result[1],
+                        })
+                    })
+                } else {
+                    let hashedPassword = await bcrypt.hash(req.body.password, 8)
+                    insert_query += "'" + req.body.name + "',";
+                    insert_query += "'" + req.body.email + "',";
+                    insert_query += "'" + "/uploads/default-avatar.png" + "',";
+                    insert_query += "'" + hashedPassword + "')";
+
+                    con.query(insert_query, function(err, result) {
+                        if (err) throw err;
+                        console.log("1 record changed");
+                        res.redirect('/admins');
+                    });
+                }
+            })
+        }
     });
 
     app.get('/login', cehckNotAuthenticated, function(req, res) {
@@ -270,15 +329,22 @@ module.exports = function(app, con, path, passport) { //exports the function
     })
 
     app.get('/profile', checkAuthenticated, function(req, res) {
-
-        res.render('profile', {
-            message_bio: '',
-            message_photo: '',
-            id: req.user.id,
-            name: req.user.nama,
-            email: req.user.email,
-            photo: req.user.foto,
+        var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+        con.query(query, function(err, result) {
+            //select all light sensor value and time from the database
+            if (err) throw err;
+            console.log(result)
+            res.render('profile', {
+                message_bio: '',
+                message_photo: '',
+                id: req.user.id,
+                name: req.user.nama,
+                email: req.user.email,
+                photo: req.user.foto,
+                notifikasi: result
+            });
         });
+
 
     });
 
@@ -286,105 +352,120 @@ module.exports = function(app, con, path, passport) { //exports the function
         console.log('request was made : ' + req.url);
         let hashedPassword = await bcrypt.hash(req.body.password, 8)
             //console.log('this is what you call id : ' + req.body.nama)
-        var query = "UPDATE `administrator` SET";
-        query += "`nama` = '" + req.body.name + "',";
-        query += "`email` = '" + req.body.email + "',";
-        query += "`password` = '" + hashedPassword + "'";
-        query += " WHERE `id` = '" + req.params.id + "'";
+        var update_query = "UPDATE `administrator` SET";
+        update_query += "`nama` = '" + req.body.name + "',";
+        update_query += "`email` = '" + req.body.email + "',";
+        update_query += "`password` = '" + hashedPassword + "'";
+        update_query += " WHERE `id` = '" + req.params.id + "'";
+
+        var query = "SELECT email FROM `administrator` WHERE email = '" + req.body.email + "';"
+        query += "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;",
+            message_bio = 0
 
         if (!req.body.name || !req.body.email || !req.body.password) {
-            return res.render('profile', {
-                message_bio: 'Semua data harus diisi',
-                message_photo: '',
-                id: req.user.id,
-                name: req.user.nama,
-                email: req.user.email,
-                photo: req.user.foto,
-            })
+            message_bio = 'Semua data harus diisi'
         }
 
         if (req.body.name.length > 100) {
-            return res.render('profile', {
-                message_bio: 'nama maksimal 100 karakter',
-                message_photo: '',
-                id: req.user.id,
-                name: req.user.nama,
-                email: req.user.email,
-                photo: req.user.foto,
-            })
+            message_bio = 'nama maksimal 100 karakter'
         }
 
         if (req.body.email.length > 100) {
-            return res.render('profile', {
-                message_bio: 'email maksimal 100 karakter',
-                message_photo: '',
-                id: req.user.id,
-                name: req.user.nama,
-                email: req.user.email,
-                photo: req.user.foto,
-            })
+            message_bio = 'email maksimal 100 karakter'
         }
 
         if (req.body.password.length > 50) {
-            return res.render('profile', {
-                message_bio: 'password maksimal 50 karakter',
-                message_photo: '',
-                id: req.user.id,
-                name: req.user.nama,
-                email: req.user.email,
-                photo: req.user.foto,
-            })
+            message_bio = 'password maksimal 50 karakter'
         }
 
-        if (!req.body.name || !req.body.email || !req.body.password) {
-            return res.render('profile', {
-                message_bio: 'Semua data harus diisi',
-                message_photo: '',
-                id: req.user.id,
-                name: req.user.nama,
-                email: req.user.email,
-                photo: req.user.foto,
+
+        if (message_bio.length) {
+            con.query(query, function(err, result) {
+                if (err) throw err;
+                return res.render('profile', {
+                    message_bio: message_bio,
+                    message_photo: '',
+                    id: req.user.id,
+                    name: req.user.nama,
+                    email: req.user.email,
+                    photo: req.user.foto,
+                    notifikasi: result[1]
+                })
+            });
+        } else {
+            con.query(query, async function(err, result) {
+                if (err) throw err;
+                if (req.body.email != req.user.email) {
+                    if (result[0].length > 0) {
+                        con.query(query, function(err, result) {
+                            if (err) throw err;
+                            return res.render('profile', {
+                                message_bio: 'Email sudah digunakan',
+                                message_photo: '',
+                                id: req.user.id,
+                                name: req.user.nama,
+                                email: req.user.email,
+                                photo: req.user.foto,
+                                notifikasi: result[1]
+                            })
+                        })
+                    } else {
+                        con.query(update_query, function(err, result) {
+                            if (err) throw err;
+                            if (result.affectedRows) {
+                                console.log("1 record changed");
+                                res.redirect('/profile');
+                            }
+                        });
+                    }
+                } else {
+                    con.query(update_query, function(err, result) {
+                        if (err) throw err;
+                        if (result.affectedRows) {
+                            console.log("1 record changed");
+                            res.redirect('/profile');
+                        }
+                    });
+                }
             })
+
         }
-
-        con.query(query, function(err, result) {
-            if (err) throw err;
-            if (result.affectedRows) {
-                console.log("1 record changed");
-                res.redirect('/profile');
-            }
-        });
-
-    });
-
-    app.get('*', checkAuthenticated, function(req, res) {
-        res.status(404).render('404');
     });
 
     app.post('/profile/:id/edit/photo', function(req, res) {
         upload(req, res, err => {
 
             if (!req.file) {
-                return res.render('profile', {
-                    message_bio: '',
-                    message_photo: 'Belum memilih foto',
-                    id: req.user.id,
-                    name: req.user.nama,
-                    email: req.user.email,
-                    photo: req.user.foto,
-                })
+                con.query("SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;", function(err, result) {
+                    if (err) throw err;
+                    return res.render('profile', {
+                        message_bio: '',
+                        message_photo: 'Belum memilih foto',
+                        id: req.user.id,
+                        name: req.user.nama,
+                        email: req.user.email,
+                        photo: req.user.foto,
+                        notifikasi: result
+                    })
+                });
+            } else {
+                if (err) throw err;
+                var query = "UPDATE `administrator` SET";
+                query += "`foto` = '" + req.file.filename + "'";
+                query += " WHERE `administrator`.`id`= " + req.params.id + "";
+                console.log(req.params.id);
+                con.query(query, function(err, results) {
+                    res.redirect('/profile')
+                });
             }
-
-            if (err) throw err;
-            var query = "UPDATE `administrator` SET";
-            query += "`foto` = '" + req.file.filename + "'";
-            query += " WHERE `administrator`.`id`= " + req.params.id + "";
-            console.log(req.params.id);
-            con.query(query, function(err, results) {
-                res.redirect('/profile')
-            });
         });
     });
+
+    app.get('*', checkAuthenticated, function(req, res) {
+        res.status(404).render('404');
+    });
+
+
 
 
 

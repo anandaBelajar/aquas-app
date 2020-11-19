@@ -22,65 +22,45 @@
     <li role="presentation" class="nav-item dropdown open">
         <a href="javascript:;" class="dropdown-toggle info-number" id="navbarDropdown1" data-toggle="dropdown" aria-expanded="false">
             <i class="fa fa-bell"></i>
-            <span class="badge bg-blue">6</span>
+            <% if(notifikasi.length){%>
+                <span class="badge bg-blue"><%= notifikasi.length  %></span>
+                <%}%>
         </a>
-        <ul class="dropdown-menu list-unstyled msg_list" role="menu" aria-labelledby="navbarDropdown1">
-            <li class="nav-item">
-                <a class="dropdown-item">
-                    <span class="image"><img src="/public/gentelella/production/images/img.jpg" alt="Profile Image" /></span>
-                    <span>
-              <span>John Smith</span>
-                    <span class="time">3 mins ago</span>
-                    </span>
-                    <span class="message">
-              Film festivals used to be do-or-die moments for movie makers. They were where...
-            </span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="dropdown-item">
-                    <span class="image"><img src="/public/gentelella/production/images/img.jpg" alt="Profile Image" /></span>
-                    <span>
-              <span>John Smith</span>
-                    <span class="time">3 mins ago</span>
-                    </span>
-                    <span class="message">
-              Film festivals used to be do-or-die moments for movie makers. They were where...
-            </span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="dropdown-item">
-                    <span class="image"><img src="/public/gentelella/production/images/img.jpg" alt="Profile Image" /></span>
-                    <span>
-              <span>John Smith</span>
-                    <span class="time">3 mins ago</span>
-                    </span>
-                    <span class="message">
-              Film festivals used to be do-or-die moments for movie makers. They were where...
-            </span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="dropdown-item">
-                    <span class="image"><img src="/public/gentelella/production/images/img.jpg" alt="Profile Image" /></span>
-                    <span>
-              <span>John Smith</span>
-                    <span class="time">3 mins ago</span>
-                    </span>
-                    <span class="message">
-              Film festivals used to be do-or-die moments for movie makers. They were where...
-            </span>
-                </a>
-            </li>
-            <li class="nav-item">
-                <div class="text-center">
-                    <a class="dropdown-item">
-                        <strong>See All Alerts</strong>
-                        <i class="fa fa-angle-right"></i>
-                    </a>
-                </div>
-            </li>
+        <ul class="dropdown-menu list-unstyled msg_list top-notification" role="menu" aria-labelledby="navbarDropdown1">
+            <% if(notifikasi.length){%>
+                <% notifikasi.forEach((item, index) => { %>
+                    <li class="nav-item">
+                        <a href="notification-detail/<%= item.id %>" class="dropdown-item">
+                            <span>
+          <span class="font-weight-bold"><%= item.jenis %> <%if(item.status == 'read'){%><i class="fa fa-check-circle"></i><%} else {%><i class="fa fa-exclamation-circle"></i><%}%></span>
+                            <span class="time">
+                                <%
+                                    var raw_date = String(item.tanggal),
+                                        date = raw_date.split(" ") 
+                                %>
+                                <%= date[2]; %>
+                                <%= date[1]; %>
+                                <%= date[3]; %>
+                            </span>
+                            </span>
+                            <span class="message">
+         <%= item.deskripsi %>
+        </span>
+                        </a>
+                    </li>
+                    <% }) %>
+                        <% } else { %>
+                            <p class="text-center">No data found</p>
+                            <% } %>
+
+                                <li class="nav-item">
+                                    <div class="text-center">
+                                        <a href="/notifications" class="dropdown-item">
+                                            <strong>Tampilkan semua notifikasi</strong>
+                                            <i class="fa fa-angle-right"></i>
+                                        </a>
+                                    </div>
+                                </li>
         </ul>
     </li>
     </ul>
