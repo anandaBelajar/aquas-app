@@ -178,6 +178,28 @@
 /** End notification page */
 
 
+/** Start error */
+
+#upload_image_form label.error,
+#add_admin_form label.error,
+#edit_admin_form label.error {
+    color: #FF3333;
+}
+
+#upload_image_form label.error {
+    text-align: center;
+    width: 100%;
+    padding: 10px 0;
+}
+
+#login_form .form-label-group #email-error {
+    position: unset;
+    text-align: center;
+    width: 100%;
+    padding: 10px 0;
+}
+
+
 /**END 404 */
 
 
