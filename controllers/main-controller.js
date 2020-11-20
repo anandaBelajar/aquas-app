@@ -239,74 +239,40 @@ module.exports = function(app, con, path, passport) { //exports the function
         console.log('request was made : ' + req.url);
 
         var query = "SELECT email FROM `administrator` WHERE email = '" + req.body.email + "';",
-            insert_query = "INSERT INTO `administrator` (`nama`, `email`, `foto`,  `password`) VALUES (",
-            error_message = "",
-            can_check_email = true
+            insert_query = "INSERT INTO `administrator` (`nama`, `email`, `foto`,  `password`) VALUES ("
+
 
         query += " SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
 
-        if (!req.body.name || !req.body.email || !req.body.password) {
-            error_message = "semua data harus diisi"
-            can_check_email = false
-        }
-
-        if (req.body.name.length > 100) {
-            error_message = 'nama maksimal 100 karakter'
-            can_check_email = false
-        }
-
-        if (req.body.email.length > 100) {
-            error_message = 'email maksimal 100 karakter'
-            can_check_email = false
-        }
-
-        if (req.body.password.length > 50) {
-            error_message = 'Password maksimal 50 karakter'
-            can_check_email = false
-        }
-
-        if (error_message.length) {
-            con.query(query, function(err, result) {
-                if (err) throw err;
-                return res.render('admin-add', {
-                    message: error_message,
-                    id: req.user.id,
-                    name: req.user.nama,
-                    input_name: req.body.name,
-                    photo: req.user.foto,
-                    notifikasi: result[1],
-                })
-            })
-        } else {
-            con.query(query, async function(err, result) {
-                if (err) throw err;
-                if (result[0].length > 0) {
-                    return con.query(query, function(err, result) {
-                        if (err) throw err;
-                        res.render('admin-add', {
-                            message: 'Email sudah digunakan',
-                            id: req.user.id,
-                            name: req.user.nama,
-                            input_name: req.body.name,
-                            photo: req.user.foto,
-                            notifikasi: result[1],
-                        })
+        con.query(query, async function(err, result) {
+            if (err) throw err;
+            if (result[0].length > 0) {
+                return con.query(query, function(err, result) {
+                    if (err) throw err;
+                    res.render('admin-add', {
+                        message: 'Email sudah digunakan',
+                        id: req.user.id,
+                        name: req.user.nama,
+                        input_name: req.body.name,
+                        photo: req.user.foto,
+                        notifikasi: result[1],
                     })
-                } else {
-                    let hashedPassword = await bcrypt.hash(req.body.password, 8)
-                    insert_query += "'" + req.body.name + "',";
-                    insert_query += "'" + req.body.email + "',";
-                    insert_query += "'" + "/uploads/default-avatar.png" + "',";
-                    insert_query += "'" + hashedPassword + "')";
+                })
+            } else {
+                let hashedPassword = await bcrypt.hash(req.body.password, 8)
+                insert_query += "'" + req.body.name + "',";
+                insert_query += "'" + req.body.email + "',";
+                insert_query += "'" + "default-avatar.png" + "',";
+                insert_query += "'" + hashedPassword + "')";
 
-                    con.query(insert_query, function(err, result) {
-                        if (err) throw err;
-                        console.log("1 record changed");
-                        res.redirect('/admins');
-                    });
-                }
-            })
-        }
+                con.query(insert_query, function(err, result) {
+                    if (err) throw err;
+                    console.log("1 record changed");
+                    res.redirect('/admins');
+                });
+            }
+        })
+
     });
 
     app.get('/login', cehckNotAuthenticated, function(req, res) {
@@ -362,62 +328,22 @@ module.exports = function(app, con, path, passport) { //exports the function
         query += "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;",
             message_bio = 0
 
-        if (!req.body.name || !req.body.email || !req.body.password) {
-            message_bio = 'Semua data harus diisi'
-        }
-
-        if (req.body.name.length > 100) {
-            message_bio = 'nama maksimal 100 karakter'
-        }
-
-        if (req.body.email.length > 100) {
-            message_bio = 'email maksimal 100 karakter'
-        }
-
-        if (req.body.password.length > 50) {
-            message_bio = 'password maksimal 50 karakter'
-        }
-
-
-        if (message_bio.length) {
-            con.query(query, function(err, result) {
-                if (err) throw err;
-                return res.render('profile', {
-                    message_bio: message_bio,
-                    message_photo: '',
-                    id: req.user.id,
-                    name: req.user.nama,
-                    email: req.user.email,
-                    photo: req.user.foto,
-                    notifikasi: result[1]
-                })
-            });
-        } else {
-            con.query(query, async function(err, result) {
-                if (err) throw err;
-                if (req.body.email != req.user.email) {
-                    if (result[0].length > 0) {
-                        con.query(query, function(err, result) {
-                            if (err) throw err;
-                            return res.render('profile', {
-                                message_bio: 'Email sudah digunakan',
-                                message_photo: '',
-                                id: req.user.id,
-                                name: req.user.nama,
-                                email: req.user.email,
-                                photo: req.user.foto,
-                                notifikasi: result[1]
-                            })
+        con.query(query, async function(err, result) {
+            if (err) throw err;
+            if (req.body.email != req.user.email) {
+                if (result[0].length > 0) {
+                    con.query(query, function(err, result) {
+                        if (err) throw err;
+                        return res.render('profile', {
+                            message_bio: 'Email sudah digunakan',
+                            message_photo: '',
+                            id: req.user.id,
+                            name: req.user.nama,
+                            email: req.user.email,
+                            photo: req.user.foto,
+                            notifikasi: result[1]
                         })
-                    } else {
-                        con.query(update_query, function(err, result) {
-                            if (err) throw err;
-                            if (result.affectedRows) {
-                                console.log("1 record changed");
-                                res.redirect('/profile');
-                            }
-                        });
-                    }
+                    })
                 } else {
                     con.query(update_query, function(err, result) {
                         if (err) throw err;
@@ -427,9 +353,18 @@ module.exports = function(app, con, path, passport) { //exports the function
                         }
                     });
                 }
-            })
+            } else {
+                con.query(update_query, function(err, result) {
+                    if (err) throw err;
+                    if (result.affectedRows) {
+                        console.log("1 record changed");
+                        res.redirect('/profile');
+                    }
+                });
+            }
+        })
 
-        }
+
     });
 
     app.post('/profile/:id/edit/photo', function(req, res) {
