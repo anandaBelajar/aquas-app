@@ -26,11 +26,7 @@
                             <div class="dashboard_graph notification-detail-container">
                                 <%
 var raw_date = String(item[0].tanggal),
-    date = raw_date.split(" "),
-    raw_time = date[5].split("+"),
-    time = raw_time[1].split("")
-
-     
+    date = raw_date.split(" ")  
 %>
                                     <div class="row x_title">
                                         <div class="col-md-6">
@@ -47,10 +43,7 @@ var raw_date = String(item[0].tanggal),
                                                 <%= date[3]; %>, 
                                             </span>
                                                 <span>Pukul : 
-                                                    <%= time[0] %>
-                                                    <%= time[1] %> :
-                                                    <%= time[2] %>
-                                                    <%= time[3] %>
+                                                    <%= item[0].waktu %>
                                                     </span> <b class="caret"></b>
                                             </div>
                                         </div>

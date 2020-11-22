@@ -36,11 +36,8 @@
                                             <td>
                                                 <%
                                                     var raw_date = String(item.tanggal),
-                                                        date = raw_date.split(" "),
-                                                        raw_time = date[5].split("+"),
-                                                        time = raw_time[1].split("")
+                                                        date = raw_date.split(" ")
 
-                                                         
                                                 %>
                                                     <span>
                                                 <%= date[2]; %>
@@ -48,10 +45,7 @@
                                                 <%= date[3]; %>, 
                                             </span>
                                                     <span>Pukul : 
-                                                    <%= time[0] %>
-                                                    <%= time[1] %> :
-                                                    <%= time[2] %>
-                                                    <%= time[3] %>
+                                                    <%= item.waktu %>
                                                     </span>
                                             </td>
                                             <td>

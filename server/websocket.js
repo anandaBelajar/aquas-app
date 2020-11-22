@@ -58,7 +58,8 @@ module.exports = function(server, con) { //exports the function
         var year = date.getFullYear();
         var month = date.getMonth();
         var day = date.getDate();
-        var time = hour + ' : ' + minutes + ' : ' + seconds; //current time to display on front end
+        var dateonly = year + "-" + month + "-" + day
+        var time = hour + ':' + minutes + ':' + seconds; //current time to display on front end
         var dbDateTime = year + "-" + month + "-" + day + "- " + hour + ":" + minutes + ":" + seconds; //date time to save in database
 
         if (topic == 'aquas/feed') {
@@ -124,31 +125,43 @@ module.exports = function(server, con) { //exports the function
             var query = "SELECT id, email FROM administrator;",
                 notif_query = "",
                 jenis = "",
+                subject = "",
                 content = "",
                 rec_email = []
 
             if (message.toString() == 'pemberitahuan_pakan') {
-                jenis = "pemberitahuan"
+                jenis = 'pemberitahuan_pakan'
+                subject = "pemberitahuan"
                 content = 'Sisa pakan sebanyak ' + current_feed + "%"
             } else if (message.toString() == 'peringatan_pakan') {
-                jenis = "peringatan"
-                content = 'Sisa pakan sebanyak' + current_feed + '%, mohon segera lakukan isi ulang'
+                jenis = 'peringatan_pakan'
+                subject = "peringatan"
+                content = 'Sisa pakan sebanyak ' + current_feed + '%, mohon segera lakukan isi ulang'
             } else if (message.toString() == 'peringatan_suhu') {
-                jenis = "peringatan"
+                jenis = 'peringatan_suhu'
+                subject = "peringatan"
                 content = 'Kondisi suhu saat ini tidak baik : ' + current_temp + 'celcius, mohon segera lakukan pemeriksaan'
             } else if (message.toString() == 'peringatan_ph') {
-                jenis = "pemberitahuan"
+                jenis = 'peringatan_ph'
+                subject = "peringatan"
                 content = 'Kondisi ph saat ini tidak baik : ' + current_ph + 'mohon segera lakukan pemeriksaan'
             }
 
-            con.query(query, function(err, result) {
-                if (err) throw err;
-                if (result.length) {
-                    result.forEach(function(item) {
+            query += "SELECT jenis FROM notifikasi WHERE jenis = '" + jenis + "';"
+            query += "SELECT tanggal FROM notifikasi WHERE tanggal ='" + dateonly + "';"
+                //query += "SELECT tanggal FROM notifikasi;"
 
-                        notif_query += "INSERT INTO `notifikasi` (`jenis`, `tanggal`, `deskripsi`, `status`, `id_administrator`) VALUES (";
+            con.query(query, function(err, result) {
+                //console.log(dateonly + "T16:00:00.000Z")
+                if (err) throw err;
+                if (!(result[0].length && result[1].length && result[2].length)) {
+                    result[0].forEach(function(item) {
+
+                        notif_query += "INSERT INTO `notifikasi` (`jenis`, `subject`,`tanggal`, `waktu`, `deskripsi`, `status`, `id_administrator`) VALUES (";
                         notif_query += "'" + jenis + "',";
-                        notif_query += "'" + dbDateTime + "',";
+                        notif_query += "'" + subject + "',";
+                        notif_query += "'" + dateonly + "',";
+                        notif_query += "'" + time + "',";
                         notif_query += "'" + content + "',";
                         notif_query += "'" + 'unread' + "',";
                         notif_query += "'" + item['id'] + "');";

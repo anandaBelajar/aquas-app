@@ -6,7 +6,7 @@ var topic = 'aquas/mail';
 client.on('connect', function() {
     client.subscribe(topic, function(err) {
         if (!err) {
-            client.publish(topic, 'pemberitahuan_pakan'); //publish the messsage
+            client.publish(topic, 'peringatan_pakan'); //publish the messsage
             //client.publish(topic, 'peringatan'); //publish the messsage
         }
         client.end(); //close the client
