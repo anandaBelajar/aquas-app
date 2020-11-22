@@ -3,7 +3,8 @@ var bodyParser = require('body-parser'),
     bcrypt = require('bcryptjs'),
     methodOverride = require('method-override'),
     multer = require('multer');
-const { render } = require('ejs');
+const { render } = require('ejs')
+
 
 module.exports = function(app, con, path, passport) { //exports the function
 

@@ -1,5 +1,6 @@
 var mqtt = require('mqtt')
-var client = mqtt.connect('mqtt://mqtt.eclipse.org:1883')
+    //var client = mqtt.connect('mqtt://mqtt.eclipse.org:1883')
+var client = mqtt.connect('mqtt://192.168.1.15:5000')
 
 var topic = [
         'aquas/feed',
@@ -9,6 +10,7 @@ var topic = [
         'aquas/pump',
         'aquas/growlight',
         'aquas/debug',
+        'aquas/mail',
     ] //set the topic
 
 client.on('connect', function() {

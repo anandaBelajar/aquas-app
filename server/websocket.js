@@ -4,8 +4,18 @@ Backend Websocket
 
 var socket = require('socket.io'); //require socket.io package
 let mqtt = require('mqtt'); //require mqtt package
+const nodemailer = require('nodemailer');
 
 module.exports = function(server, con) { //exports the function
+
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.EMAIL,
+            pass: process.env.EMAIL_PASS
+        }
+    });
+
 
     //let client = mqtt.connect(process.env.MQTT_BROKER); //connect to online broker
     let client = mqtt.connect(process.env.MQTT_LOCAL_BROKER); //connect to local broker
@@ -17,11 +27,15 @@ module.exports = function(server, con) { //exports the function
             'aquas/light',
             'aquas/temp',
             'aquas/ph',
+            'aquas/mail'
         ],
         aquas_pump_topic = 'aquas/pump',
         aquas_growlight_topic = 'aquas/growlight',
         aquas_servo_topic = 'aquas/servo'
 
+    var current_feed = "",
+        current_temp = "",
+        current_ph = ""
 
     client.on('connect', function() {
         console.log('connected to a broker...'); //console log whe connection to broker success
@@ -48,6 +62,7 @@ module.exports = function(server, con) { //exports the function
         var dbDateTime = year + "-" + month + "-" + day + "- " + hour + ":" + minutes + ":" + seconds; //date time to save in database
 
         if (topic == 'aquas/feed') {
+            current_feed = message.toString()
             var feed = [message.toString(), time]; //save sensor value from mqtt message and current time 
             io.sockets.emit('aquas_feed_msg_arrive', feed); //send sensor value and current time to frontend websocket
         } else
@@ -77,6 +92,7 @@ module.exports = function(server, con) { //exports the function
             */
 
         } else if (topic == 'aquas/temp') {
+            current_temp = message.toString()
             if (minutes % 60 == 0 && seconds == 0) {
                 //save the sensor value to database every 60 minutes
                 var sql = "INSERT INTO `data_suhu` (`data`, `waktu`) VALUES (";
@@ -90,6 +106,7 @@ module.exports = function(server, con) { //exports the function
             var temp = [message.toString(), time]; //save sensor value from mqtt message and current time 
             io.sockets.emit('aquas_temp_msg_arrive', temp);
         } else if (topic == 'aquas/ph') {
+            current_ph = message.toString()
             if (minutes % 60 == 0 && seconds == 0) {
                 //save the sensor value to database every 60 minutes
                 var sql = "INSERT INTO `data_ph` (`data`, `waktu`) VALUES (";
@@ -102,6 +119,68 @@ module.exports = function(server, con) { //exports the function
             }
             var ph = [message.toString(), time]; //save sensor value from mqtt message and current time 
             io.sockets.emit('aquas_ph_msg_arrive', ph);
+        } else if (topic == 'aquas/mail') {
+            console.log('mail coming')
+            var query = "SELECT id, email FROM administrator;",
+                notif_query = "",
+                jenis = "",
+                content = "",
+                rec_email = []
+
+            if (message.toString() == 'pemberitahuan_pakan') {
+                jenis = "pemberitahuan"
+                content = 'Sisa pakan sebanyak ' + current_feed + "%"
+            } else if (message.toString() == 'peringatan_pakan') {
+                jenis = "peringatan"
+                content = 'Sisa pakan sebanyak' + current_feed + '%, mohon segera lakukan isi ulang'
+            } else if (message.toString() == 'peringatan_suhu') {
+                jenis = "peringatan"
+                content = 'Kondisi suhu saat ini tidak baik : ' + current_temp + 'celcius, mohon segera lakukan pemeriksaan'
+            } else if (message.toString() == 'peringatan_ph') {
+                jenis = "pemberitahuan"
+                content = 'Kondisi ph saat ini tidak baik : ' + current_ph + 'mohon segera lakukan pemeriksaan'
+            }
+
+            con.query(query, function(err, result) {
+                if (err) throw err;
+                if (result.length) {
+                    result.forEach(function(item) {
+
+                        notif_query += "INSERT INTO `notifikasi` (`jenis`, `tanggal`, `deskripsi`, `status`, `id_administrator`) VALUES (";
+                        notif_query += "'" + jenis + "',";
+                        notif_query += "'" + dbDateTime + "',";
+                        notif_query += "'" + content + "',";
+                        notif_query += "'" + 'unread' + "',";
+                        notif_query += "'" + item['id'] + "');";
+
+                        rec_email.push(item['email'])
+
+                        console.log(item['id'])
+                        console.log(item['email'])
+                    });
+                    con.query(notif_query, function(err, result) {
+                        if (err) throw err;
+                    });
+                    let mailOptions = {
+                        //email data
+                        from: process.env.EMAIL,
+                        to: rec_email,
+                        subject: jenis,
+                        text: content
+                    }
+
+                    transporter.sendMail(mailOptions, function(err, data) {
+                        //send the email
+                        if (err) {
+                            //send the error message if there are any error
+                            console.log(err);
+                        } else {
+                            //show email sent when there ae no error
+                            console.log('Email sent!');
+                        }
+                    });
+                }
+            });
         }
     })
 
@@ -259,6 +338,7 @@ module.exports = function(server, con) { //exports the function
             client.publish(aquas_growlight_topic, 'off'); //publish the messsage
         });
         //End light socket event
+
 
 
     });
