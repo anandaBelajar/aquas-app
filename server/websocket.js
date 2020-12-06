@@ -16,9 +16,12 @@ module.exports = function(server, con) { //exports the function
         }
     });
 
+    //let client = mqtt.connect(process.env.MQTT_LOCAL_BROKER);
+    let client = mqtt.connect(process.env.VPS_MQTT_BROKER, {
+        username: process.env.VPS_MQTT_USER,
+        password: process.env.VPS_MQTT_PASS,
 
-    //let client = mqtt.connect(process.env.MQTT_BROKER); //connect to online broker
-    let client = mqtt.connect(process.env.MQTT_LOCAL_BROKER); //connect to local broker
+    });
 
     var io = socket(server); //pass the server as socket parameter
 

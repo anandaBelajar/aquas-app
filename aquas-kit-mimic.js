@@ -1,6 +1,11 @@
 let mqtt = require('mqtt'); //require mqtt package
-//let client = mqtt.connect('mqtt://mqtt.eclipse.org:1883'); //setup the broker
-let client = mqtt.connect('mqtt://192.168.1.15:5000'); //connect to local broker
+require('dotenv').config({ path: __dirname + '/.env' })
+    //let client = mqtt.connect('mqtt://mqtt.eclipse.org:1883'); //setup the broker
+
+let client = mqtt.connect(process.env.VPS_MQTT_BROKER, {
+    username: process.env.VPS_MQTT_USER,
+    password: process.env.VPS_MQTT_PASS
+}); //connect to local broker
 
 var topic = [
         //'aquas/ultrasonic',
