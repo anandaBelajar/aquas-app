@@ -83,7 +83,7 @@
                                             </div>
                                         </div>
                                         <div class="x_content">
-                                            <form action="/single-feed" method="post">
+                                            <form id="feed_schedule_form" action="/single-feed" method="post">
                                                 <p>Tentukan jadwal pemberian pakan ikan pada form ini</p>
                                                 <% if (form_items.length > 0) {%>
                                                     <% form_items.forEach((item, index) => { %>
@@ -110,12 +110,10 @@
                                                                         <input class="form-control" type="text" id="waktu_pakan_sore" name="waktu_pakan_sore" data-waktu="16:00" required='required'></div>
                                                                 </div>
                                                                 <% } %>
-
-
                                                                     <div class="ln_solid">
                                                                         <div class="form-group">
                                                                             <div class="col-md-6 offset-md-3">
-                                                                                <button type='submit' class="btn btn-primary">Submit</button>
+                                                                                <button id="btn_submit_feed_scheduled" type='submit' class="btn btn-primary">Submit</button>
                                                                             </div>
                                                                         </div>
                                                                     </div>

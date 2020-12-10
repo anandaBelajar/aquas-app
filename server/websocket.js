@@ -38,7 +38,10 @@ module.exports = function(server, con) { //exports the function
 
     var current_feed = "",
         current_temp = "",
-        current_ph = ""
+        current_ph = "",
+        jadwal_pakan_pagi = "08 : 00 : 00",
+        jadwal_pakan_siang = "12 : 00 : 00",
+        jadwal_pakan_sore = "16 : 00 : 00"
 
     client.on('connect', function() {
         console.log('connected to a broker...'); //console log whe connection to broker success
@@ -140,14 +143,22 @@ module.exports = function(server, con) { //exports the function
                 jenis = 'peringatan_pakan'
                 subject = "peringatan"
                 content = 'Sisa pakan sebanyak ' + current_feed + '%, mohon segera lakukan isi ulang'
-            } else if (message.toString() == 'peringatan_suhu') {
-                jenis = 'peringatan_suhu'
+            } else if (message.toString() == 'peringatan_suhu_rendah') {
+                jenis = 'peringatan_suhu_rendah'
                 subject = "peringatan"
-                content = 'Kondisi suhu saat ini tidak baik : ' + current_temp + 'celcius, mohon segera lakukan pemeriksaan'
-            } else if (message.toString() == 'peringatan_ph') {
-                jenis = 'peringatan_ph'
+                content = 'Kondisi suhu saat ini terlalu rendah : ' + current_temp + 'celcius, mohon segera lakukan pemeriksaan'
+            } else if (message.toString() == 'peringatan_suhu_tinggi') {
+                jenis = 'peringatan_suhu_tinggi'
                 subject = "peringatan"
-                content = 'Kondisi ph saat ini tidak baik : ' + current_ph + 'mohon segera lakukan pemeriksaan'
+                content = 'Kondisi suhu saat ini terlalu tinggi : ' + current_temp + 'celcius, mohon segera lakukan pemeriksaan'
+            } else if (message.toString() == 'peringatan_ph_rendah') {
+                jenis = 'peringatan_ph_rendah'
+                subject = "peringatan"
+                content = 'Kondisi ph saat ini teralu rendah : ' + current_ph + 'mohon segera lakukan pemeriksaan'
+            } else if (message.toString() == 'peringatan_ph_tinggi') {
+                jenis = 'peringatan_ph_tinggi'
+                subject = "peringatan"
+                content = 'Kondisi ph saat ini terlalu tinggi : ' + current_ph + 'mohon segera lakukan pemeriksaan'
             }
 
             query += "SELECT jenis FROM notifikasi WHERE jenis = '" + jenis + "';"
@@ -354,6 +365,12 @@ module.exports = function(server, con) { //exports the function
             client.publish(aquas_growlight_topic, 'off'); //publish the messsage
         });
         //End light socket event
+
+        socket.on('feed_schedule_changed', function(data) {
+            jadwal_pakan_pagi = data['input_pakan_pagi'] + " : 00";
+            jadwal_pakan_siang = data['input_pakan_siang'] + " : 00";
+            jadwal_pakan_sore = data['input_pakan_sore'] + " : 00";
+        });
 
 
 

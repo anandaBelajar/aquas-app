@@ -33,7 +33,8 @@ var aquas_light_chart = $('#aquas_light_chart'),
     waktu_pakan_pagi = $('#waktu_pakan_pagi'),
     waktu_pakan_siang = $('#waktu_pakan_siang'),
     waktu_pakan_sore = $('#waktu_pakan_sore'),
-    admins_data_table = $('#admins_data_table')
+    admins_data_table = $('#admins_data_table'),
+    btn_submit_feed_scheduled = $('#btn_submit_feed_scheduled')
 
 var pakan_pagi_options = {
         //hh:mm 24 hour format only, defaults to current time
@@ -446,6 +447,14 @@ $(function() {
 
     //End light toggle event
 
+    btn_submit_feed_scheduled.on('click', function() {
+
+        socket.emit('feed_schedule_changed', {
+            input_pakan_pagi: waktu_pakan_pagi.val(),
+            input_pakan_siang: waktu_pakan_siang.val(),
+            input_pakan_sore: waktu_pakan_sore.val(),
+        });
+    })
 
 
 });

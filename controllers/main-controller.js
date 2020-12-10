@@ -138,7 +138,7 @@ module.exports = function(app, con, path, passport) { //exports the function
             con.query(query, function(err, result) {
                 if (err) throw err;
                 console.log("1 record changed");
-                res.redirect('/');
+                res.redirect('/single-feed');
             });
         });
     });
