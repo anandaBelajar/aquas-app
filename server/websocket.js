@@ -225,7 +225,6 @@ module.exports = function(server, con) { //exports the function
 
         socket.on('servo_open', function() {
             //servo open close status doesn't need to be saved in database because it using javascript interval timer
-            console.log('servo')
             io.sockets.emit('servo_open');
             client.publish(aquas_servo_manual_topic, 'open'); //publish the messsage
             setTimeout(function() {
