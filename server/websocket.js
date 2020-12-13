@@ -35,7 +35,8 @@ module.exports = function(server, con) { //exports the function
         ],
         aquas_pump_topic = 'aquas/pump',
         aquas_growlight_topic = 'aquas/growlight',
-        aquas_servo_topic = 'aquas/servo'
+        aquas_servo_topic = 'aquas/servo',
+        aquas_time_topic = 'aquas/time'
 
 
     var current_feed = "",
@@ -129,7 +130,6 @@ module.exports = function(server, con) { //exports the function
             var ph = [message.toString(), time]; //save sensor value from mqtt message and current time 
             io.sockets.emit('aquas_ph_msg_arrive', ph);
         } else if (topic == 'aquas/mail') {
-            console.log('mail coming')
             var query = "SELECT id, email FROM administrator;",
                 notif_query = "",
                 jenis = "",
@@ -168,7 +168,6 @@ module.exports = function(server, con) { //exports the function
                 //query += "SELECT tanggal FROM notifikasi;"
 
             con.query(query, function(err, result) {
-                //console.log(dateonly + "T16:00:00.000Z")
                 if (err) throw err;
                 if (!(result[0].length && result[1].length && result[2].length)) {
                     result[0].forEach(function(item) {
@@ -183,9 +182,6 @@ module.exports = function(server, con) { //exports the function
                         notif_query += "'" + item['id'] + "');";
 
                         rec_email.push(item['email'])
-
-                        console.log(item['id'])
-                        console.log(item['email'])
                     });
                     con.query(notif_query, function(err, result) {
                         if (err) throw err;
@@ -381,35 +377,17 @@ module.exports = function(server, con) { //exports the function
     setInterval(function() {
 
         var date = new Date(),
-            seconds = date.getSeconds(),
-            minutes = date.getMinutes(),
-            hour = date.getHours(),
-            year = date.getFullYear(),
-            month = date.getMonth(),
-            day = date.getDate(),
-            dateonly = year + "-" + month + "-" + day,
-            time = hour + ':' + minutes + ':' + seconds, //current time to display on front end
-            dbDateTime = year + "-" + month + "-" + day + "- " + hour + ":" + minutes + ":" + seconds; //date time to save in database
-
+            seconds = date.getSeconds() < 10 ? '0' + String(date.getSeconds()) : date.getSeconds(),
+            minutes = date.getMinutes() < 10 ? '0' + String(date.getMinutes()) : date.getMinutes(),
+            hour = date.getHours() < 10 ? '0' + String(date.getHours()) : date.getHours(),
+            time = hour + ':' + minutes + ':' + seconds //current time to display on front end
         var query = "SELECT waktu FROM  `jadwal_pakan`"
-        console.log('..........time..........')
-        console.log(time)
-        console.log('..........time..........')
-        var date = new Date(),
-            seconds = date.getSeconds(),
-            minutes = date.getMinutes(),
-            hour = date.getHours(),
-            year = date.getFullYear(),
-            month = date.getMonth(),
-            day = date.getDate(),
-            dateonly = year + "-" + month + "-" + day,
-            time = hour + ':' + minutes + ':' + seconds, //current time to display on front end
-            dbDateTime = year + "-" + month + "-" + day + "- " + hour + ":" + minutes + ":" + seconds; //date time to save in database
 
         con.query(query, function(err, result) {
             if (err) throw err;
             if (result.length) {
                 if (result[0]['waktu'] == time || result[1]['waktu'] == time || result[2]['waktu'] == time) {
+                    console.log('waktu pakan')
                     client.publish(aquas_servo_topic, 'open'); //publish the messsage
                     setTimeout(function() {
                         client.publish(aquas_servo_topic, 'close'); //publish the messsage
@@ -417,6 +395,8 @@ module.exports = function(server, con) { //exports the function
                 }
             }
         });
+
+        client.publish(aquas_time_topic, String(hour)); //publish the messsage
     }, 1000);
 
 

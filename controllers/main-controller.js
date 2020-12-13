@@ -44,7 +44,7 @@ module.exports = function(app, con, path, passport) { //exports the function
             //select all light sensor value and time from the database
             if (err) throw err;
             //index route
-            console.log(result[1])
+
             res.render('index', {
                 name: req.user.nama,
                 photo: req.user.foto,
@@ -63,7 +63,7 @@ module.exports = function(app, con, path, passport) { //exports the function
             //select all light sensor value and time from the database
             if (err) throw err;
             //index route
-            console.log(result[1])
+
             res.render('notifications', {
                 name: req.user.nama,
                 photo: req.user.foto,
@@ -83,7 +83,7 @@ module.exports = function(app, con, path, passport) { //exports the function
             //select all light sensor value and time from the database
             if (err) throw err;
             //index route
-            console.log(result[1])
+
             res.render('notification-detail', {
                 name: req.user.nama,
                 photo: req.user.foto,
@@ -125,10 +125,10 @@ module.exports = function(app, con, path, passport) { //exports the function
             query = "UPDATE `jadwal_pakan` SET `waktu` = '" + req.body.waktu_pakan_pagi.replace(/\s/g, '') + "' WHERE `jadwal_pakan`.`jenis` = 'pagi';";
         query += " UPDATE `jadwal_pakan` SET `waktu` = '" + req.body.waktu_pakan_siang.replace(/\s/g, '') + "' WHERE `jadwal_pakan`.`jenis` = 'siang';";
         query += " UPDATE `jadwal_pakan` SET `waktu` = '" + req.body.waktu_pakan_sore.replace(/\s/g, '') + "' WHERE `jadwal_pakan`.`jenis` = 'sore';";
-        console.log('sinle-feed acessed')
+
         con.query(check_table_query, function(err, result) {
             if (err) throw err;
-            console.log(result);
+
             if (result.length < 1) {
                 query = 'INSERT INTO jadwal_pakan(jenis, waktu) VALUES ';
                 query += "('pagi','" + req.body.waktu_pakan_pagi.replace(/\s/g, '') + "'),"
@@ -209,7 +209,7 @@ module.exports = function(app, con, path, passport) { //exports the function
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
-            console.log(result)
+
             res.render('admin-manage', {
                 //render the ejs view for light detail page
                 name: req.user.nama,
@@ -225,7 +225,7 @@ module.exports = function(app, con, path, passport) { //exports the function
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
-            console.log(result)
+
             res.render('admin-add', {
                 notifikasi: result,
                 name: req.user.nama,
@@ -300,7 +300,7 @@ module.exports = function(app, con, path, passport) { //exports the function
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
-            console.log(result)
+
             res.render('profile', {
                 message_bio: '',
                 message_photo: '',

@@ -58,9 +58,6 @@ var pakan_pagi_options = {
         showSeconds: false, //Whether or not to show seconds,
     }
 
-// console.log('jenis_jadwal_pakan lies here')
-// console.log(waktu_pakan_pagi.val())
-
 waktu_pakan_pagi.wickedpicker({
     now: waktu_pakan_pagi.data('waktu'),
     twentyFour: true, //Display 24 hour format, defaults to false
@@ -79,21 +76,6 @@ waktu_pakan_sore.wickedpicker({
     title: 'Waktu Pakan Sore', //The Wickedpicker's title,
     showSeconds: false, //Whether or not to show seconds,
 });
-
-$('#wa').wickedpicker({
-    now: waktu_pakan_pagi.data('waktu'),
-    twentyFour: true, //Display 24 hour format, defaults to false
-    title: 'Waktu Pakan Sore', //The Wickedpicker's title,
-    showSeconds: false, //Whether or not to show seconds,
-});
-
-$('#wb').wickedpicker({
-    now: waktu_pakan_siang.data('waktu'),
-    twentyFour: true, //Display 24 hour format, defaults to false
-    title: 'Waktu Pakan Sore', //The Wickedpicker's title,
-    showSeconds: false, //Whether or not to show seconds,
-});
-
 
 
 //Start feed console

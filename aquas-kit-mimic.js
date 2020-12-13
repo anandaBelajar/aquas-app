@@ -15,6 +15,7 @@ var topic = [
         'aquas/pump',
         'aquas/growlight',
         'aquas/servo',
+        'aquas/time'
     ] //set the topic
 
 client.on('connect', function() {
