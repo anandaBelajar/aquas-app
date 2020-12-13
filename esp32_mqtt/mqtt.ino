@@ -58,17 +58,39 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println("pump");
   }
  
-  if (strcmp(topic,"aquas/servo")==0) {
+  if (strcmp(topic,"aquas/servo_auto")==0) {
     // obvioulsy state of my red LED
-    turnServo(message);
+    turnServoAuto(message);
     Serial.println("servo");
   }
+
+  if (strcmp(topic,"aquas/servo_manual")==0) {
+    // obvioulsy state of my red LED
+    turnServoManual(message);
+    Serial.println("servo");
+  }
+
+   if (strcmp(topic,"aquas/growlight")==0) {
+    if(message == "auto") {
+      growlight_automation_state = "auto";
+    }   
+    else if(message == "manual") {
+      growlight_automation_state = "manual";
+    }
+    Serial.println("growlight state");
+  }
  
-  if (strcmp(topic,"aquas/growlight")==0) {
+  if (strcmp(topic,"aquas/growlight_manual")==0) {
     // this one is blue...
-    turnGrowlight(message);
+    turnGrowlightManual(message);
     Serial.println("growlight");
-  }  
+  }
+
+  if(growlight_automation_state == "auto"){
+    if (strcmp(topic,"aquas/time")==0) {
+      turnGrowlightAuto(message);
+    }
+  }
 }
 
 void send_sensor_data(){

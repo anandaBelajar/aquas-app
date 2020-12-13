@@ -8,7 +8,7 @@
  
 const char* ssid = "ZTE_2.4G_7RTKSh";
 const char* password = "42326120";
-const char* mqttServer = "mqtt.eclipse.org";
+const char* mqttServer = "aquas-app.site";
 const int mqttPort = 1883;
 const char* mqttUser = "";
 const char* mqttPassword = "";
@@ -67,6 +67,7 @@ String ph_str; //variable to hold string converted light value
 char ph[200]; //array to hold light value message package
 //End Define sensor array and variable for MQTT
 
+String growlight_automation_state = "auto";
 
 void setup() {
  
@@ -118,4 +119,6 @@ void loop() {
     send_sensor_data();
     lastMsg = now;
   }
+
+ 
 }

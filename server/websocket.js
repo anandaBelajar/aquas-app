@@ -35,6 +35,7 @@ module.exports = function(server, con) { //exports the function
         ],
         aquas_pump_topic = 'aquas/pump',
         aquas_growlight_topic = 'aquas/growlight',
+        aquas_growlight_manual_topic = 'aquas/growlight_manual',
         aquas_servo_topic = 'aquas/servo',
         aquas_servo_topic = 'aquas/servo_auto',
         aquas_servo_manual_topic = 'aquas/servo_manual',
@@ -316,7 +317,7 @@ module.exports = function(server, con) { //exports the function
                 }
             });
             io.sockets.emit('grow_light_on');
-            client.publish(aquas_growlight_topic, 'on'); //publish the messsage
+            client.publish(aquas_growlight_manual_topic, 'on'); //publish the messsage
         });
 
         socket.on('grow_light_off', function() {
@@ -332,7 +333,7 @@ module.exports = function(server, con) { //exports the function
                 }
             });
             io.sockets.emit('grow_light_off');
-            client.publish(aquas_growlight_topic, 'off'); //publish the messsage
+            client.publish(aquas_growlight_manual_topic, 'off'); //publish the messsage
         });
         //End light socket event
 

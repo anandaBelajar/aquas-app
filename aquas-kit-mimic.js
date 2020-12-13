@@ -14,6 +14,7 @@ var topic = [
         //'aquas/temp',
         'aquas/pump',
         'aquas/growlight',
+        'aquas/growlight_manual',
         'aquas/servo',
         'aquas/servo_auto',
         'aquas/servo_manual',
