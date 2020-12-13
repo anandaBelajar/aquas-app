@@ -6,6 +6,7 @@ var socket = require('socket.io'); //require socket.io package
 let mqtt = require('mqtt'); //require mqtt package
 const nodemailer = require('nodemailer');
 
+
 module.exports = function(server, con) { //exports the function
 
     let transporter = nodemailer.createTransport({
@@ -36,12 +37,14 @@ module.exports = function(server, con) { //exports the function
         aquas_growlight_topic = 'aquas/growlight',
         aquas_servo_topic = 'aquas/servo'
 
+
     var current_feed = "",
         current_temp = "",
         current_ph = "",
-        jadwal_pakan_pagi = "08 : 00 : 00",
-        jadwal_pakan_siang = "12 : 00 : 00",
-        jadwal_pakan_sore = "16 : 00 : 00"
+        jadwal_pakan_pagi = "",
+        jadwal_pakan_siang = "",
+        jadwal_pakan_sore = ""
+
 
     client.on('connect', function() {
         console.log('connected to a broker...'); //console log whe connection to broker success
@@ -54,20 +57,19 @@ module.exports = function(server, con) { //exports the function
     })
 
     client.on('message', function(topic, message) {
+
+        var date = new Date(),
+            seconds = date.getSeconds(),
+            minutes = date.getMinutes(),
+            hour = date.getHours(),
+            year = date.getFullYear(),
+            month = date.getMonth(),
+            day = date.getDate(),
+            dateonly = year + "-" + month + "-" + day,
+            time = hour + ':' + minutes + ':' + seconds, //current time to display on front end
+            dbDateTime = year + "-" + month + "-" + day + "- " + hour + ":" + minutes + ":" + seconds; //date time to save in database
+
         //fire the function when message coming
-
-        //get current date time value
-        var date = new Date();
-        var seconds = date.getSeconds();
-        var minutes = date.getMinutes();
-        var hour = date.getHours();
-        var year = date.getFullYear();
-        var month = date.getMonth();
-        var day = date.getDate();
-        var dateonly = year + "-" + month + "-" + day
-        var time = hour + ':' + minutes + ':' + seconds; //current time to display on front end
-        var dbDateTime = year + "-" + month + "-" + day + "- " + hour + ":" + minutes + ":" + seconds; //date time to save in database
-
         if (topic == 'aquas/feed') {
             current_feed = message.toString()
             var feed = [message.toString(), time]; //save sensor value from mqtt message and current time 
@@ -375,6 +377,48 @@ module.exports = function(server, con) { //exports the function
 
 
     });
+
+    setInterval(function() {
+
+        var date = new Date(),
+            seconds = date.getSeconds(),
+            minutes = date.getMinutes(),
+            hour = date.getHours(),
+            year = date.getFullYear(),
+            month = date.getMonth(),
+            day = date.getDate(),
+            dateonly = year + "-" + month + "-" + day,
+            time = hour + ':' + minutes + ':' + seconds, //current time to display on front end
+            dbDateTime = year + "-" + month + "-" + day + "- " + hour + ":" + minutes + ":" + seconds; //date time to save in database
+
+        var query = "SELECT waktu FROM  `jadwal_pakan`"
+        console.log('..........time..........')
+        console.log(time)
+        console.log('..........time..........')
+        var date = new Date(),
+            seconds = date.getSeconds(),
+            minutes = date.getMinutes(),
+            hour = date.getHours(),
+            year = date.getFullYear(),
+            month = date.getMonth(),
+            day = date.getDate(),
+            dateonly = year + "-" + month + "-" + day,
+            time = hour + ':' + minutes + ':' + seconds, //current time to display on front end
+            dbDateTime = year + "-" + month + "-" + day + "- " + hour + ":" + minutes + ":" + seconds; //date time to save in database
+
+        con.query(query, function(err, result) {
+            if (err) throw err;
+            if (result.length) {
+                if (result[0]['waktu'] == time || result[1]['waktu'] == time || result[2]['waktu'] == time) {
+                    client.publish(aquas_servo_topic, 'open'); //publish the messsage
+                    setTimeout(function() {
+                        client.publish(aquas_servo_topic, 'close'); //publish the messsage
+                    }, 3000)
+                }
+            }
+        });
+    }, 1000);
+
 
 
 
