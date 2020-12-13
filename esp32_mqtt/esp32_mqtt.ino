@@ -27,6 +27,7 @@ PubSubClient client(espClient);
 
 #define pump 19
 #define growlight 18
+#define growlight2 23
 #define servoPin 13
 
 int status = WL_IDLE_STATUS;
