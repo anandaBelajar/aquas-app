@@ -15,6 +15,8 @@ var topic = [
         'aquas/pump',
         'aquas/growlight',
         'aquas/servo',
+        'aquas/servo_auto',
+        'aquas/servo_manual',
         'aquas/time'
     ] //set the topic
 

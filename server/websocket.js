@@ -36,16 +36,15 @@ module.exports = function(server, con) { //exports the function
         aquas_pump_topic = 'aquas/pump',
         aquas_growlight_topic = 'aquas/growlight',
         aquas_servo_topic = 'aquas/servo',
+        aquas_servo_topic = 'aquas/servo_auto',
+        aquas_servo_manual_topic = 'aquas/servo_manual',
+        aquas_servo_auto_topic = 'aquas/servo_auto',
         aquas_time_topic = 'aquas/time'
 
 
     var current_feed = "",
         current_temp = "",
-        current_ph = "",
-        jadwal_pakan_pagi = "",
-        jadwal_pakan_siang = "",
-        jadwal_pakan_sore = ""
-
+        current_ph = ""
 
     client.on('connect', function() {
         console.log('connected to a broker...'); //console log whe connection to broker success
@@ -89,17 +88,6 @@ module.exports = function(server, con) { //exports the function
             }
             var light = [message.toString(), time]; //save sensor value from mqtt message and current time 
             io.sockets.emit('aquas_light_msg_arrive', light); //send sensor value and current time to frontend websocket
-
-            /*
-            if (hour == 8 && minutes == 0 && seconds == 0 && message.toString() >= 50) {
-                //at 08.00 AM if and the moisture equal or higer than 50 % turn on the pump 
-                client.publish(pubTopic, 'on'); //publish the messsage
-            } else if (message.toString() <= 30) {
-                //always turn off the pump if moisture lower or equal to 30% 
-                client.publish(pubTopic, 'off'); //publish the messsage
-
-            }
-            */
 
         } else if (topic == 'aquas/temp') {
             current_temp = message.toString()
@@ -145,27 +133,18 @@ module.exports = function(server, con) { //exports the function
                 jenis = 'peringatan_pakan'
                 subject = "peringatan"
                 content = 'Sisa pakan sebanyak ' + current_feed + '%, mohon segera lakukan isi ulang'
-            } else if (message.toString() == 'peringatan_suhu_rendah') {
-                jenis = 'peringatan_suhu_rendah'
+            } else if (message.toString() == 'peringatan_suhu') {
+                jenis = 'peringatan_suhu'
                 subject = "peringatan"
-                content = 'Kondisi suhu saat ini terlalu rendah : ' + current_temp + 'celcius, mohon segera lakukan pemeriksaan'
-            } else if (message.toString() == 'peringatan_suhu_tinggi') {
-                jenis = 'peringatan_suhu_tinggi'
+                content = 'Temperatur suhu saat ini  : ' + current_temp + 'celcius, mohon segera lakukan pemeriksaan'
+            } else if (message.toString() == 'peringatan_ph') {
+                jenis = 'peringatan_ph'
                 subject = "peringatan"
-                content = 'Kondisi suhu saat ini terlalu tinggi : ' + current_temp + 'celcius, mohon segera lakukan pemeriksaan'
-            } else if (message.toString() == 'peringatan_ph_rendah') {
-                jenis = 'peringatan_ph_rendah'
-                subject = "peringatan"
-                content = 'Kondisi ph saat ini teralu rendah : ' + current_ph + 'mohon segera lakukan pemeriksaan'
-            } else if (message.toString() == 'peringatan_ph_tinggi') {
-                jenis = 'peringatan_ph_tinggi'
-                subject = "peringatan"
-                content = 'Kondisi ph saat ini terlalu tinggi : ' + current_ph + 'mohon segera lakukan pemeriksaan'
+                content = 'Derajat ph saat ini : ' + current_ph + 'mohon segera lakukan pemeriksaan'
             }
 
             query += "SELECT jenis FROM notifikasi WHERE jenis = '" + jenis + "';"
             query += "SELECT tanggal FROM notifikasi WHERE tanggal ='" + dateonly + "';"
-                //query += "SELECT tanggal FROM notifikasi;"
 
             con.query(query, function(err, result) {
                 if (err) throw err;
@@ -246,20 +225,14 @@ module.exports = function(server, con) { //exports the function
 
         socket.on('servo_open', function() {
             //servo open close status doesn't need to be saved in database because it using javascript interval timer
+            console.log('servo')
             io.sockets.emit('servo_open');
-            client.publish(aquas_servo_topic, 'open'); //publish the messsage
+            client.publish(aquas_servo_manual_topic, 'open'); //publish the messsage
             setTimeout(function() {
                 io.sockets.emit('servo_close');
-                client.publish(aquas_servo_topic, 'close'); //publish the messsage
+                client.publish(aquas_servo_manual_topic, 'close'); //publish the messsage
             }, 3000)
         });
-
-        // socket.on('servo_close', function() {
-        //     //servo open close status doesn't need to be saved in database because it using javascript interval timer
-        //     //io.sockets.emit('servo_close');
-        //     client.publish(aquas_servo_topic, 'close'); //publish the messsage
-        // });
-        //End servo socket event
 
         //Start pump event Socket
         socket.on('pump_on', function() {
@@ -388,9 +361,9 @@ module.exports = function(server, con) { //exports the function
             if (result.length) {
                 if (result[0]['waktu'] == time || result[1]['waktu'] == time || result[2]['waktu'] == time) {
                     console.log('waktu pakan')
-                    client.publish(aquas_servo_topic, 'open'); //publish the messsage
+                    client.publish(aquas_servo_auto_topic, 'open'); //publish the messsage
                     setTimeout(function() {
-                        client.publish(aquas_servo_topic, 'close'); //publish the messsage
+                        client.publish(aquas_servo_auto_topic, 'close'); //publish the messsage
                     }, 3000)
                 }
             }
