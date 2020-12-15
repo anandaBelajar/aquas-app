@@ -88,6 +88,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
 
   
   if (strcmp(topic,"aquas/time")==0) {
+    server_time = message.toInt();
     if(growlight_automation_state == "auto"){
       turnGrowlightAuto(message);
     }

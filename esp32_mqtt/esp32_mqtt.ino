@@ -73,11 +73,17 @@ char ph[200]; //array to hold light value message package
 
 String growlight_automation_state = "auto";
 
+int server_time;
+
 void setup() {
 
-  init_fuzzy_ph_notification();
  
   Serial.begin(115200);
+
+  init_fuzzy_ph_notification();
+  init_fuzzy_temp_notification();
+  init_fuzzy_feed_notification();
+  init_fuzzy_lighting();
 
   ESP32PWM::allocateTimer(0);
   ESP32PWM::allocateTimer(1);
@@ -124,7 +130,7 @@ void loop() {
   unsigned long now = millis();
   if (now - lastMsg > 1000) {
     send_sensor_data();
-    do_notification();
+    do_fuzzy();
     lastMsg = now;
   }
 
