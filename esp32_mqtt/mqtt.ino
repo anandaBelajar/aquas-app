@@ -86,11 +86,13 @@ void callback(char* topic, byte* payload, unsigned int length) {
     Serial.println("growlight");
   }
 
-  if(growlight_automation_state == "auto"){
-    if (strcmp(topic,"aquas/time")==0) {
+  
+  if (strcmp(topic,"aquas/time")==0) {
+    if(growlight_automation_state == "auto"){
       turnGrowlightAuto(message);
     }
   }
+  
 }
 
 void send_sensor_data(){

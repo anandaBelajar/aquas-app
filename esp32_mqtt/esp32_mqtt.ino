@@ -5,6 +5,9 @@
 #include <BH1750.h> //BH1750 light sensor library
 #include <OneWire.h> 
 #include <DallasTemperature.h> //DS18B20 temp sensor value
+#include <Fuzzy.h>
+
+Fuzzy *fuzzy = new Fuzzy();
  
 const char* ssid = "ZTE_2.4G_7RTKSh";
 const char* password = "42326120";
@@ -71,6 +74,8 @@ char ph[200]; //array to hold light value message package
 String growlight_automation_state = "auto";
 
 void setup() {
+
+  init_fuzzy_ph_notification();
  
   Serial.begin(115200);
 
@@ -110,6 +115,7 @@ void setup() {
 }
  
 void loop() {
+  
   if (!client.connected()) {
       reconnect();
     }
@@ -118,6 +124,7 @@ void loop() {
   unsigned long now = millis();
   if (now - lastMsg > 1000) {
     send_sensor_data();
+    do_notification();
     lastMsg = now;
   }
 
