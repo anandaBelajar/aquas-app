@@ -32,7 +32,7 @@
                     <li class="nav-item">
                         <a href="notification-detail/<%= item.id %>" class="dropdown-item">
                             <span>
-          <span class="font-weight-bold"><%= item.jenis %> <%if(item.status == 'read'){%><i class="fa fa-check-circle"></i><%} else {%><i class="fa fa-exclamation-circle"></i><%}%></span>
+          <span class="font-weight-bold"><%= item.subject%> <%if(item.status == 'read'){%><i class="fa fa-check-circle"></i><%} else {%><i class="fa fa-exclamation-circle"></i><%}%></span>
                             <span class="time">
                                 <%
                                     var raw_date = String(item.tanggal),
@@ -50,7 +50,7 @@
                     </li>
                     <% }) %>
                         <% } else { %>
-                            <p class="text-center">No data found</p>
+                            <p class="text-center" style="margin-top: 25px;">No data found</p>
                             <% } %>
 
                                 <li class="nav-item">
