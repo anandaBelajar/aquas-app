@@ -3,8 +3,8 @@
 #include <ESP32Servo.h>
 #include <Wire.h>
 #include <BH1750.h> //BH1750 light sensor library
-#include <OneWire.h> 
-#include <DallasTemperature.h> //DS18B20 temp sensor value
+#include <OneWire.h>
+#include <DallasTemperature.h>
 #include <Fuzzy.h>
 
 Fuzzy *fuzzy = new Fuzzy();
@@ -43,20 +43,27 @@ int distance;
 //End define ultrasnoic
 
 //Start define BH1750
-//BH1750 pin SDA = 21 SCL = 22
+//BH1750 pin SDA = 21 (putih) SCL = 22 (kuning)
 BH1750 lightMeter;
 //End define BH1750
 
 
 //Start define DS18B20
-#define ONE_WIRE_BUS 34
-OneWire oneWire(ONE_WIRE_BUS);
+const int oneWireBus = 4;     
+// Setup a oneWire instance to communicate with any OneWire devices
+OneWire oneWire(oneWireBus);
+// Pass our oneWire reference to Dallas Temperature sensor 
 DallasTemperature tempSensor(&oneWire);
 //END defineDS18B20
 
 //Start define E201C
-const int phPin  = 35;
-float Po = 0;  
+const int phPin  = 34;
+double Po                        = 0;
+const int numReadings = 20;
+double readings[numReadings];      // the readings from the analog input
+int readIndex = 0;              // the index of the current reading
+int phTotal = 0;                  // the running phTotal
+double phAverage = 0;                // the phAverage
 //End define E201C
 
 
@@ -97,6 +104,9 @@ void setup() {
   pinMode(pump, OUTPUT);
   pinMode(growlight, OUTPUT);
   pinMode (phPin, INPUT); 
+  for (int thisReading = 0; thisReading < numReadings; thisReading++) {
+    readings[thisReading] = 0;
+  } 
 
 
   digitalWrite(pump, HIGH);
@@ -133,6 +143,5 @@ void loop() {
     do_fuzzy();
     lastMsg = now;
   }
-
  
 }

@@ -1,8 +1,7 @@
 float get_temp_value() {
-  tempSensor.requestTemperatures();
-  float temp = tempSensor.getTempCByIndex(0);
-  //Serial.print("Temp : ");
-  //Serial.println(temp);
-
-  return temp;
+  tempSensor.requestTemperatures(); 
+  float temperatureC = tempSensor.getTempCByIndex(0);
+  //Serial.print(temperatureC);
+  //Serial.println("ºC");
+  return temperatureC;
 }

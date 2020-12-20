@@ -3,7 +3,7 @@ void init_fuzzy_ph_notification(){
 FuzzyInput *fuzzy_ph_input = new FuzzyInput(1);
 FuzzySet *ph_rendah = new FuzzySet(0, 0, 6, 6.5);
 fuzzy_ph_input->addFuzzySet(ph_rendah);
-FuzzySet *ph_normal = new FuzzySet(6, 6.5, 6.5, 7);
+FuzzySet *ph_normal = new FuzzySet(5, 6.5, 6.5, 7);
 fuzzy_ph_input->addFuzzySet(ph_normal);
 FuzzySet *ph_tinggi = new FuzzySet(6.7, 7, 14, 14);
 fuzzy_ph_input->addFuzzySet(ph_tinggi);
