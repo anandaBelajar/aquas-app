@@ -37,7 +37,6 @@ module.exports = function(server, con) { //exports the function
         aquas_growlight_topic = 'aquas/growlight',
         aquas_growlight_manual_topic = 'aquas/growlight_manual',
         aquas_servo_topic = 'aquas/servo',
-        aquas_servo_topic = 'aquas/servo_auto',
         aquas_servo_manual_topic = 'aquas/servo_manual',
         aquas_servo_auto_topic = 'aquas/servo_auto',
         aquas_time_topic = 'aquas/time'
@@ -72,8 +71,13 @@ module.exports = function(server, con) { //exports the function
 
         //fire the function when message coming
         if (topic == 'aquas/feed') {
-            current_feed = message.toString()
-            var feed = [message.toString(), time]; //save sensor value from mqtt message and current time 
+            // current_feed = message.toString()
+            // var feed = [message.toString(), time]; //save sensor value from mqtt message and current time 
+            // io.sockets.emit('aquas_feed_msg_arrive', feed); //send sensor value and current time to frontend websocket
+
+            current_feed = Math.trunc(100 * ((parseFloat(message.toString()) - 0) / (23 - 0)))
+            var feed = current_feed <= 100 ? [current_feed, time] : [100, time]; //save sensor value from mqtt message and current time 
+            //console.log(message.toString());
             io.sockets.emit('aquas_feed_msg_arrive', feed); //send sensor value and current time to frontend websocket
         } else
         if (topic == 'aquas/light') {
@@ -137,11 +141,11 @@ module.exports = function(server, con) { //exports the function
             } else if (message.toString() == 'peringatan_suhu') {
                 jenis = 'peringatan_suhu'
                 subject = "peringatan"
-                content = 'Temperatur suhu saat ini  : ' + current_temp + 'celcius, mohon segera lakukan pemeriksaan'
+                content = 'Temperatur suhu saat ini  : ' + current_temp + ' celcius, mohon segera lakukan pemeriksaan'
             } else if (message.toString() == 'peringatan_ph') {
                 jenis = 'peringatan_ph'
                 subject = "peringatan"
-                content = 'Derajat ph saat ini : ' + current_ph + 'mohon segera lakukan pemeriksaan'
+                content = 'Derajat ph saat ini : ' + current_ph + ', mohon segera lakukan pemeriksaan'
             }
 
             query += "SELECT jenis FROM notifikasi WHERE jenis = '" + jenis + "';"
@@ -205,7 +209,7 @@ module.exports = function(server, con) { //exports the function
                 }
             });
             io.sockets.emit('servo_auto');
-            client.publish(aquas_servo_topic, 'auto'); //publish the messsage
+            client.publish(aquas_servo_auto_topic, 'auto'); //publish the messsage
         });
 
         socket.on('servo_manual', function() {
@@ -221,7 +225,7 @@ module.exports = function(server, con) { //exports the function
                 }
             });
             io.sockets.emit('servo_manual');
-            client.publish(aquas_servo_topic, 'manual'); //publish the messsage
+            client.publish(aquas_servo_auto_topic, 'manual'); //publish the messsage
         });
 
         socket.on('servo_open', function() {

@@ -5,7 +5,8 @@ void turnGrowlightManual(String message){
   }   //turn the pump off
   else if(message == "on") {
     digitalWrite(growlight, LOW);
-    digitalWrite(growlight2, LOW);
+    digitalWrite(growlight2, LOW);digitalWrite(growlight, HIGH);
+    digitalWrite(growlight2, HIGH);
   } //turn the pump on
 }
 

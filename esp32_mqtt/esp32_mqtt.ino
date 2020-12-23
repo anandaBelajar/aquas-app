@@ -13,8 +13,8 @@ const char* ssid = "ZTE_2.4G_7RTKSh";
 const char* password = "42326120";
 const char* mqttServer = "aquas-app.site";
 const int mqttPort = 1883;
-const char* mqttUser = "";
-const char* mqttPassword = "";
+const char* mqttUser = "ananda";
+const char* mqttPassword = "linguafranca99";
 
 Servo myservo;
 
@@ -140,7 +140,7 @@ void loop() {
   unsigned long now = millis();
   if (now - lastMsg > 1000) {
     send_sensor_data();
-    do_fuzzy();
+    //do_fuzzy();
     lastMsg = now;
   }
  
