@@ -71,13 +71,8 @@ module.exports = function(server, con) { //exports the function
 
         //fire the function when message coming
         if (topic == 'aquas/feed') {
-            // current_feed = message.toString()
-            // var feed = [message.toString(), time]; //save sensor value from mqtt message and current time 
-            // io.sockets.emit('aquas_feed_msg_arrive', feed); //send sensor value and current time to frontend websocket
-
             current_feed = Math.trunc(100 * ((parseFloat(message.toString()) - 0) / (23 - 0)))
             var feed = current_feed <= 100 ? [current_feed, time] : [100, time]; //save sensor value from mqtt message and current time 
-            //console.log(message.toString());
             io.sockets.emit('aquas_feed_msg_arrive', feed); //send sensor value and current time to frontend websocket
         } else
         if (topic == 'aquas/light') {
