@@ -209,7 +209,7 @@ module.exports = function(server, con) { //exports the function
                 }
             });
             io.sockets.emit('servo_auto');
-            client.publish(aquas_servo_auto_topic, 'auto'); //publish the messsage
+            //client.publish(aquas_servo_auto_topic, 'auto'); //publish the messsage
         });
 
         socket.on('servo_manual', function() {
@@ -225,16 +225,16 @@ module.exports = function(server, con) { //exports the function
                 }
             });
             io.sockets.emit('servo_manual');
-            client.publish(aquas_servo_auto_topic, 'manual'); //publish the messsage
+            //client.publish(aquas_servo_auto_topic, 'manual'); //publish the messsage
         });
 
         socket.on('servo_open', function() {
             //servo open close status doesn't need to be saved in database because it using javascript interval timer
             io.sockets.emit('servo_open');
-            client.publish(aquas_servo_manual_topic, 'open'); //publish the messsage
+            client.publish(aquas_servo_topic, 'open'); //publish the messsage
             setTimeout(function() {
                 io.sockets.emit('servo_close');
-                client.publish(aquas_servo_manual_topic, 'close'); //publish the messsage
+                client.publish(aquas_servo_topic, 'close'); //publish the messsage
             }, 3000)
         });
 
@@ -358,17 +358,23 @@ module.exports = function(server, con) { //exports the function
             minutes = date.getMinutes() < 10 ? '0' + String(date.getMinutes()) : date.getMinutes(),
             hour = date.getHours() < 10 ? '0' + String(date.getHours()) : date.getHours(),
             time = hour + ':' + minutes + ':' + seconds //current time to display on front end
-        var query = "SELECT waktu FROM  `jadwal_pakan`"
+        var query = "SELECT waktu FROM  jadwal_pakan; "
+        query += "SELECT status FROM status_aktuator WHERE jenis='servo_auto';"
+
+        //query += "SELECT jenis FROM notifikasi WHERE jenis = '" + jenis + "';"
+        //query += "SELECT tanggal FROM notifikasi WHERE tanggal ='" + dateonly + "';"
 
         con.query(query, function(err, result) {
             if (err) throw err;
+
             if (result.length) {
-                if (result[0]['waktu'] == time || result[1]['waktu'] == time || result[2]['waktu'] == time) {
-                    console.log('waktu pakan')
-                    client.publish(aquas_servo_auto_topic, 'open'); //publish the messsage
-                    setTimeout(function() {
-                        client.publish(aquas_servo_auto_topic, 'close'); //publish the messsage
-                    }, 3000)
+                if (result[0][0]['waktu'] == time || result[0][1]['waktu'] == time || result[0][2]['waktu'] == time) {
+                    if (result[1][0]['status'] == 'auto') {
+                        client.publish(aquas_servo_topic, 'open'); //publish the messsage
+                        setTimeout(function() {
+                            client.publish(aquas_servo_topic, 'close'); //publish the messsage
+                        }, 3000)
+                    }
                 }
             }
         });
