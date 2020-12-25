@@ -376,13 +376,22 @@ $(function() {
 
     socket.on('servo_open', function() {
         aquas_manual_feed_toggle.prop('checked', true)
-        aquas_manual_feed_toggle_container.find('label').text('Buka')
+            //aquas_manual_feed_toggle_container.find('label').text('Buka')
+        aquas_manual_feed_toggle_container.find('label').text('')
+        aquas_manual_feed_toggle_container.find('.loader-container').addClass('fa fa-spinner fa-spin fa-2x fa-fw"')
     })
 
 
     socket.on('servo_close', function() {
         aquas_manual_feed_toggle.prop('checked', false)
-        aquas_manual_feed_toggle_container.find('label').text('Tutup')
+            //aquas_manual_feed_toggle_container.find('label').text('Tutup')
+        aquas_manual_feed_toggle_container.find('label').text('')
+        aquas_manual_feed_toggle_container.find('.loader-container').addClass('fa fa-spinner fa-spin fa-2x fa-fw"')
+    })
+
+    socket.on('remove_servo_loader', function(status) {
+        aquas_manual_feed_toggle_container.find('label').text(status)
+        aquas_manual_feed_toggle_container.find('.loader-container').removeClass('fa fa-spinner fa-spin fa-2x fa-fw"')
     })
 
 
@@ -392,12 +401,21 @@ $(function() {
 
     socket.on('pump_on', function() {
         aquas_manual_pump_toggle.prop('checked', true)
-        aquas_manual_pump_toggle_container.find('label').text('On')
+            //aquas_manual_pump_toggle_container.find('label').text('On')
+        aquas_manual_pump_toggle_container.find('label').text('')
+        aquas_manual_pump_toggle_container.find('.loader-container').addClass('fa fa-spinner fa-spin fa-2x fa-fw"')
     })
 
     socket.on('pump_off', function() {
         aquas_manual_pump_toggle.prop('checked', false)
-        aquas_manual_pump_toggle_container.find('label').text('Off')
+            //aquas_manual_pump_toggle_container.find('label').text('Off')
+        aquas_manual_pump_toggle_container.find('label').text('')
+        aquas_manual_pump_toggle_container.find('.loader-container').addClass('fa fa-spinner fa-spin fa-2x fa-fw"')
+    })
+
+    socket.on('remove_pump_loader', function(status) {
+        aquas_manual_pump_toggle_container.find('label').text(status)
+        aquas_manual_pump_toggle_container.find('.loader-container').removeClass('fa fa-spinner fa-spin fa-2x fa-fw"')
     })
 
     //End pump toggle event
@@ -419,12 +437,21 @@ $(function() {
 
     socket.on('grow_light_on', function() {
         aquas_manual_light_toggle.prop('checked', true)
-        aquas_manual_light_toggle_container.find('label').text('On')
+            //aquas_manual_light_toggle_container.find('label').text('On')
+        aquas_manual_light_toggle_container.find('label').text('')
+        aquas_manual_light_toggle_container.find('.loader-container').addClass('fa fa-spinner fa-spin fa-2x fa-fw"')
     })
 
     socket.on('grow_light_off', function() {
         aquas_manual_light_toggle.prop('checked', false)
-        aquas_manual_light_toggle_container.find('label').text('Off')
+            //aquas_manual_light_toggle_container.find('label').text('Off')
+        aquas_manual_light_toggle_container.find('label').text('')
+        aquas_manual_light_toggle_container.find('.loader-container').addClass('fa fa-spinner fa-spin fa-2x fa-fw"')
+    })
+
+    socket.on('remove_growlight_loader', function(status) {
+        aquas_manual_light_toggle_container.find('label').text(status)
+        aquas_manual_light_toggle_container.find('.loader-container').removeClass('fa fa-spinner fa-spin fa-2x fa-fw"')
     })
 
     //End light toggle event

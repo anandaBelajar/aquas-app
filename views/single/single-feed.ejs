@@ -49,6 +49,7 @@
                                                 <input type="checkbox" class="custom-control-input" id="aquas_auto_feed_toggle" <% if(input_items[0].status=='auto' ){ %> checked
                                                 <%}%> >
                                                     <label class="custom-control-label" for="aquas_auto_feed_toggle"><% if(input_items[0].status=='auto' ){ %> Auto <%}else{%> Manual <%}%></label>
+
                                             </div>
                                             <p class="control_description">Aktifkan kontrol pakan otomatis</p>
                                         </div>
@@ -57,6 +58,7 @@
                                                 <div class="custom-control custom-switch custom-switch-md">
                                                     <input type="checkbox" class="custom-control-input" id="aquas_manual_feed_toggle">
                                                     <label class="custom-control-label" for="aquas_manual_feed_toggle">tutup</label>
+                                                    <div class="loader-container"></div>
                                                 </div>
                                                 <p class="control_description">Buka atau tutup container pakan</p>
                                         </div>

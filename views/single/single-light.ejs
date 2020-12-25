@@ -59,6 +59,7 @@
                                                 <input type="checkbox" class="custom-control-input" id="aquas_auto_light_toggle" <% if(input_items[2].status=='auto' ){ %> checked
                                                 <%}%> >
                                                     <label class="custom-control-label" for="aquas_auto_light_toggle"><% if(input_items[2].status=='auto' ){ %> Auto <%}else{%> Manual <%}%></label>
+
                                             </div>
                                             <p class="control_description">Aktifkan kontrol pencahyaan otomatis</p>
                                         </div>
@@ -68,6 +69,7 @@
                                                     <input type="checkbox" class="custom-control-input" id="aquas_manual_light_toggle" <% if(input_items[3].status=='on' ){ %> checked
                                                     <%}%>>
                                                         <label class="custom-control-label" for="aquas_manual_light_toggle"> <% if(input_items[3].status=='on' ){ %> On <%}else{%> Off <%}%> </label>
+                                                        <div class="loader-container"></div>
                                                 </div>
                                                 <p class="control_description">Hidupkan atau matikan growlight</p>
                                         </div>

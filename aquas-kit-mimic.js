@@ -35,8 +35,27 @@ client.on('connect', function() {
 
 client.on('message', function(topic, message) {
     // message is Buffer
-    console.log('topic : ' + topic + ' message : ' + message.toString()) //show th message
-        //client.end() //client.end digunakan untuk menghentikan listening pada suatu broker
+    //console.log('topic : ' + topic + ' message : ' + message.toString()) //show th message
+    //client.end() //client.end digunakan untuk menghentikan listening pada suatu broker
+    if (topic == "aquas/pump") {
+        if (message.toString() == "on") {
+            client.publish('aquas/remove-loader', "pump/on")
+        } else if (message.toString() == "off") {
+            client.publish('aquas/remove-loader', "pump/off")
+        }
+    } else if (topic == "aquas/growlight_manual") {
+        if (message.toString() == "on") {
+            client.publish('aquas/remove-loader', "growlight/on")
+        } else if (message.toString() == "off") {
+            client.publish('aquas/remove-loader', "growlight/off")
+        }
+    } else if (topic == "aquas/servo") {
+        if (message.toString() == "open") {
+            client.publish('aquas/remove-loader', "servo/buka")
+        } else if (message.toString() == "close") {
+            client.publish('aquas/remove-loader', "servo/tutup")
+        }
+    }
 })
 
 function getRandomInt(min, max) {

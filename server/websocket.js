@@ -31,14 +31,13 @@ module.exports = function(server, con) { //exports the function
             'aquas/light',
             'aquas/temp',
             'aquas/ph',
-            'aquas/mail'
+            'aquas/mail',
+            'aquas/remove-loader'
         ],
         aquas_pump_topic = 'aquas/pump',
         aquas_growlight_topic = 'aquas/growlight',
         aquas_growlight_manual_topic = 'aquas/growlight_manual',
         aquas_servo_topic = 'aquas/servo',
-        aquas_servo_manual_topic = 'aquas/servo_manual',
-        aquas_servo_auto_topic = 'aquas/servo_auto',
         aquas_time_topic = 'aquas/time'
 
 
@@ -117,6 +116,16 @@ module.exports = function(server, con) { //exports the function
             }
             var ph = [message.toString(), time]; //save sensor value from mqtt message and current time 
             io.sockets.emit('aquas_ph_msg_arrive', ph);
+        } else if (topic == "aquas/remove-loader") {
+            var message = message.toString().split("/")
+
+            if (message[0] == "pump") {
+                io.sockets.emit('remove_pump_loader', message[1]);
+            } else if (message[0] == "servo") {
+                io.sockets.emit('remove_servo_loader', message[1]);
+            } else if (message[0] == "growlight") {
+                io.sockets.emit('remove_growlight_loader', message[1]);
+            }
         } else if (topic == 'aquas/mail') {
             var query = "SELECT id, email FROM administrator;",
                 notif_query = "",
