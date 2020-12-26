@@ -47,6 +47,23 @@ module.exports = function(server, con) { //exports the function
 
     client.on('connect', function() {
         console.log('connected to a broker...'); //console log whe connection to broker success
+        var query = "SELECT * FROM status_aktuator"
+        con.query(query, function(err, results) {
+            if (err) throw err;
+            if (results.length) {
+                var growlight_auto_status = "auto";
+                results.forEach((item, index) => {
+                    if (item['jenis'] == 'pump_manual') {
+                        client.publish(aquas_pump_topic, item['status'])
+                    } else if (item['jenis'] == 'grow_light_auto') {
+                        client.publish(aquas_growlight_topic, item['status'])
+                        growlight_auto_status = item['status'];
+                    } else if (item['jenis'] == 'grow_light_manual' && growlight_auto_status == 'manual') {
+                        client.publish(aquas_growlight_manual_topic, item['status'])
+                    }
+                })
+            }
+        });
         topic.forEach(function(value, index) {
             client.subscribe(value, function(err) {
                 //display subscribed topic when mqtt connection to broker success
@@ -310,6 +327,7 @@ module.exports = function(server, con) { //exports the function
             });
             io.sockets.emit('grow_light_manual');
             client.publish(aquas_growlight_topic, 'manual'); //publish the messsage
+            client.publish(aquas_growlight_manual_topic, 'off');
         });
 
         socket.on('grow_light_on', function() {
@@ -365,9 +383,6 @@ module.exports = function(server, con) { //exports the function
         var query = "SELECT waktu FROM  jadwal_pakan; "
         query += "SELECT status FROM status_aktuator WHERE jenis='servo_auto';"
 
-        //query += "SELECT jenis FROM notifikasi WHERE jenis = '" + jenis + "';"
-        //query += "SELECT tanggal FROM notifikasi WHERE tanggal ='" + dateonly + "';"
-
         con.query(query, function(err, result) {
             if (err) throw err;
 
@@ -383,7 +398,7 @@ module.exports = function(server, con) { //exports the function
             }
         });
 
-        client.publish(aquas_time_topic, String(hour)); //publish the messsage
+        client.publish(aquas_time_topic, String(19)); //publish the messsage
     }, 1000);
 
 
