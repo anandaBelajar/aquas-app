@@ -8,10 +8,6 @@ let client = mqtt.connect(process.env.VPS_MQTT_BROKER, {
 }); //connect to local broker
 
 var topic = [
-        //'aquas/ultrasonic',
-        //'aquas/light',
-        //'aquas/ph',
-        //'aquas/temp',
         'aquas/pump',
         'aquas/growlight',
         'aquas/growlight_manual',
@@ -27,6 +23,8 @@ client.on('connect', function() {
         client.subscribe(value, function(err) {
 
             console.log('subscribed to topic : ' + value); //display the subscribed topic of the mqtt broker
+
+
         })
 
     });
@@ -38,23 +36,28 @@ client.on('message', function(topic, message) {
     //console.log('topic : ' + topic + ' message : ' + message.toString()) //show th message
     //client.end() //client.end digunakan untuk menghentikan listening pada suatu broker
     if (topic == "aquas/pump") {
+        console.log(topic + ' : ' + message.toString())
         if (message.toString() == "on") {
             client.publish('aquas/remove-loader', "pump/on")
         } else if (message.toString() == "off") {
             client.publish('aquas/remove-loader', "pump/off")
         }
     } else if (topic == "aquas/growlight_manual") {
+        console.log(topic + ' : ' + message.toString())
         if (message.toString() == "on") {
             client.publish('aquas/remove-loader', "growlight/on")
         } else if (message.toString() == "off") {
             client.publish('aquas/remove-loader', "growlight/off")
         }
     } else if (topic == "aquas/servo") {
+        console.log(topic + ' : ' + message.toString())
         if (message.toString() == "open") {
             client.publish('aquas/remove-loader', "servo/buka")
         } else if (message.toString() == "close") {
             client.publish('aquas/remove-loader', "servo/tutup")
         }
+    } else if (topic == "aquas/growlight") {
+        console.log(topic + ' : ' + message.toString())
     }
 })
 
@@ -75,9 +78,4 @@ setInterval(function() {
     client.publish('aquas/light', light_value)
     client.publish('aquas/temp', temp_value)
     client.publish('aquas/ph', ph_value)
-
-    // client.publish('aquas/feed', 'apreciate it irancell')
-    // client.publish('aquas/light', 'apreciate it irancell')
-    // client.publish('aquas/temp', 'apreciate it irancell')
-    // client.publish('aquas/ph', 'apreciate it irancell')
 }, 1000);

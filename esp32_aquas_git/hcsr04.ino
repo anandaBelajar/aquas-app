@@ -18,6 +18,8 @@ int get_ultrasonic_value() {
   //Serial.print(distance);
   //Serial.println(" cm");
 
+  global_ultrasonic_value = distance;
+
   return distance;
 
   

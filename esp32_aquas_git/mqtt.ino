@@ -87,7 +87,9 @@ void send_sensor_data(){
   client.publish("aquas/ph", ph);
     
   
-}void reconnect() {
+}
+
+void reconnect() {
   // Loop until we're reconnected
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
@@ -100,6 +102,7 @@ void send_sensor_data(){
       client.subscribe("aquas/growlight_manual");
       client.subscribe("aquas/servo");
       client.subscribe("aquas/time");
+      client.subscribe("aquas/remove-loader");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());

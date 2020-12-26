@@ -212,71 +212,54 @@ FuzzyRule *lightingRuleSix = new FuzzyRule(16, ifTerangAndMalam, thenGrowlightMa
 fuzzy->addFuzzyRule(lightingRuleSix);
 }
 
-void do_fuzzy() {
-  
-  //dummy notification data
-  int dummy_ph_input = random(0, 14);
-  int dummy_temp_input = random(0, 50);
-  int dummy_feed_input = random(0, 23);
-  int dummy_light_input = random(6233, 7406);
-  int dummy_time_input = random(0, 24);
-  //end dummy notification data
-  
+void do_ph_notif_fuzzy(){
+  //int dummy_ph_input = random(0, 14);  
   fuzzy->setInput(1, get_ph_value());
-  fuzzy->setInput(2, get_temp_value());
-  fuzzy->setInput(3, get_ultrasonic_value());
-  fuzzy->setInput(4, get_light_value());
-  fuzzy->setInput(5, server_time);
+}
+
+void do_temp_notif_fuzzy(){
+  //int dummy_temp_input = random(0, 50);
+}
+
+void do_notification_fuzzy() {
+  
+  fuzzy->setInput(1, global_ph_value);  
+  fuzzy->setInput(2,  global_temp_value);
+  fuzzy->setInput(3, global_ultrasonic_value);
   fuzzy->fuzzify();
   float ph_fuzzy_output = fuzzy->defuzzify(1);
   float temp_fuzzy_output = fuzzy->defuzzify(2);
   float feed_fuzzy_output = fuzzy->defuzzify(3);
-  float lighting_fuzzy_output = fuzzy->defuzzify(4);
-
-  Serial.println(server_time);
 
   if(ph_fuzzy_output < 1.5){
     client.publish("aquas/mail", "peringatan_ph");
     //Serial.println("mail sent");
   }
-
+  
   if(temp_fuzzy_output < 1.5){
     client.publish("aquas/mail", "peringatan_suhu");
   }
-
+ 
   if(feed_fuzzy_output < 1.5){
     client.publish("aquas/mail", "pemberitahuan_pakan");
   }else if(feed_fuzzy_output > 2.5){
     client.publish("aquas/mail", "peringatan_pakan");
   }
+ 
+}
 
-  if(lighting_fuzzy_output < 1.5  && growlight_automation_state == "auto"){
-    turnGrowlight("on");
-  }else if(lighting_fuzzy_output >= 1.5  && growlight_automation_state == "auto"){
-    turnGrowlight("off");
+void do_lighting_fuzzy(){
+  fuzzy->setInput(4, global_light_value);
+  fuzzy->setInput(5, server_time);
+  fuzzy->fuzzify();
+  float lighting_fuzzy_output = fuzzy->defuzzify(4);
+
+  
+  if(growlight_automation_state == "auto"){
+    if(lighting_fuzzy_output < 1.5){
+      turnGrowlight("on");
+    }else if(lighting_fuzzy_output >= 1.5){
+      turnGrowlight("off");
+    }
   }
-
-
-  //Serial.println("...........................................");
-  //Serial.print("ph fuzzy input: ");
-  //Serial.println(dummy_ph_input);
-  //Serial.print("ph fuzzy output: ");
-  //Serial.println(ph_fuzzy_output);
-  //Serial.println("...........................................");
-  //Serial.print("temp fuzzy input: ");
-  //Serial.println(dummy_temp_input);
-  //Serial.print("temp fuzzy output: ");
-  //Serial.println(temp_fuzzy_output);
-  //Serial.println("...........................................");
-  //Serial.print("feed fuzzy input: ");
-  //Serial.println(dummy_feed_input);
-  //Serial.print("feed fuzzy output: ");
-  //Serial.println(feed_fuzzy_output);
-  //Serial.println("...........................................");
-  //Serial.print("light fuzzy input: ");
-  //Serial.println(dummy_light_input);
-  //Serial.print("time fuzzy input: ");
-  //Serial.println(dummy_time_input);
-  //Serial.print("feed fuzzy output: ");
-  //Serial.println(lighting_fuzzy_output);
 }

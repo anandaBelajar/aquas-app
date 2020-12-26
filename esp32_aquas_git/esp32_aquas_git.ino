@@ -71,6 +71,11 @@ String ph_str; //variable to hold string converted light value
 char ph[200]; //array to hold light value message package
 //End Define sensor array and variable for MQTT
 
+float global_ph_value;
+float global_temp_value;
+float global_ultrasonic_value;
+float global_light_value;
+
 String growlight_automation_state = "auto";
 String servo_automation_state = "auto";
 
@@ -127,7 +132,11 @@ void loop() {
   long now = millis();
   if (now - lastMsg > 1000) {
     send_sensor_data();
-    do_fuzzy();
+    
+  do_notification_fuzzy();
+  if(growlight_automation_state == "auto"){
+    do_lighting_fuzzy();
+  }
     lastMsg = now;
   }
 }

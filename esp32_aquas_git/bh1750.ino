@@ -5,6 +5,8 @@ float get_light_value() {
   //Serial.print(lux);
   //Serial.println(" lx");
 
+  global_light_value = lux;
+
   return lux;
   
 }
