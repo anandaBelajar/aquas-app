@@ -7,8 +7,6 @@
             </div>
 
             <%- include('partials/top-navigation') %>
-
-                <!-- page content -->
                 <div class="right_col" role="main">
                     <!-- top tiles -->
                     <div class="page-title">
@@ -17,9 +15,7 @@
                         </div>
                     </div>
                     <div class="clearfix"></div>
-
-                    <!-- /top tiles -->
-                    <!--Start pH Chart-->
+                    <!--Start pH row container-->
                     <div class="row ph_info_container">
                         <div class="col-md-12 col-sm-12 ">
                             <div class="dashboard_graph">
@@ -58,8 +54,9 @@
                         </div>
 
                     </div>
-                    <!--End pH Chart-->
+                    <!--End pH row container-->
                     <br />
+                    <!--Start ph table container-->
                     <div class="row ph_data_table_container">
                         <div class="col-md-12 col-sm-12 ">
                             <div class="dashboard_graph">
@@ -100,9 +97,8 @@
                         </div>
                     </div>
                     <br />
-                    <!-- /top tiles -->
-
+                    <!--End ph table container-->
                 </div>
-                <!-- /page content -->
+
 
                 <%- include('partials/footer') %>

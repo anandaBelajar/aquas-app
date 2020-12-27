@@ -7,10 +7,7 @@
             </div>
 
             <%- include('partials/top-navigation') %>
-
-                <!-- page content -->
                 <div class="right_col" role="main">
-                    <!-- top tiles -->
                     <div class="page-title">
                         <div class="title_left">
                             <h3>Notification Detail</h3>
@@ -18,12 +15,11 @@
                     </div>
                     <div class="clearfix"></div>
 
-                    <!-- /top tiles -->
-                    <!--Start Administrators table-->
-                    <div class="row administrator_list_container">
+                    <!--Start notification detail content-->
+                    <div class="row notification_content_container">
 
                         <div class="col-md-12 col-sm-12 ">
-                            <div class="dashboard_graph notification-detail-container">
+                            <div class="dashboard_graph notification_content_wrapper">
                                 <%
                                     var raw_date = String(item[0].tanggal),
                                         date = raw_date.split(" ")  
@@ -57,12 +53,8 @@
 
                         <br />
                     </div>
-                    <!--End Administrators Tables-->
+                    <!--End notification detail content-->
                     <br />
-
-                    <!-- /top tiles -->
-
                 </div>
-                <!-- /page content -->
 
                 <%- include('partials/footer') %>

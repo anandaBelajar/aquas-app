@@ -7,19 +7,14 @@
             </div>
 
             <%- include('partials/top-navigation') %>
-
-                <!-- page content -->
                 <div class="right_col" role="main">
-                    <!-- top tiles -->
                     <div class="page-title">
                         <div class="title_left">
                             <h3>Detail Suhu Air</h3>
                         </div>
                     </div>
                     <div class="clearfix"></div>
-
-                    <!-- /top tiles -->
-                    <!--Start Temp Chart-->
+                    <!--Start Temp row container-->
                     <div class="row temp_info_container">
                         <div class="col-md-12 col-sm-12 ">
                             <div class="dashboard_graph">
@@ -57,8 +52,9 @@
                         </div>
 
                     </div>
-                    <!--End Temp Chart-->
+                    <!--End Temp row container-->
                     <br />
+                    <!--Start Temp table container-->
                     <div class="row temp_data_table_container">
                         <div class="col-md-12 col-sm-12 ">
                             <div class="dashboard_graph">
@@ -99,9 +95,7 @@
                         </div>
                     </div>
                     <br />
-                    <!-- /top tiles -->
-
+                    <!--End Temp table container-->
                 </div>
-                <!-- /page content -->
 
                 <%- include('partials/footer') %>

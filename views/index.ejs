@@ -7,20 +7,16 @@
             </div>
 
             <%- include('partials/top-navigation') %>
-
-                <!-- page content -->
                 <div class="right_col" role="main">
-                    <!-- top tiles -->
                     <div class="page-title">
                         <div class="title_left">
                             <h3>Dashboard Utama</h3>
                         </div>
                     </div>
                     <div class="clearfix"></div>
-
-                    <!-- /top tiles -->
-                    <!--Start Feed Chart-->
+                    <!--Start feed and pump console row-->
                     <div class="row feed_info_container">
+                        <!--Start light console container-->
                         <div class="col-md-8 col-sm-8  ">
                             <div class="dashboard_graph">
 
@@ -70,6 +66,8 @@
                                 <div class="clearfix"></div>
                             </div>
                         </div>
+                        <!--End light console container-->
+                        <!--Start pump console container-->
                         <div class="col-md-4 col-sm-4 ">
                             <div class="x_panel tile">
                                 <div class="x_title">
@@ -100,13 +98,11 @@
                                 </div>
                             </div>
                         </div>
-
+                        <!--End pump console container-->
                     </div>
-                    <!--End Feed Chart-->
+                    <!--End Feed and pump console row-->
                     <br />
-
-                    <!-- /top tiles -->
-                    <!--Start Light Chart-->
+                    <!--Start light console row container-->
                     <div class="row light_info_container">
                         <div class="col-md-12 col-sm-12 ">
                             <div class="dashboard_graph">
@@ -119,7 +115,6 @@
 
                                 <div class="col-md-9 col-sm-9 ">
                                     <canvas id="aquas_light_chart"></canvas>
-                                    <!--<div id="chart_plot_01" class="demo-placeholder"></div>-->
                                 </div>
                                 <div class="col-md-3 col-sm-3  bg-white">
                                     <div class="x_title">
@@ -171,10 +166,10 @@
                         </div>
 
                     </div>
-                    <!--End Light Chart-->
+                    <!--End Light console row container-->
                     <br />
 
-                    <!--Start Temp Chart-->
+                    <!--Start Temp row container-->
                     <div class="row temp_info_container">
                         <div class="col-md-12 col-sm-12 ">
                             <div class="dashboard_graph">
@@ -212,10 +207,10 @@
                         </div>
 
                     </div>
-                    <!--End Temp Chart-->
+                    <!--End Temp row container-->
                     <br />
 
-                    <!--Start pH Chart-->
+                    <!--Start pH row container-->
                     <div class="row ph_info_container">
                         <div class="col-md-12 col-sm-12 ">
                             <div class="dashboard_graph">
@@ -254,9 +249,8 @@
                         </div>
 
                     </div>
-                    <!--End pH Chart-->
+                    <!--End pH row container-->
                     <br />
                 </div>
-                <!-- /page content -->
 
                 <%- include('partials/footer') %>
