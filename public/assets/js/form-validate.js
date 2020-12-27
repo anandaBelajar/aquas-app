@@ -1,12 +1,11 @@
-// Wait for the DOM to be ready
 $(function() {
-    /**Start add administrator form avalidation */
+    //Start add admnistrator form validation
     $.validator.addMethod("gmail", function(value, element) {
         return this.optional(element) || /^.+@gmail.com$/.test(value)
     }, 'Email harus menggunakan Gmail');
 
+    //add admin form validation rule
     $("#add_admin_form").validate({
-        // Specify validation rules
         rules: {
             name: {
                 required: true,
@@ -23,7 +22,7 @@ $(function() {
                 minlength: 6
             }
         },
-        // Specify validation error messages
+        //add admin form error validation message
         messages: {
             name: {
                 required: "Nama harus diisi",
@@ -38,17 +37,16 @@ $(function() {
                 minlength: "Password minimal 6 karakter",
                 maxlength: "Password maksimal 50 karakter",
             },
-            //email: "Email ynag anda masukkan tidak valid"
         },
-        // Make sure the form is submitted to the destination defined
-        // in the "action" attribute of the form when valid
         submitHandler: function(form) {
             form.submit();
         }
     });
+    //End add administartor validation form
 
+    //Start edit admin form validation form
     $("#edit_admin_form").validate({
-        // Specify validation rules
+        //edit admin form validation rule
         rules: {
             name: {
                 required: true,
@@ -65,7 +63,7 @@ $(function() {
                 maxlength: 50,
             }
         },
-        // Specify validation error messages
+        //edit admin form validation error message
         messages: {
             name: {
                 required: "Nama harus diisi",
@@ -80,38 +78,33 @@ $(function() {
                 minlength: "Password minimal 6 karakter",
                 maxlength: "Email maksimal 50 karakter",
             },
-            //email: "Email ynag anda masukkan tidak valid"
         },
-        // Make sure the form is submitted to the destination defined
-        // in the "action" attribute of the form when valid
         submitHandler: function(form) {
             form.submit();
         }
     });
 
-    /**Start image form*/
+    //Start admin image profile form validation
     $("#upload_image_form").validate({
-        // Specify validation rules
+        //admin image profile validation rule
         rules: {
             picture: "required",
             maxlength: 500
         },
-        // Specify validation error messages
+        //admin image profile validation error message
         messages: {
             picture: "Foto belum dipilih",
             maxlength: "Path foto terlalu panjang"
         },
-        // Make sure the form is submitted to the destination defined
-        // in the "action" attribute of the form when valid
         submitHandler: function(form) {
             form.submit();
         }
     });
-    /**End image form*/
+    //End admin image profile form validation
 
-    /**Start login form*/
+    //Start login form validation 
     $("#login_form").validate({
-        // Specify validation rules
+        //login form validation error message
         rules: {
             email: {
                 required: true,
@@ -120,7 +113,7 @@ $(function() {
                 required: true,
             }
         },
-        // Specify validation error messages
+        //login form validation error message
         messages: {
             email: {
                 required: "Email harus diisi",
@@ -128,15 +121,12 @@ $(function() {
             password: {
                 required: "Password harus diisi",
             },
-            //email: "Email ynag anda masukkan tidak valid"
         },
-        // Make sure the form is submitted to the destination defined
-        // in the "action" attribute of the form when valid
         submitHandler: function(form) {
             form.submit();
         }
     });
-    /**End login form*/
+    //end login form validation
 
 
 

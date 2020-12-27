@@ -6,7 +6,7 @@
 }
 
 
-/*Start Chart*/
+/*Start console*/
 
 .current_value_wrapper {
     border: 10px solid;
@@ -23,9 +23,6 @@
     vertical-align: middle;
     line-height: 140px;
 }
-
-
-/* for md */
 
 .custom-switch.custom-switch-md .custom-control-label {
     padding-left: 2rem;
@@ -77,10 +74,19 @@
     margin-top: 10%;
 }
 
+
+/*end console*/
+
+
+/*start manage admin page*/
+
 #add_admin_button i,
 #add_admin_button span {
     color: #ffff;
 }
+
+
+/*manage admin page*/
 
 .dropdown-item button {
     background: none;
@@ -119,10 +125,10 @@
 }
 
 
-/** End sidebar progile picture */
+/** End sidebar profile picture */
 
 
-/**Start 404 */
+/**Start 404 page*/
 
 .container-404 {
     background: linear-gradient(to right, #0062E6, #33AEFF);
@@ -138,6 +144,9 @@
     color: #fff;
     text-decoration: none;
 }
+
+
+/*End 404 page*/
 
 
 /** Start Top Bar */
@@ -169,17 +178,6 @@
 
 /** Start notifications page */
 
-
-/* .btn.btn-primary.btn-sm.btn-notif-detail {
-                    margin-left: 20px;
-                    color: #fff;
-                }
-                
-                .dashboard_graph.notification-detail-container {
-                    height: 400px;
-                }
-                */
-
 .notification-detail .notification-full-description {
     font-size: 18px;
     padding: 20px 30px;
@@ -189,7 +187,7 @@
 /** End notification page */
 
 
-/** Start error */
+/** Start error label*/
 
 #upload_image_form label.error,
 #add_admin_form label.error,
@@ -209,6 +207,34 @@
     width: 100%;
     padding: 10px 0;
 }
+
+
+/*End error label*/
+
+
+/*Start page load progress and spinner */
+
+.nav.side-menu>li.current-page,
+.nav.side-menu>li.active {
+    border-right: 5px solid #0062E6;
+}
+
+#nprogress .bar {
+    background: #0062E6;
+}
+
+#nprogress .peg {
+    -webkit-box-shadow: 0 0 10px#0062E6, 0 0 5px #0062E6;
+    box-shadow: 0 0 10px #0062E6 0 0 5px #0062E6;
+}
+
+#nprogress .spinner-icon {
+    border-top-color: #0062E6;
+    border-left-color: #0062E6;
+}
+
+
+/*End page load progress and spinner */
 
 @media (min-width:576px) and (max-width:1036px) {
     .aquas_button_container a {
