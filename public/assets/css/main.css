@@ -1,147 +1,176 @@
-                /*Start Chart*/
-                
-                .current_value_wrapper {
-                    border: 10px solid;
-                    border-radius: 50%;
-                    text-align: center;
-                    width: auto;
-                    width: 150px;
-                    height: 150px;
-                    margin: 0 auto;
-                }
-                
-                .aquas_current_value {
-                    font-size: 25px;
-                    vertical-align: middle;
-                    line-height: 140px;
-                }
-                /* for md */
-                
-                .custom-switch.custom-switch-md .custom-control-label {
-                    padding-left: 2rem;
-                    padding-bottom: 1.5rem;
-                }
-                
-                .custom-switch.custom-switch-md .custom-control-label::before {
-                    height: 1.5rem;
-                    width: calc(2rem + 0.75rem);
-                    border-radius: 3rem;
-                }
-                
-                .custom-switch.custom-switch-md .custom-control-label::after {
-                    width: calc(1.5rem - 4px);
-                    height: calc(1.5rem - 4px);
-                    border-radius: calc(2rem - (1.5rem / 2));
-                }
-                
-                .custom-switch.custom-switch-md .custom-control-input:checked~.custom-control-label::after {
-                    transform: translateX(calc(1.5rem - 0.25rem));
-                }
-                
-                .custom-switch.custom-switch-md .custom-control-label {
-                    padding-left: 1rem;
-                    padding-bottom: 0.5rem;
-                    font-size: 20px;
-                }
-                
-                .aquas-button {
-                    border-radius: 5px;
-                }
-                
-                .aquas_feed_bar_wrapper {
-                    border-radius: 25px;
-                    height: 45px;
-                }
-                
-                .pump_icon_wrapper {
-                    text-align: center;
-                }
-                
-                .aquas_pump_icon {
-                    font-size: 35px;
-                }
-                
-                .temp_info_container .aquas_button_container,
-                .ph_info_container .aquas_button_container {
-                    margin-top: 10%;
-                }
-                
-                #add_admin_button i,
-                #add_admin_button span {
-                    color: #ffff;
-                }
-                
-                .dropdown-item button {
-                    background: none;
-                    color: inherit;
-                    border: none;
-                    padding: 0;
-                    font: inherit;
-                    cursor: pointer;
-                    outline: inherit;
-                }
-                /** Start admin profile */
-                
-                .edit_admin_form_container .profile_img .crop-avatar img {
-                    max-width: 260px;
-                }
-                
-                .edit_admin_form_container .btn-sm.btn-primary.row {
-                    margin: auto;
-                }
-                /**End admin profile*/
-                /** Start Sidebar profile photo*/
-                
-                .profile_pic .img-circle.profile_img {
-                    width: 85px;
-                    height: 85px;
-                }
-                
-                .profile .profile_info {
-                    padding: 25px 25px 10px;
-                }
-                /** End sidebar progile picture */
-                /**Start 404 */
-                
-                .container-404 {
-                    background: linear-gradient(to right, #0062E6, #33AEFF);
-                }
-                
-                .page-wrap-404 {
-                    color: #fff;
-                    min-height: 100vh;
-                }
-                
-                .page-wrap-404 a,
-                .page-wrap-404 a:hover {
-                    color: #fff;
-                    text-decoration: none;
-                }
-                /** Start Top Bar */
-                
-                .fa-exclamation-circle,
-                .fa-check-circle {
-                    margin-left: 3px;
-                }
-                
-                .fa-check-circle {
-                    color: #1fce1f;
-                    ;
-                }
-                
-                .fa-exclamation-circle {
-                    color: #FF5C00;
-                    ;
-                }
-                
-                .dropdown-menu.top-notification.msg_list span {
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                }
-                /**End Top bar */
-                /** Start notifications page */
-                /* .btn.btn-primary.btn-sm.btn-notif-detail {
+.site_title img {
+    width: auto;
+    height: 35px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+
+
+/*Start Chart*/
+
+.current_value_wrapper {
+    border: 10px solid;
+    border-radius: 50%;
+    text-align: center;
+    width: auto;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+}
+
+.aquas_current_value {
+    font-size: 25px;
+    vertical-align: middle;
+    line-height: 140px;
+}
+
+
+/* for md */
+
+.custom-switch.custom-switch-md .custom-control-label {
+    padding-left: 2rem;
+    padding-bottom: 1.5rem;
+}
+
+.custom-switch.custom-switch-md .custom-control-label::before {
+    height: 1.5rem;
+    width: calc(2rem + 0.75rem);
+    border-radius: 3rem;
+}
+
+.custom-switch.custom-switch-md .custom-control-label::after {
+    width: calc(1.5rem - 4px);
+    height: calc(1.5rem - 4px);
+    border-radius: calc(2rem - (1.5rem / 2));
+}
+
+.custom-switch.custom-switch-md .custom-control-input:checked~.custom-control-label::after {
+    transform: translateX(calc(1.5rem - 0.25rem));
+}
+
+.custom-switch.custom-switch-md .custom-control-label {
+    padding-left: 1rem;
+    padding-bottom: 0.5rem;
+    font-size: 20px;
+}
+
+.aquas-button {
+    border-radius: 5px;
+}
+
+.aquas_feed_bar_wrapper {
+    border-radius: 25px;
+    height: 45px;
+}
+
+.pump_icon_wrapper {
+    text-align: center;
+}
+
+.aquas_pump_icon {
+    height: 55px;
+    width: auto;
+}
+
+.temp_info_container .aquas_button_container,
+.ph_info_container .aquas_button_container {
+    margin-top: 10%;
+}
+
+#add_admin_button i,
+#add_admin_button span {
+    color: #ffff;
+}
+
+.dropdown-item button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+
+/** Start admin profile */
+
+.edit_admin_form_container .profile_img .crop-avatar img {
+    max-width: 260px;
+}
+
+.edit_admin_form_container .btn-sm.btn-primary.row {
+    margin: auto;
+}
+
+
+/**End admin profile*/
+
+
+/** Start Sidebar profile photo*/
+
+.profile_pic .img-circle.profile_img {
+    width: 85px;
+    height: 85px;
+}
+
+.profile .profile_info {
+    padding: 25px 25px 10px;
+}
+
+
+/** End sidebar progile picture */
+
+
+/**Start 404 */
+
+.container-404 {
+    background: linear-gradient(to right, #0062E6, #33AEFF);
+}
+
+.page-wrap-404 {
+    color: #fff;
+    min-height: 100vh;
+}
+
+.page-wrap-404 a,
+.page-wrap-404 a:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
+
+/** Start Top Bar */
+
+.fa-exclamation-circle,
+.fa-check-circle {
+    margin-left: 3px;
+}
+
+.fa-check-circle {
+    color: #1fce1f;
+    ;
+}
+
+.fa-exclamation-circle {
+    color: #FF5C00;
+    ;
+}
+
+.dropdown-menu.top-notification.msg_list span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+/**End Top bar */
+
+
+/** Start notifications page */
+
+
+/* .btn.btn-primary.btn-sm.btn-notif-detail {
                     margin-left: 20px;
                     color: #fff;
                 }
@@ -150,80 +179,84 @@
                     height: 400px;
                 }
                 */
-                
-                .notification-detail .notification-full-description {
-                    font-size: 18px;
-                    padding: 20px 30px;
-                }
-                /** End notification page */
-                /** Start error */
-                
-                #upload_image_form label.error,
-                #add_admin_form label.error,
-                #edit_admin_form label.error {
-                    color: #FF3333;
-                }
-                
-                #upload_image_form label.error {
-                    text-align: center;
-                    width: 100%;
-                    padding: 10px 0;
-                }
-                
-                #login_form .form-label-group #email-error {
-                    position: unset;
-                    text-align: center;
-                    width: 100%;
-                    padding: 10px 0;
-                }
-                
-                @media (min-width:576px) and (max-width:1036px) {
-                    .aquas_button_container a {
-                        font-size: 0.6rem;
-                    }
-                    .current_value_wrapper {
-                        border: 5px solid;
-                        border-radius: 50%;
-                        text-align: center;
-                        width: auto;
-                        width: 100px;
-                        height: 100px;
-                    }
-                    .aquas_current_value {
-                        font-size: 20px;
-                        vertical-align: middle;
-                        line-height: 100px;
-                    }
-                    .home .feed_info_container .col-sm-3 {
-                        max-width: unset;
-                    }
-                    .home .feed_info_container .col-sm-9 {
-                        max-width: unset;
-                    }
-                }
-                
-                @media (max-width:480px) {
-                    .info-number .badge {
-                        position: absolute;
-                        right: 130px;
-                        top: 5px;
-                    }
-                }
-                
-                @media (max-width:370px) {
-                    td span {
-                        font-size: 0.7rem;
-                    }
-                    .col-sm-12 {
-                        padding-right: 3px;
-                        padding-left: 3px;
-                    }
-                }
-                
-                @media (max-width:281px) {
-                    .info-number .badge {
-                        position: absolute;
-                        right: 13px;
-                        top: 35px;
-                    }
-                }
+
+.notification-detail .notification-full-description {
+    font-size: 18px;
+    padding: 20px 30px;
+}
+
+
+/** End notification page */
+
+
+/** Start error */
+
+#upload_image_form label.error,
+#add_admin_form label.error,
+#edit_admin_form label.error {
+    color: #FF3333;
+}
+
+#upload_image_form label.error {
+    text-align: center;
+    width: 100%;
+    padding: 10px 0;
+}
+
+#login_form .form-label-group #email-error {
+    position: unset;
+    text-align: center;
+    width: 100%;
+    padding: 10px 0;
+}
+
+@media (min-width:576px) and (max-width:1036px) {
+    .aquas_button_container a {
+        font-size: 0.6rem;
+    }
+    .current_value_wrapper {
+        border: 5px solid;
+        border-radius: 50%;
+        text-align: center;
+        width: auto;
+        width: 100px;
+        height: 100px;
+    }
+    .aquas_current_value {
+        font-size: 20px;
+        vertical-align: middle;
+        line-height: 100px;
+    }
+    .home .feed_info_container .col-sm-3 {
+        max-width: unset;
+    }
+    .home .feed_info_container .col-sm-9 {
+        max-width: unset;
+    }
+}
+
+@media (max-width:480px) {
+    .info-number .badge {
+        position: absolute;
+        right: 130px;
+        top: 5px;
+    }
+}
+
+@media (max-width:370px) {
+    td span {
+        font-size: 0.7rem;
+    }
+    .col-sm-12 {
+        padding-right: 3px;
+        padding-left: 3px;
+    }
+}
+
+@media (max-width:281px) {
+    .info-number .badge {
+        position: absolute;
+        right: 13px;
+        top: 35px;
+    }
+}
