@@ -6,7 +6,7 @@ var bodyParser = require('body-parser'),
 const { render } = require('ejs')
 
 
-module.exports = function(app, con, path, passport) { //exports the function
+module.exports = function(app, con, path, passport) {
 
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(methodOverride('_method'));
