@@ -83,12 +83,11 @@ module.exports = function(server, con) {
             minutes = date.getMinutes(),
             hour = date.getHours(),
             year = date.getFullYear(),
-            month = date.getMonth(),
+            month = parseInt(date.getMonth()) + 1,
             day = date.getDate(),
             dateonly = year + "-" + month + "-" + day,
             time = hour + ':' + minutes + ':' + seconds,
-            dbDateTime = year + "-" + month + "-" + day + "- " + hour + ":" + minutes + ":" + seconds; //date time to save in database
-
+            dbDateTime = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds; //date time to save in database
         if (topic == 'aquas/feed') {
             //MQTT feed value handler
             current_feed = Math.trunc(100 * ((parseFloat(message.toString()) - 0) / (23 - 0)))
