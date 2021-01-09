@@ -6,7 +6,7 @@
 float get_ph_value(){
   int pengukuranPh = analogRead(phPin);
   double TeganganPh = 3.3 / 4095.0 * pengukuranPh;
-  Po = 7.00 + ((2.4 - TeganganPh) / 0.17);
+  Po = 7.00 + ((2.4 - TeganganPh) / 0.2);
   global_ph_value = Po;
 
   return Po;

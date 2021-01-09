@@ -157,7 +157,7 @@ module.exports = function(server, con) {
             if (message.toString() == 'pemberitahuan_pakan') {
                 jenis = 'pemberitahuan_pakan'
                 subject = "pemberitahuan"
-                content = 'Sisa pakan sebanyak ' + current_feed + "%"
+                content = 'Sisa pakan sebanyak ' + current_feed + "%, mohon segera lakukan isi ulang"
             } else if (message.toString() == 'peringatan_pakan') {
                 jenis = 'peringatan_pakan'
                 subject = "peringatan"
