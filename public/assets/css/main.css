@@ -267,6 +267,9 @@
         right: 130px;
         top: 5px;
     }
+    .aquas_pump_icon {
+        height: 80px;
+    }
 }
 
 @media (max-width:370px) {
