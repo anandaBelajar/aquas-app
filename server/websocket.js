@@ -90,8 +90,13 @@ module.exports = function(server, con) {
             dbDateTime = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds; //date time to save in database
         if (topic == 'aquas/feed') {
             //MQTT feed value handler
-            current_feed = Math.trunc(100 * ((parseFloat(message.toString()) - 0) / (23 - 0)))
-            var feed = current_feed <= 100 ? [current_feed, time] : [100, time];
+            //current_feed = Math.trunc(100 * ((parseFloat(message.toString()) - 0) / (23 - 0)))
+            console.log(message.toString())
+                //current_feed = Math.trunc((parseFloat('-' + message.toString()) - (-23)) * 100 / (0 - (-23)))
+            current_feed = Math.trunc(('-' + message.toString() - (-23)) * 100 / (0 - (-23)))
+                //current_feed = Math.trunc((20 - (-23)) * 100 / (0 - (-23)))
+
+            var feed = parseInt(message.toString()) < 100 ? [current_feed, time] : [100, time];
             io.sockets.emit('aquas_feed_msg_arrive', feed);
         } else if (topic == 'aquas/light') {
             //MQTT light value handler
@@ -157,11 +162,11 @@ module.exports = function(server, con) {
             if (message.toString() == 'pemberitahuan_pakan') {
                 jenis = 'pemberitahuan_pakan'
                 subject = "pemberitahuan"
-                content = 'Sisa pakan sebanyak ' + current_feed + "%, mohon segera lakukan isi ulang"
+                content = 'Persediaan pakan sebanyak ' + current_feed + "%, mohon segera lakukan isi ulang"
             } else if (message.toString() == 'peringatan_pakan') {
                 jenis = 'peringatan_pakan'
                 subject = "peringatan"
-                content = 'Sisa pakan sebanyak ' + current_feed + '%, mohon segera lakukan isi ulang'
+                content = 'Persediaan pakan sebanyak ' + current_feed + '%, mohon segera lakukan isi ulang'
             } else if (message.toString() == 'peringatan_suhu') {
                 jenis = 'peringatan_suhu'
                 subject = "peringatan"
