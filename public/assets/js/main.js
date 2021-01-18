@@ -23,6 +23,7 @@ var socket = io.connect("http://localhost:3000"), //connect to server websocket
     aquas_ph_current_time = $('#aquas_ph_current_time'),
     aquas_ph_data_table = $('#aquas_ph_data_table'),
     aquas_feed_bar = $('#aquas_feed_bar'),
+    aquas_feed_qty = $('#aquas_feed_qty'),
     aquas_manual_pump_toggle_container = $('.aquas_manual_pump_toggle_container'),
     aquas_manual_pump_toggle = $('#aquas_manual_pump_toggle'),
     waktu_pakan_pagi = $('#waktu_pakan_pagi'),
@@ -124,7 +125,7 @@ admins_data_table.DataTable()
 socket.on('aquas_feed_msg_arrive', function(msg) {
     //get the sensor and time value from backend websocket
     aquas_feed_bar.css({ "width": msg[0] + "%" }).text(msg[0] + "%").attr("aria-valuenow", msg[0]);
-
+    aquas_feed_qty.text('Kuantitas : ' + msg[1] + ' gram')
 });
 //End aquas feed bar
 

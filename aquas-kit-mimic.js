@@ -69,7 +69,7 @@ function getRandomInt(min, max) {
 
 
 setInterval(function() {
-    var feed_value = getRandomInt(1, 100).toString()
+    var feed_value = getRandomInt(0, 23).toString()
     var light_value = getRandomInt(1, 2000).toString()
     var temp_value = getRandomInt(1, 100).toString()
     var ph_value = getRandomInt(1, 14).toString()
