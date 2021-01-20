@@ -33,7 +33,7 @@
             <% if(notifikasi.length){%>
                 <% notifikasi.forEach((item, index) => { %>
                     <li class="nav-item">
-                        <a href="notification-detail/<%= item.id %>" class="dropdown-item">
+                        <a href="/notification-detail/<%= item.id %>" class="dropdown-item">
                             <span>
           <span class="font-weight-bold"><%= item.subject%> <%if(item.status == 'read'){%><i class="fa fa-check-circle"></i><%} else {%><i class="fa fa-exclamation-circle"></i><%}%></span>
                             <span class="time">
