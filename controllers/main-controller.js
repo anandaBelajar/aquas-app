@@ -39,17 +39,19 @@ module.exports = function(app, con, path, passport) {
     app.get('/', checkAuthenticated, function(req, res) {
 
         var query = "SELECT * FROM `status_aktuator`;"
-        query += "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5 "
+        query += "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+        query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
+
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
             //index route
-
             res.render('index', {
                 name: req.user.nama,
                 photo: req.user.foto,
                 items: result[0],
                 notifikasi: result[1],
+                notifqty: result[2][0]['count']
             }); //render the ejs view for index page
         });
     });
@@ -57,7 +59,8 @@ module.exports = function(app, con, path, passport) {
     app.get('/notifications', checkAuthenticated, function(req, res) {
 
         var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
-        query += "SELECT * FROM `notifikasi` WHERE id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC'"
+        query += "SELECT * FROM `notifikasi` WHERE id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC';"
+        query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
 
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
@@ -69,6 +72,7 @@ module.exports = function(app, con, path, passport) {
                 photo: req.user.foto,
                 notifikasi: result[0],
                 items: result[1],
+                notifqty: result[2][0]['count']
             }); //render the ejs view for index page
         });
     });
@@ -77,33 +81,33 @@ module.exports = function(app, con, path, passport) {
 
         var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
         query += "SELECT * FROM `notifikasi` WHERE id ='" + req.params.id + "';"
-        query += "UPDATE `notifikasi` set status = 'read' WHERE id ='" + req.params.id + "';"
+        query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
+        query += "UPDATE `notifikasi` set status = 'read' WHERE id ='" + req.params.id + "';",
 
-        con.query(query, function(err, result) {
-            //select all light sensor value and time from the database
-            if (err) throw err;
-            //index route
 
-            res.render('notification-detail', {
-                name: req.user.nama,
-                photo: req.user.foto,
-                notifikasi: result[0],
-                item: result[1],
-            }); //render the ejs view for index page
-        });
+            con.query(query, function(err, result) {
+                //select all light sensor value and time from the database
+                if (err) throw err;
+                //index route
+
+                res.render('notification-detail', {
+                    name: req.user.nama,
+                    photo: req.user.foto,
+                    notifikasi: result[0],
+                    item: result[1],
+                    notifqty: result[2][0]['count']
+                }); //render the ejs view for index page
+            });
     });
 
-    app.get('/gentelella', function(req, res) {
-        //index route
-        res.render('gentelella-index'); //render the ejs view for index page
-    });
 
     //Start Single Route
     app.get('/single-feed', checkAuthenticated, function(req, res) {
         //light detail page route
         var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
         query += "SELECT * FROM `status_aktuator`; "
-        query += "SELECT * FROM `jadwal_pakan`"
+        query += "SELECT * FROM `jadwal_pakan`;"
+        query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
@@ -114,13 +118,13 @@ module.exports = function(app, con, path, passport) {
                 input_items: result[1],
                 form_items: result[2], //send the data from database to the light detail page
                 photo: req.user.foto,
+                notifqty: result[3][0]['count']
 
             });
         });
     });
 
     app.post('/single-feed', checkAuthenticated, function(req, res) {
-        console.log('request was made : ' + req.url);
         var check_table_query = "SELECT * FROM `jadwal_pakan`",
             query = "UPDATE `jadwal_pakan` SET `waktu` = '" + req.body.waktu_pakan_pagi.replace(/\s/g, '') + "' WHERE `jadwal_pakan`.`jenis` = 'pagi';";
         query += " UPDATE `jadwal_pakan` SET `waktu` = '" + req.body.waktu_pakan_siang.replace(/\s/g, '') + "' WHERE `jadwal_pakan`.`jenis` = 'siang';";
@@ -137,7 +141,6 @@ module.exports = function(app, con, path, passport) {
             }
             con.query(query, function(err, result) {
                 if (err) throw err;
-                console.log("1 record changed");
                 res.redirect('/single-feed');
             });
         });
@@ -148,7 +151,8 @@ module.exports = function(app, con, path, passport) {
         //var query = "SELECT * FROM `data_cahaya` ORDER BY `waktu` DESC"
         var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
         query += "SELECT * FROM `status_aktuator`; "
-        query += "SELECT * FROM `data_cahaya` ORDER BY `waktu` DESC"
+        query += "SELECT * FROM `data_cahaya` ORDER BY `waktu` DESC;"
+        query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
 
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
@@ -160,6 +164,7 @@ module.exports = function(app, con, path, passport) {
                 input_items: result[1],
                 table_items: result[2], //send the data from database to the light detail page
                 photo: req.user.foto,
+                notifqty: result[3][0]['count']
             });
         });
     });
@@ -167,7 +172,8 @@ module.exports = function(app, con, path, passport) {
     app.get('/single-temp', checkAuthenticated, function(req, res) {
         //light detail page route
         var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
-        query += "SELECT * FROM `data_suhu` ORDER BY `waktu` DESC"
+        query += "SELECT * FROM `data_suhu` ORDER BY `waktu` DESC;"
+        query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
 
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
@@ -178,6 +184,7 @@ module.exports = function(app, con, path, passport) {
                 notifikasi: result[0],
                 items: result[1], //send the data from database to the light detail page
                 photo: req.user.foto,
+                notifqty: result[2][0]['count']
             });
         });
     });
@@ -185,7 +192,8 @@ module.exports = function(app, con, path, passport) {
     app.get('/single-ph', checkAuthenticated, function(req, res) {
         //light detail page route
         var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
-        query += "SELECT * FROM `data_ph` ORDER BY `waktu` DESC"
+        query += "SELECT * FROM `data_ph` ORDER BY `waktu` DESC;"
+        query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
@@ -195,6 +203,7 @@ module.exports = function(app, con, path, passport) {
                 notifikasi: result[0],
                 items: result[1], //send the data from database to the light detail page
                 photo: req.user.foto,
+                notifqty: result[2][0]['count']
             });
         });
     });
@@ -205,7 +214,8 @@ module.exports = function(app, con, path, passport) {
     app.get('/admins', checkAuthenticated, function(req, res) {
         //light detail page route
         var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
-        query += "SELECT `id`, `nama`, `email` FROM `administrator`"
+        query += "SELECT `id`, `nama`, `email` FROM `administrator`;"
+        query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
@@ -216,12 +226,14 @@ module.exports = function(app, con, path, passport) {
                 notifikasi: result[0],
                 items: result[1], //send the data from database to the light detail page
                 photo: req.user.foto,
+                notifqty: result[2][0]['count']
             });
         });
     });
 
     app.get('/add-admin', checkAuthenticated, function(req, res) {
         var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+        query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
@@ -232,18 +244,18 @@ module.exports = function(app, con, path, passport) {
                 input_name: '',
                 message: '',
                 photo: req.user.foto,
+                notifqty: result[1][0]['count']
             });
         });
     });
 
     app.post('/add-admin', checkAuthenticated, function(req, res) {
-        console.log('request was made : ' + req.url);
-
         var query = "SELECT email FROM `administrator` WHERE email = '" + req.body.email + "';",
             insert_query = "INSERT INTO `administrator` (`nama`, `email`, `foto`,  `password`) VALUES ("
 
 
         query += " SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+        query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
 
         con.query(query, async function(err, result) {
             if (err) throw err;
@@ -257,18 +269,18 @@ module.exports = function(app, con, path, passport) {
                         input_name: req.body.name,
                         photo: req.user.foto,
                         notifikasi: result[1],
+                        notifqty: result[2][0]['count']
                     })
                 })
             } else {
                 let hashedPassword = await bcrypt.hash(req.body.password, 8)
                 insert_query += "'" + req.body.name + "',";
                 insert_query += "'" + req.body.email + "',";
-                insert_query += "'" + "default-avatar.png" + "',";
+                insert_query += "'" + "no_profile.png" + "',";
                 insert_query += "'" + hashedPassword + "')";
 
                 con.query(insert_query, function(err, result) {
                     if (err) throw err;
-                    console.log("1 record changed");
                     res.redirect('/admins');
                 });
             }
@@ -297,6 +309,7 @@ module.exports = function(app, con, path, passport) {
 
     app.get('/profile', checkAuthenticated, function(req, res) {
         var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+        query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
@@ -308,7 +321,8 @@ module.exports = function(app, con, path, passport) {
                 name: req.user.nama,
                 email: req.user.email,
                 photo: req.user.foto,
-                notifikasi: result
+                notifikasi: result,
+                notifqty: result[1][0]['count']
             });
         });
 
@@ -316,9 +330,7 @@ module.exports = function(app, con, path, passport) {
     });
 
     app.post('/profile/:id/edit', checkAuthenticated, async function(req, res) {
-        console.log('request was made : ' + req.url);
         let hashedPassword = await bcrypt.hash(req.body.password, 8)
-            //console.log('this is what you call id : ' + req.body.nama)
         var update_query = "UPDATE `administrator` SET";
         update_query += "`nama` = '" + req.body.name + "',";
         update_query += "`email` = '" + req.body.email + "',";
@@ -326,8 +338,9 @@ module.exports = function(app, con, path, passport) {
         update_query += " WHERE `id` = '" + req.params.id + "'";
 
         var query = "SELECT email FROM `administrator` WHERE email = '" + req.body.email + "';"
-        query += "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;",
-            message_bio = 0
+        query += "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+        query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
+        message_bio = 0
 
         con.query(query, async function(err, result) {
             if (err) throw err;
@@ -342,14 +355,14 @@ module.exports = function(app, con, path, passport) {
                             name: req.user.nama,
                             email: req.user.email,
                             photo: req.user.foto,
-                            notifikasi: result[1]
+                            notifikasi: result[1],
+                            notifqty: [2][0]['count']
                         })
                     })
                 } else {
                     con.query(update_query, function(err, result) {
                         if (err) throw err;
                         if (result.affectedRows) {
-                            console.log("1 record changed");
                             res.redirect('/profile');
                         }
                     });
@@ -358,7 +371,6 @@ module.exports = function(app, con, path, passport) {
                 con.query(update_query, function(err, result) {
                     if (err) throw err;
                     if (result.affectedRows) {
-                        console.log("1 record changed");
                         res.redirect('/profile');
                     }
                 });
@@ -372,7 +384,9 @@ module.exports = function(app, con, path, passport) {
         upload(req, res, err => {
 
             if (!req.file) {
-                con.query("SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;", function(err, result) {
+                var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
+                query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
+                con.query(query, function(err, result) {
                     if (err) throw err;
                     return res.render('profile', {
                         message_bio: '',
@@ -381,7 +395,8 @@ module.exports = function(app, con, path, passport) {
                         name: req.user.nama,
                         email: req.user.email,
                         photo: req.user.foto,
-                        notifikasi: result
+                        notifikasi: result,
+                        notifqty: result[1][0]['count'],
                     })
                 });
             } else {
@@ -389,7 +404,7 @@ module.exports = function(app, con, path, passport) {
                 var query = "UPDATE `administrator` SET";
                 query += "`foto` = '" + req.file.filename + "'";
                 query += " WHERE `administrator`.`id`= " + req.params.id + "";
-                console.log(req.params.id);
+
                 con.query(query, function(err, results) {
                     res.redirect('/profile')
                 });

@@ -91,10 +91,13 @@ module.exports = function(server, con) {
             dbDateTime = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds; //date time to save in database
         if (topic == 'aquas/feed') {
             //MQTT feed value handler
-            //formula current_feed = ((input - min) * 100) / (max - min)
-            current_feed = Math.trunc(('-' + message.toString() - (-23)) * 100 / (0 - (-23)))
-                //formula current_feed_gram = (((input - OldMin) * NewRange) / OldRange) + NewMin
-            current_feed_gram = Math.trunc(((('-' + message.toString() - (-23)) * (450 - 0)) / (0 - (-23))) + 0)
+            var ultrasonic_input = message.toString()
+            raw = (19 - ultrasonic_input) / 19,
+                convertion = ultrasonic_input > 19 && ultrasonic_input <= 23 ? 0 : raw
+                //formula current_feed = Math.trunc((max height - feed / max height * 100)
+            current_feed = Math.trunc(convertion * 100)
+                //formula current_feed = Math.trunc((max height - feed / max height * 450)
+            current_feed_gram = Math.trunc(convertion * 450)
             var feed = parseInt(message.toString()) < 100 ? [current_feed, current_feed_gram, time] : [100, 450, time];
             io.sockets.emit('aquas_feed_msg_arrive', feed);
         } else if (topic == 'aquas/light') {
