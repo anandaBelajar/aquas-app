@@ -69,10 +69,10 @@ function getRandomInt(min, max) {
 
 
 setInterval(function() {
-    var feed_value = getRandomInt(0, 23).toString()
-    var light_value = getRandomInt(1, 2000).toString()
+    var feed_value = getRandomInt(1, 23).toString()
+    var light_value = getRandomInt(6000, 7000).toString()
     var temp_value = getRandomInt(26, 28).toString()
-    var ph_value = getRandomInt(4, 9).toString()
+    var ph_value = getRandomInt(6, 8).toString()
 
     client.publish('aquas/feed', feed_value)
     client.publish('aquas/light', light_value)
