@@ -32,9 +32,6 @@ client.on('connect', function() {
 })
 
 client.on('message', function(topic, message) {
-    // message is Buffer
-    //console.log('topic : ' + topic + ' message : ' + message.toString()) //show th message
-    //client.end() //client.end digunakan untuk menghentikan listening pada suatu broker
     if (topic == "aquas/pump") {
         console.log(topic + ' : ' + message.toString())
         if (message.toString() == "on") {
@@ -74,8 +71,13 @@ setInterval(function() {
     var temp_value = getRandomInt(26, 28).toString()
     var ph_value = getRandomInt(6, 8).toString()
 
-    client.publish('aquas/feed', feed_value)
-    client.publish('aquas/light', light_value)
-    client.publish('aquas/temp', temp_value)
-    client.publish('aquas/ph', ph_value)
+    client.publish('aquas/feed', '12')
+    client.publish('aquas/ph', '5')
+    client.publish('aquas/temp', '10')
+    client.publish('aquas/mail', 'peringatan_suhu')
+
+    //client.publish('aquas/feed', feed_value)
+    //client.publish('aquas/light', light_value)
+    //client.publish('aquas/temp', temp_value)
+    //client.publish('aquas/ph', ph_value)
 }, 1000);

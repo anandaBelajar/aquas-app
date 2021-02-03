@@ -37,7 +37,10 @@ module.exports = function(server, con) {
         aquas_growlight_manual_topic = 'aquas/growlight_manual',
         aquas_servo_topic = 'aquas/servo',
         aquas_time_topic = 'aquas/time',
+        pemberitahuan_pakan_timeout,
+        peringatan_pakan_timeout,
         //global current sensor value
+        ultrasonic_input,
         current_feed = "",
         current_feed_gram = "",
         current_temp = "",
@@ -91,9 +94,9 @@ module.exports = function(server, con) {
             dbDateTime = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds; //date time to save in database
         if (topic == 'aquas/feed') {
             //MQTT feed value handler
-            var ultrasonic_input = message.toString()
-            raw = (19 - ultrasonic_input) / 19,
-                convertion = ultrasonic_input > 19 && ultrasonic_input <= 23 ? 0 : raw
+            ultrasonic_input = message.toString()
+            raw = (22 - ultrasonic_input) / 22,
+                convertion = ultrasonic_input > 22 ? 0 : raw
                 //formula current_feed = Math.trunc((max height - feed / max height * 100)
             current_feed = Math.trunc(convertion * 100)
                 //formula current_feed = Math.trunc((max height - feed / max height * 450)
@@ -154,69 +157,46 @@ module.exports = function(server, con) {
             }
         } else if (topic == 'aquas/mail') {
             //MQTT mail handler
-            var query = "SELECT id, email FROM administrator;",
-                notif_query = "",
-                jenis = "",
+            var jenis = "",
                 subject = "",
-                content = "",
-                rec_email = []
+                content = ""
 
             if (message.toString() == 'pemberitahuan_pakan') {
-                jenis = 'pemberitahuan_pakan'
-                subject = "pemberitahuan"
-                content = 'Persediaan pakan sebanyak ' + current_feed + "%, mohon segera lakukan isi ulang"
+                if (!pemberitahuan_pakan_timeout) {
+                    pemberitahuan_pakan_timeout = setTimeout(function() {
+                        if (ultrasonic_input > 11 && ultrasonic_input <= 17) {
+                            jenis = 'pemberitahuan_pakan'
+                            subject = "pemberitahuan"
+                            content = 'Persediaan pakan sebanyak ' + current_feed + '% dengan kuantitas ' + current_feed_gram + ', mohon segera lakukan isi ulang'
+                            send_email(jenis, subject, dateonly, time, content);
+                            pemberitahuan_pakan_timeout = null
+                        }
+                    }, 5000);
+                }
             } else if (message.toString() == 'peringatan_pakan') {
-                jenis = 'peringatan_pakan'
-                subject = "peringatan"
-                content = 'Persediaan pakan sebanyak ' + current_feed + '%, mohon segera lakukan isi ulang'
+                if (!peringatan_pakan_timeout) {
+                    peringatan_pakan_timeout = setTimeout(function() {
+                        if (ultrasonic_input > 17) {
+                            jenis = 'peringatan_pakan'
+                            subject = "peringatan"
+                            content = 'Persediaan pakan sebanyak ' + current_feed + '% dengan kuantitas ' + current_feed_gram + ', mohon segera lakukan isi ulang'
+                            send_email(jenis, subject, dateonly, time, content);
+                            peringatan_pakan_timeout = null
+                        }
+                    }, 15000)
+                }
             } else if (message.toString() == 'peringatan_suhu') {
                 jenis = 'peringatan_suhu'
                 subject = "peringatan"
                 content = 'Temperatur suhu saat ini  : ' + current_temp + ' celcius, mohon segera lakukan pemeriksaan'
-            } else if (message.toString() == 'peringatan_ph') {
+                send_email(jenis, subject, dateonly, time, content);
+            } else
+            if (message.toString() == 'peringatan_ph') {
                 jenis = 'peringatan_ph'
                 subject = "peringatan"
                 content = 'Derajat ph saat ini : ' + current_ph + ', mohon segera lakukan pemeriksaan'
+                send_email(jenis, subject, dateonly, time, content);
             }
-
-            query += "SELECT jenis FROM notifikasi WHERE jenis = '" + jenis + "';"
-            query += "SELECT tanggal FROM notifikasi WHERE tanggal ='" + dateonly + "';"
-
-            con.query(query, function(err, result) {
-                if (err) throw err;
-                if (!(result[0].length && result[1].length && result[2].length)) {
-                    result[0].forEach(function(item) {
-
-                        notif_query += "INSERT INTO `notifikasi` (`jenis`, `subject`,`tanggal`, `waktu`, `deskripsi`, `status`, `id_administrator`) VALUES (";
-                        notif_query += "'" + jenis + "',";
-                        notif_query += "'" + subject + "',";
-                        notif_query += "'" + dateonly + "',";
-                        notif_query += "'" + time + "',";
-                        notif_query += "'" + content + "',";
-                        notif_query += "'" + 'unread' + "',";
-                        notif_query += "'" + item['id'] + "');";
-
-                        rec_email.push(item['email'])
-                    });
-                    con.query(notif_query, function(err, result) {
-                        if (err) throw err;
-                    });
-                    let mailOptions = {
-                        from: process.env.EMAIL,
-                        to: rec_email,
-                        subject: jenis,
-                        text: content
-                    }
-
-                    transporter.sendMail(mailOptions, function(err, data) {
-                        if (err) {
-                            console.log(err);
-                        } else {
-                            console.log('Email sent!');
-                        }
-                    });
-                }
-            });
         }
     })
 
@@ -261,7 +241,7 @@ module.exports = function(server, con) {
             setTimeout(function() {
                 io.sockets.emit('servo_close');
                 client.publish(aquas_servo_topic, 'close');
-            }, 3000)
+            }, 1500)
         });
         //End Servo manual status socket event
 
@@ -378,9 +358,62 @@ module.exports = function(server, con) {
             jadwal_pakan_sore = data['input_pakan_sore'] + " : 00";
         });
 
-
-
     });
+
+
+    /**
+     * Sending email funtion
+     * 
+     * @param {*} jenis 
+     * @param {*} subject 
+     * @param {*} dateonly 
+     * @param {*} time 
+     * @param {*} content 
+     */
+    function send_email(jenis, subject, dateonly, time, content) {
+        var query = "SELECT id, email FROM administrator;",
+            notif_query = "",
+            rec_email = []
+
+        query += "SELECT jenis FROM notifikasi WHERE jenis = '" + jenis + "';"
+        query += "SELECT tanggal FROM notifikasi WHERE tanggal ='" + dateonly + "';"
+
+        con.query(query, function(err, result) {
+            if (err) throw err;
+            if (!(result[0].length && result[1].length && result[2].length)) {
+                result[0].forEach(function(item) {
+
+                    notif_query += "INSERT INTO `notifikasi` (`jenis`, `subject`,`tanggal`, `waktu`, `deskripsi`, `status`, `id_administrator`) VALUES (";
+                    notif_query += "'" + jenis + "',";
+                    notif_query += "'" + subject + "',";
+                    notif_query += "'" + dateonly + "',";
+                    notif_query += "'" + time + "',";
+                    notif_query += "'" + content + "',";
+                    notif_query += "'" + 'unread' + "',";
+                    notif_query += "'" + item['id'] + "');";
+
+                    rec_email.push(item['email'])
+                });
+                con.query(notif_query, function(err, result) {
+                    if (err) throw err;
+                });
+                let mailOptions = {
+                    from: process.env.EMAIL,
+                    to: rec_email,
+                    subject: jenis,
+                    text: content
+                }
+
+                transporter.sendMail(mailOptions, function(err, data) {
+                    if (err) {
+                        console.log(err);
+                    } else {
+                        console.log('Email sent!');
+                    }
+                });
+            }
+        });
+    }
 
     setInterval(function() {
 
@@ -412,9 +445,5 @@ module.exports = function(server, con) {
 
         client.publish(aquas_time_topic, String(hour)); //publish the current time to arduino
     }, 1000);
-
-
-
-
 
 }
