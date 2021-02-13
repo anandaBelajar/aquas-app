@@ -39,6 +39,8 @@ module.exports = function(server, con) {
         aquas_time_topic = 'aquas/time',
         pemberitahuan_pakan_timeout,
         peringatan_pakan_timeout,
+        peringatan_suhu_timeout,
+        peringatan_ph_timeout,
         //global current sensor value
         ultrasonic_input,
         current_feed = "",
@@ -95,8 +97,8 @@ module.exports = function(server, con) {
         if (topic == 'aquas/feed') {
             //MQTT feed value handler
             ultrasonic_input = message.toString()
-            raw = (22 - ultrasonic_input) / 22,
-                convertion = ultrasonic_input > 22 ? 0 : raw
+            raw = (20 - ultrasonic_input) / 20,
+                convertion = ultrasonic_input > 20 ? 0 : raw
                 //formula current_feed = Math.trunc((max height - feed / max height * 100)
             current_feed = Math.trunc(convertion * 100)
                 //formula current_feed = Math.trunc((max height - feed / max height * 450)
@@ -147,10 +149,12 @@ module.exports = function(server, con) {
         } else if (topic == "aquas/remove-loader") {
             //MQTT actuator loading animation handler
             var message = message.toString().split("/")
-
             if (message[0] == "pump") {
                 io.sockets.emit('remove_pump_loader', message[1]);
             } else if (message[0] == "servo") {
+                if (message[1] == 'Tutup') {
+                    io.sockets.emit('servo_close');
+                }
                 io.sockets.emit('remove_servo_loader', message[1]);
             } else if (message[0] == "growlight") {
                 io.sockets.emit('remove_growlight_loader', message[1]);
@@ -169,9 +173,9 @@ module.exports = function(server, con) {
                             subject = "pemberitahuan"
                             content = 'Persediaan pakan sebanyak ' + current_feed + '% dengan kuantitas ' + current_feed_gram + ', mohon segera lakukan isi ulang'
                             send_email(jenis, subject, dateonly, time, content);
-                            pemberitahuan_pakan_timeout = null
                         }
-                    }, 5000);
+                        pemberitahuan_pakan_timeout = null
+                    }, 10000);
                 }
             } else if (message.toString() == 'peringatan_pakan') {
                 if (!peringatan_pakan_timeout) {
@@ -181,21 +185,36 @@ module.exports = function(server, con) {
                             subject = "peringatan"
                             content = 'Persediaan pakan sebanyak ' + current_feed + '% dengan kuantitas ' + current_feed_gram + ', mohon segera lakukan isi ulang'
                             send_email(jenis, subject, dateonly, time, content);
-                            peringatan_pakan_timeout = null
                         }
-                    }, 15000)
+                        peringatan_pakan_timeout = null
+                    }, 10000)
                 }
             } else if (message.toString() == 'peringatan_suhu') {
-                jenis = 'peringatan_suhu'
-                subject = "peringatan"
-                content = 'Temperatur suhu saat ini  : ' + current_temp + ' celcius, mohon segera lakukan pemeriksaan'
-                send_email(jenis, subject, dateonly, time, content);
+                if (!peringatan_suhu_timeout) {
+                    peringatan_suhu_timeout = setTimeout(function() {
+                        if (current_temp < 18 || current_temp > 30) {
+                            jenis = 'peringatan_suhu'
+                            subject = "peringatan"
+                            content = 'Temperatur suhu saat ini  : ' + current_temp + ' celcius, mohon segera lakukan pemeriksaan'
+                            send_email(jenis, subject, dateonly, time, content);
+                        }
+                        peringatan_suhu_timeout = null
+                    }, 5000)
+                }
+
             } else
             if (message.toString() == 'peringatan_ph') {
-                jenis = 'peringatan_ph'
-                subject = "peringatan"
-                content = 'Derajat ph saat ini : ' + current_ph + ', mohon segera lakukan pemeriksaan'
-                send_email(jenis, subject, dateonly, time, content);
+                if (!peringatan_ph_timeout) {
+                    peringatan_ph_timeout = setTimeout(function() {
+                        if (current_ph < 5.5 || current_ph > 7.5) {
+                            jenis = 'peringatan_ph'
+                            subject = "peringatan"
+                            content = 'Derajat ph saat ini : ' + current_ph + ', mohon segera lakukan pemeriksaan'
+                            send_email(jenis, subject, dateonly, time, content);
+                        }
+                        peringatan_ph_timeout = null
+                    }, 5000)
+                }
             }
         }
     })
@@ -239,9 +258,8 @@ module.exports = function(server, con) {
             io.sockets.emit('servo_open');
             client.publish(aquas_servo_topic, 'open');
             setTimeout(function() {
-                io.sockets.emit('servo_close');
                 client.publish(aquas_servo_topic, 'close');
-            }, 1500)
+            }, 3000)
         });
         //End Servo manual status socket event
 
@@ -436,7 +454,7 @@ module.exports = function(server, con) {
                         client.publish(aquas_servo_topic, 'open');
                         setTimeout(function() {
                             client.publish(aquas_servo_topic, 'close');
-                        }, 3000)
+                        }, 5000)
                     }
                 }
             }
