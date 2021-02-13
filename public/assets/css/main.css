@@ -186,6 +186,10 @@
 
 /** Start notifications page */
 
+.notification_indicator {
+    margin-top: 10px;
+}
+
 .notification-detail .notification-full-description {
     font-size: 18px;
     padding: 20px 30px;
