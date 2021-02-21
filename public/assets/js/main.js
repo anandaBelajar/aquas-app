@@ -29,6 +29,8 @@ var socket = io.connect("http://localhost:3000"), //connect to server websocket
     waktu_pakan_pagi = $('#waktu_pakan_pagi'),
     waktu_pakan_siang = $('#waktu_pakan_siang'),
     waktu_pakan_sore = $('#waktu_pakan_sore'),
+    waktu_pencahayaan_mulai = $('#waktu_pencahayaan_mulai'),
+    waktu_pencahayaan_selesai = $('#waktu_pencahayaan_selesai'),
     admins_data_table = $('#admins_data_table'),
     btn_submit_feed_scheduled = $('#btn_submit_feed_scheduled'),
     btn_submit_feeder_timeout = $('#btn_submit_feeder_timeout'),
@@ -58,6 +60,21 @@ waktu_pakan_sore.wickedpicker({
 
 //feeder timeout field
 feeder_timeout.TouchSpin();
+
+//lighting schedule wickedpicker configuration
+waktu_pencahayaan_mulai.wickedpicker({
+    now: waktu_pencahayaan_mulai.data('waktu'),
+    twentyFour: true,
+    title: 'Waktu Pencahayaan Mulai',
+    showSeconds: false,
+});
+
+waktu_pencahayaan_selesai.wickedpicker({
+    now: waktu_pencahayaan_selesai.data('waktu'),
+    twentyFour: true,
+    title: 'Waktu Pencahayaan Selesai',
+    showSeconds: false,
+});
 
 //growlight light limit field
 growlight_light_limit.TouchSpin();

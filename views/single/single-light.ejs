@@ -56,7 +56,7 @@
                                                     <label class="custom-control-label" for="aquas_auto_light_toggle"><% if(input_items[2].status=='auto' ){ %> Auto <%}else{%> Manual <%}%></label>
 
                                             </div>
-                                            <p class="control_description">Aktifkan kontrol pencahyaan otomatis</p>
+                                            <p class="control_description">Aktifkan kontrol pencahayaan otomatis</p>
                                         </div>
                                         <div class="aquas_manual_light_toggle_container" <% if(input_items[2].status=='auto' ){ %> style="display:none"
                                             <%}%> >
@@ -77,15 +77,66 @@
                         </div>
                     </div>
                     <!--End light console. row container-->
+                    <!--Start growlight schedule form row container-->
                     <br />
-                    <div class="row feeder_timeout_setting_container">
+                    <div class="row lighting_schedule_form_container">
                         <div class="col-md-12 col-sm-12 ">
                             <div class="row">
                                 <div class="col-md-12 col-sm-12">
                                     <div class="x_panel">
                                         <div class="row x_title">
                                             <div class="col-md-6">
-                                                <h3>Limit Pencahyaan</h3>
+                                                <h3>Waktu Optimal Pencahayaan</h3>
+                                            </div>
+                                        </div>
+                                        <div class="x_content">
+                                            <form id="lighting_schedule_form" action="/lighting-schedule" method="post">
+                                                <p>Tentukan waktu optimal pencahayaan pada form ini</p>
+                                                <% if (form_items.length > 0) {%>
+                                                    <% form_items.forEach((item, index) => { %>
+                                                        <div class="field item form-group">
+                                                            <label class="col-form-label col-md-3 col-sm-3  label-align">Waktu Pencahayaan <%= item.jenis %><span class="required">*</span></label>
+                                                            <div class="col-md-6 col-sm-6">
+                                                                <input class="form-control" type="text" id="waktu_pencahayaan_<%= item.jenis %>" name="waktu_pencahayaan_<%= item.jenis %>" data-waktu="<%= item.waktu %>" required='required'></div>
+                                                        </div>
+                                                        <% }) %>
+                                                            <% } else { %>
+                                                                <div class="field item form-group">
+                                                                    <label class="col-form-label col-md-3 col-sm-3  label-align">Waktu Pencahayaan Mulai<span class="required">*</span></label>
+                                                                    <div class="col-md-6 col-sm-6">
+                                                                        <input class="form-control" type="text" id="waktu_pencahayaan_mulai" name="waktu_pencahayaan_mulai" data-waktu="08:00" required='required'></div>
+                                                                </div>
+                                                                <div class="field item form-group">
+                                                                    <label class="col-form-label col-md-3 col-sm-3  label-align">Waktu Pencahayaan Selesai<span class="required">*</span></label>
+                                                                    <div class="col-md-6 col-sm-6">
+                                                                        <input class="form-control" type="text" id="waktu_pencahayaan_selesai" name="waktu_pencahayaan_selesai" data-waktu="12:00" required='required'></div>
+                                                                </div>
+                                                                <% } %>
+                                                                    <div class="ln_solid ">
+                                                                        <div class="form-group ">
+                                                                            <div class="col-md-6 offset-md-3 ">
+                                                                                <button id="btn_submit_lighting_scheduled " type='submit' class="btn btn-primary ">Submit</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!--End growlight schedule form row container-->
+                    <br />
+                    <div class="row growlight_light_limit_setting_container">
+                        <div class="col-md-12 col-sm-12 ">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="x_panel">
+                                        <div class="row x_title">
+                                            <div class="col-md-6">
+                                                <h3>Limit Pencahayaan</h3>
                                             </div>
                                         </div>
                                         <div class="x_content">

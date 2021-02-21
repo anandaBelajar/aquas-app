@@ -106,7 +106,7 @@ module.exports = function(app, con, path, passport) {
         //light detail page route
         var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
         query += "SELECT * FROM `status_aktuator`; "
-        query += "SELECT * FROM `jadwal_pakan`;"
+        query += "SELECT * FROM `jadwal_aktuator` WHERE aktuator='servo';"
         query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
         query += "SELECT `limit` FROM `limit_aktuator` WHERE `jenis` = 'timeout_pintu_pakan';";
         con.query(query, function(err, result) {
@@ -126,19 +126,19 @@ module.exports = function(app, con, path, passport) {
     });
 
     app.post('/single-feed', checkAuthenticated, function(req, res) {
-        var check_table_query = "SELECT * FROM `jadwal_pakan`",
-            query = "UPDATE `jadwal_pakan` SET `waktu` = '" + req.body.waktu_pakan_pagi.replace(/\s/g, '') + "' WHERE `jadwal_pakan`.`jenis` = 'pagi';";
-        query += " UPDATE `jadwal_pakan` SET `waktu` = '" + req.body.waktu_pakan_siang.replace(/\s/g, '') + "' WHERE `jadwal_pakan`.`jenis` = 'siang';";
-        query += " UPDATE `jadwal_pakan` SET `waktu` = '" + req.body.waktu_pakan_sore.replace(/\s/g, '') + "' WHERE `jadwal_pakan`.`jenis` = 'sore';";
+        var check_table_query = "SELECT * FROM `jadwal_aktuator` WHERE aktuator='servo'",
+            query = "UPDATE `jadwal_aktuator` SET `waktu` = '" + req.body.waktu_pakan_pagi.replace(/\s/g, '') + "' WHERE `jadwal_aktuator`.`jenis` = 'pagi';";
+        query += " UPDATE `jadwal_aktuator` SET `waktu` = '" + req.body.waktu_pakan_siang.replace(/\s/g, '') + "' WHERE `jadwal_aktuator`.`jenis` = 'siang';";
+        query += " UPDATE `jadwal_aktuator` SET `waktu` = '" + req.body.waktu_pakan_sore.replace(/\s/g, '') + "' WHERE `jadwal_aktuator`.`jenis` = 'sore';";
 
         con.query(check_table_query, function(err, result) {
             if (err) throw err;
 
             if (result.length < 1) {
-                query = 'INSERT INTO jadwal_pakan(jenis, waktu) VALUES ';
-                query += "('pagi','" + req.body.waktu_pakan_pagi.replace(/\s/g, '') + "'),"
-                query += "('siang','" + req.body.waktu_pakan_siang.replace(/\s/g, '') + "'),"
-                query += "('sore','" + req.body.waktu_pakan_sore.replace(/\s/g, '') + "')"
+                query = 'INSERT INTO jadwal_aktuator(aktuator, jenis, waktu) VALUES ';
+                query += "('servo', 'pagi','" + req.body.waktu_pakan_pagi.replace(/\s/g, '') + "'),"
+                query += "('servo', 'siang','" + req.body.waktu_pakan_siang.replace(/\s/g, '') + "'),"
+                query += "('servo', 'sore','" + req.body.waktu_pakan_sore.replace(/\s/g, '') + "')"
             }
             con.query(query, function(err, result) {
                 if (err) throw err;
@@ -170,6 +170,7 @@ module.exports = function(app, con, path, passport) {
         //var query = "SELECT * FROM `data_cahaya` ORDER BY `waktu` DESC"
         var query = "SELECT * FROM `notifikasi` WHERE status = 'unread' AND id_administrator =" + req.user.id + " ORDER BY 'tanggal' 'DESC' LIMIT 5;"
         query += "SELECT * FROM `status_aktuator`; "
+        query += "SELECT * FROM `jadwal_aktuator` WHERE aktuator='growlight';"
         query += "SELECT * FROM `data_cahaya` ORDER BY `waktu` DESC;"
         query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
         query += "SELECT `limit` FROM limit_aktuator WHERE `jenis` = 'limit_cahaya_growlight';"
@@ -182,10 +183,31 @@ module.exports = function(app, con, path, passport) {
                 name: req.user.nama,
                 notifikasi: result[0],
                 input_items: result[1],
-                table_items: result[2], //send the data from database to the light detail page
+                form_items: result[2],
+                table_items: result[3], //send the data from database to the light detail page
                 photo: req.user.foto,
-                notifqty: result[3][0]['count'],
-                growlight_light_limit: result[4][0]['limit']
+                notifqty: result[4][0]['count'],
+                growlight_light_limit: result[5][0]['limit']
+            });
+        });
+    });
+
+    app.post('/lighting-schedule', checkAuthenticated, function(req, res) {
+        var check_table_query = "SELECT * FROM `jadwal_aktuator` WHERE aktuator='growlight'",
+            query = "UPDATE `jadwal_aktuator` SET `waktu` = '" + req.body.waktu_pencahayaan_mulai.replace(/\s/g, '') + "' WHERE `jadwal_aktuator`.`jenis` = 'mulai';";
+        query += " UPDATE `jadwal_aktuator` SET `waktu` = '" + req.body.waktu_pencahayaan_selesai.replace(/\s/g, '') + "' WHERE `jadwal_aktuator`.`jenis` = 'selesai';";
+
+        con.query(check_table_query, function(err, result) {
+            if (err) throw err;
+
+            if (result.length < 1) {
+                query = 'INSERT INTO jadwal_aktuator(aktuator, jenis, waktu) VALUES ';
+                query += "('growlight', 'mulai','" + req.body.waktu_pencahayaan_mulai.replace(/\s/g, '') + "'),"
+                query += "('growlight', 'selesai','" + req.body.waktu_pencahayaan_selesai.replace(/\s/g, '') + "')"
+            }
+            con.query(query, function(err, result) {
+                if (err) throw err;
+                res.redirect('/single-light');
             });
         });
     });

@@ -34,10 +34,7 @@ module.exports = function(server, con) {
         //publised topic
         aquas_pump_topic = 'aquas/pump',
         aquas_growlight_topic = 'aquas/growlight',
-        aquas_growlight_manual_topic = 'aquas/growlight_manual',
         aquas_servo_topic = 'aquas/servo',
-        aquas_time_topic = 'aquas/time',
-        growlight_light_limit_topic = 'aquas/growlight_light_limit_topic',
         pemberitahuan_pakan_timeout,
         peringatan_pakan_timeout,
         peringatan_suhu_timeout,
@@ -66,10 +63,9 @@ module.exports = function(server, con) {
                     if (item['jenis'] == 'pump_manual') {
                         client.publish(aquas_pump_topic, item['status'])
                     } else if (item['jenis'] == 'grow_light_auto') {
-                        client.publish(aquas_growlight_topic, item['status'])
                         growlight_auto_status = item['status'];
                     } else if (item['jenis'] == 'grow_light_manual' && growlight_auto_status == 'manual') {
-                        client.publish(aquas_growlight_manual_topic, item['status'])
+                        client.publish(aquas_growlight_topic, item['status'])
                     }
                 })
             }
@@ -330,7 +326,6 @@ module.exports = function(server, con) {
                 }
             });
             io.sockets.emit('grow_light_auto');
-            client.publish(aquas_growlight_topic, 'auto');
         });
 
         socket.on('grow_light_manual', function() {
@@ -346,8 +341,7 @@ module.exports = function(server, con) {
                 }
             });
             io.sockets.emit('grow_light_manual');
-            client.publish(aquas_growlight_topic, 'manual');
-            client.publish(aquas_growlight_manual_topic, 'off');
+            client.publish(aquas_growlight_topic, 'off');
         });
         //End light automation (auto/manual) socket event
 
@@ -365,7 +359,7 @@ module.exports = function(server, con) {
                 }
             });
             io.sockets.emit('grow_light_on');
-            client.publish(aquas_growlight_manual_topic, 'on');
+            client.publish(aquas_growlight_topic, 'on');
         });
 
         socket.on('grow_light_off', function() {
@@ -381,7 +375,7 @@ module.exports = function(server, con) {
                 }
             });
             io.sockets.emit('grow_light_off');
-            client.publish(aquas_growlight_manual_topic, 'off');
+            client.publish(aquas_growlight_topic, 'off');
         });
         //End light manual (on/off) socket event
 
@@ -460,11 +454,11 @@ module.exports = function(server, con) {
             minutes = date.getMinutes() < 10 ? '0' + String(date.getMinutes()) : date.getMinutes(),
             hour = date.getHours() < 10 ? '0' + String(date.getHours()) : date.getHours(),
             time = hour + ':' + minutes + ':' + seconds,
-            growlight_light_limit,
-            setting = [],
             //Start feed automation process
-            query = "SELECT waktu FROM  jadwal_pakan; "
+            query = "SELECT waktu FROM  jadwal_aktuator WHERE aktuator ='servo';"
         query += "SELECT status FROM status_aktuator WHERE jenis='servo_auto';"
+        query += "SELECT status FROM status_aktuator WHERE jenis='grow_light_auto';"
+        query += "SELECT waktu FROM  jadwal_aktuator WHERE aktuator ='growlight';"
         query += "SELECT `limit` FROM limit_aktuator WHERE jenis='limit_cahaya_growlight';"
 
         con.query(query, function(err, result) {
@@ -479,20 +473,18 @@ module.exports = function(server, con) {
                         }, feeder_timeout)
                     }
                 }
-                growlight_light_limit = result[2][0]['limit']
-                setting = [String(hour), String(growlight_light_limit)]
-                send_setting_to_microcontroller(setting)
+                if (result[2][0]['status'] == 'auto') {
+                    if (current_light < result[4][0]['limit'] && time >= result[3][0]['waktu'] && time <= result[3][1]['waktu']) {
+                        client.publish(aquas_growlight_topic, 'on');
+                    } else {
+                        client.publish(aquas_growlight_topic, 'off');
+                    }
+                }
             }
         });
         //End feed automation process
 
 
     }, 1000);
-
-
-    function send_setting_to_microcontroller(setting) {
-        client.publish(aquas_time_topic, setting[0]); //publish the current time to arduino
-        client.publish(growlight_light_limit_topic, setting[1]);
-    }
 
 }
