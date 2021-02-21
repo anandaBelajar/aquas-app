@@ -78,6 +78,42 @@
                     </div>
                     <!--End light console. row container-->
                     <br />
+                    <div class="row feeder_timeout_setting_container">
+                        <div class="col-md-12 col-sm-12 ">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="x_panel">
+                                        <div class="row x_title">
+                                            <div class="col-md-6">
+                                                <h3>Limit Pencahyaan</h3>
+                                            </div>
+                                        </div>
+                                        <div class="x_content">
+                                            <form id="growlight_light_limit_form" action="/growlight-light-limit-setting" method="post">
+                                                <p>Tentukan intensitas cahaya terendah untuk menayalakan growlight secara otomatis</p>
+
+                                                <div class="field item form-group">
+                                                    <label class="col-form-label col-md-3 col-sm-3  label-align">Limit cahaya growlight<span class="required">*</span></label>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <input class="form-control" type="text" id="growlight_light_limit" name="growlight_light_limit" value="<%= growlight_light_limit %>" data-bts-min="0" data-bts-max="107527" data-bts-postfix="lux" required='required'>
+                                                    </div>
+                                                </div>
+                                                <div class="ln_solid">
+                                                    <div class="form-group">
+                                                        <div class="col-md-6 offset-md-3">
+                                                            <button id="btn_submit_growlight_light_limit" type='submit' class="btn btn-primary">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <br />
                     <!--Start light table container-->
                     <div class="row light_data_table_container">
                         <div class="col-md-12 col-sm-12 ">

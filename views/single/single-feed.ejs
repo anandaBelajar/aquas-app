@@ -126,6 +126,41 @@
                     </div>
                     <br />
                     <!--End feed schedule form row container-->
+                    <div class="row feeder_timeout_setting_container">
+                        <div class="col-md-12 col-sm-12 ">
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="x_panel">
+                                        <div class="row x_title">
+                                            <div class="col-md-6">
+                                                <h3>Timeout Pintu Pakan</h3>
+                                            </div>
+                                        </div>
+                                        <div class="x_content">
+                                            <form id="feeder_timeout_form" action="/feeder-timeout-setting" method="post">
+                                                <p>Tentukan kuantitas pakan yang diberikan dengan mengatur timeout pintu pakan</p>
+
+                                                <div class="field item form-group">
+                                                    <label class="col-form-label col-md-3 col-sm-3  label-align">Timeour Pintu Pakan<span class="required">*</span></label>
+                                                    <div class="col-md-6 col-sm-6">
+                                                        <input class="form-control" type="text" id="feeder_timeout" name="timeout_pintu_pakan" value="<%= timeout_pakan %>" data-bts-min="1" data-bts-postfix="detik" required='required'>
+                                                    </div>
+                                                </div>
+                                                <div class="ln_solid">
+                                                    <div class="form-group">
+                                                        <div class="col-md-6 offset-md-3">
+                                                            <button id="btn_submit_feeder_timeout" type='submit' class="btn btn-primary">Submit</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
 
                 </div>
 

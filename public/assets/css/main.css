@@ -273,6 +273,28 @@
     }
 }
 
+#feeder_timeout_form .input-group-append,
+#feeder_timeout_form .input-group-prepend {
+    display: unset;
+}
+
+#feeder_timeout_form .input-group-addon {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+}
+
+#growlight_light_limit_form .input-group-append,
+#growlight_light_limit_form .input-group-prepend {
+    display: unset;
+}
+
+#growlight_light_limit_form .input-group-addon {
+    padding: 0;
+    background-color: transparent;
+    border: none;
+}
+
 @media (max-width:480px) {
     .info-number .badge {
         position: absolute;

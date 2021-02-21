@@ -108,6 +108,7 @@ module.exports = function(app, con, path, passport) {
         query += "SELECT * FROM `status_aktuator`; "
         query += "SELECT * FROM `jadwal_pakan`;"
         query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
+        query += "SELECT `limit` FROM `limit_aktuator` WHERE `jenis` = 'timeout_pintu_pakan';";
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
             if (err) throw err;
@@ -118,8 +119,8 @@ module.exports = function(app, con, path, passport) {
                 input_items: result[1],
                 form_items: result[2], //send the data from database to the light detail page
                 photo: req.user.foto,
-                notifqty: result[3][0]['count']
-
+                notifqty: result[3][0]['count'],
+                timeout_pakan: result[4][0]['limit']
             });
         });
     });
@@ -146,6 +147,24 @@ module.exports = function(app, con, path, passport) {
         });
     });
 
+    app.post('/feeder-timeout-setting', checkAuthenticated, function(req, res) {
+        var check_table_query = "SELECT `limit` FROM `limit_aktuator` WHERE  `limit_aktuator`.`jenis` = 'timeout_pintu_pakan'",
+            query = "UPDATE `limit_aktuator` SET `limit` =" + req.body.timeout_pintu_pakan + " WHERE `limit_aktuator`.`jenis` = 'timeout_pintu_pakan';";
+
+
+        con.query(check_table_query, function(err, result) {
+            if (err) throw err;
+
+            if (result.length < 1) {
+                query = "INSERT INTO limit_aktuator(jenis, limit) VALUES ('timeout_pintu_pakan'," + req.body.timeout_pintu_pakan + ");"
+            }
+            con.query(query, function(err, result) {
+                if (err) throw err;
+                res.redirect('/single-feed');
+            });
+        });
+    });
+
     app.get('/single-light', checkAuthenticated, function(req, res) {
         //light detail page route
         //var query = "SELECT * FROM `data_cahaya` ORDER BY `waktu` DESC"
@@ -153,6 +172,7 @@ module.exports = function(app, con, path, passport) {
         query += "SELECT * FROM `status_aktuator`; "
         query += "SELECT * FROM `data_cahaya` ORDER BY `waktu` DESC;"
         query += "SELECT COUNT(id) AS count FROM notifikasi WHERE status='unread' AND id_administrator =" + req.user.id + ";"
+        query += "SELECT `limit` FROM limit_aktuator WHERE `jenis` = 'limit_cahaya_growlight';"
 
         con.query(query, function(err, result) {
             //select all light sensor value and time from the database
@@ -164,7 +184,26 @@ module.exports = function(app, con, path, passport) {
                 input_items: result[1],
                 table_items: result[2], //send the data from database to the light detail page
                 photo: req.user.foto,
-                notifqty: result[3][0]['count']
+                notifqty: result[3][0]['count'],
+                growlight_light_limit: result[4][0]['limit']
+            });
+        });
+    });
+
+    app.post('/growlight-light-limit-setting', checkAuthenticated, function(req, res) {
+        var check_table_query = "SELECT `limit` FROM `limit_aktuator` WHERE  `limit_aktuator`.`jenis` = 'timeout_pintu_pakan'",
+            query = "UPDATE `limit_aktuator` SET `limit` =" + req.body.growlight_light_limit + " WHERE `limit_aktuator`.`jenis` = 'limit_cahaya_growlight';";
+
+
+        con.query(check_table_query, function(err, result) {
+            if (err) throw err;
+
+            if (result.length < 1) {
+                query = "INSERT INTO limit_aktuator(jenis, limit) VALUES ('limit_cahaya_growlight'," + req.body.growlight_light_limit + ");"
+            }
+            con.query(query, function(err, result) {
+                if (err) throw err;
+                res.redirect('/single-light');
             });
         });
     });

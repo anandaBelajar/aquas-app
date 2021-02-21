@@ -37,16 +37,20 @@ module.exports = function(server, con) {
         aquas_growlight_manual_topic = 'aquas/growlight_manual',
         aquas_servo_topic = 'aquas/servo',
         aquas_time_topic = 'aquas/time',
+        growlight_light_limit_topic = 'aquas/growlight_light_limit_topic',
         pemberitahuan_pakan_timeout,
         peringatan_pakan_timeout,
         peringatan_suhu_timeout,
         peringatan_ph_timeout,
+        peringatan_cahaya_timeout,
+        feeder_timeout,
         //global current sensor value
         ultrasonic_input,
         current_feed = "",
         current_feed_gram = "",
         current_temp = "",
-        current_ph = ""
+        current_ph = "",
+        current_light = ""
 
     //connect to mqtt broker
     client.on('connect', function() {
@@ -107,15 +111,16 @@ module.exports = function(server, con) {
             io.sockets.emit('aquas_feed_msg_arrive', feed);
         } else if (topic == 'aquas/light') {
             //MQTT light value handler
+            current_light = message.toString()
             if (minutes % 60 == 0 && seconds == 0) {
                 var sql = "INSERT INTO `data_cahaya` (`data`, `waktu`) VALUES (";
-                sql += "'" + message.toString() + "',";
+                sql += "'" + current_light + "',";
                 sql += "'" + dbDateTime + "')";
                 con.query(sql, function(err, result) {
                     if (err) throw err;
                 });
             }
-            var light = [message.toString(), time];
+            var light = [current_light, time];
             io.sockets.emit('aquas_light_msg_arrive', light);
 
         } else if (topic == 'aquas/temp') {
@@ -123,28 +128,28 @@ module.exports = function(server, con) {
             current_temp = message.toString()
             if (minutes % 60 == 0 && seconds == 0) {
                 var sql = "INSERT INTO `data_suhu` (`data`, `waktu`) VALUES (";
-                sql += "'" + message.toString() + "',";
+                sql += "'" + mcurrent_temp + "',";
                 sql += "'" + dbDateTime + "')";
                 con.query(sql, function(err, result) {
                     if (err) throw err;
 
                 });
             }
-            var temp = [message.toString(), time];
+            var temp = [current_temp, time];
             io.sockets.emit('aquas_temp_msg_arrive', temp);
         } else if (topic == 'aquas/ph') {
             //MQTT ph value handler
             current_ph = message.toString()
             if (minutes % 60 == 0 && seconds == 0) {
                 var sql = "INSERT INTO `data_ph` (`data`, `waktu`) VALUES (";
-                sql += "'" + message.toString() + "',";
+                sql += "'" + current_ph + "',";
                 sql += "'" + dbDateTime + "')";
                 con.query(sql, function(err, result) {
                     if (err) throw err;
 
                 });
             }
-            var ph = [message.toString(), time];
+            var ph = [current_ph, time];
             io.sockets.emit('aquas_ph_msg_arrive', ph);
         } else if (topic == "aquas/remove-loader") {
             //MQTT actuator loading animation handler
@@ -202,8 +207,7 @@ module.exports = function(server, con) {
                     }, 5000)
                 }
 
-            } else
-            if (message.toString() == 'peringatan_ph') {
+            } else if (message.toString() == 'peringatan_ph') {
                 if (!peringatan_ph_timeout) {
                     peringatan_ph_timeout = setTimeout(function() {
                         if (current_ph < 5.5 || current_ph > 7.5) {
@@ -213,6 +217,18 @@ module.exports = function(server, con) {
                             send_email(jenis, subject, dateonly, time, content);
                         }
                         peringatan_ph_timeout = null
+                    }, 5000)
+                }
+            } else if (message.toString() == 'peringatan_cahaya') {
+                if (!peringatan_cahaya_timeout) {
+                    peringatan_cahaya_timeout = setTimeout(function() {
+                        if (current_light > 19384) {
+                            jenis = 'peringatan_cahaya'
+                            subject = "peringatan"
+                            content = 'Intensitas cahaya saat ini : ' + current_light + ' lux, mohon segera lakukan pemeriksaan'
+                            send_email(jenis, subject, dateonly, time, content);
+                        }
+                        peringatan_cahaya_timeout = null
                     }, 5000)
                 }
             }
@@ -259,7 +275,7 @@ module.exports = function(server, con) {
             client.publish(aquas_servo_topic, 'open');
             setTimeout(function() {
                 client.publish(aquas_servo_topic, 'close');
-            }, 3000)
+            }, feeder_timeout)
         });
         //End Servo manual status socket event
 
@@ -376,6 +392,9 @@ module.exports = function(server, con) {
             jadwal_pakan_sore = data['input_pakan_sore'] + " : 00";
         });
 
+        socket.on('feeder_timeout_changed', function(data) {
+            feeder_timeout = data['feeder_timeout'] * 1000;
+        });
     });
 
 
@@ -441,9 +460,12 @@ module.exports = function(server, con) {
             minutes = date.getMinutes() < 10 ? '0' + String(date.getMinutes()) : date.getMinutes(),
             hour = date.getHours() < 10 ? '0' + String(date.getHours()) : date.getHours(),
             time = hour + ':' + minutes + ':' + seconds,
+            growlight_light_limit,
+            setting = [],
             //Start feed automation process
             query = "SELECT waktu FROM  jadwal_pakan; "
         query += "SELECT status FROM status_aktuator WHERE jenis='servo_auto';"
+        query += "SELECT `limit` FROM limit_aktuator WHERE jenis='limit_cahaya_growlight';"
 
         con.query(query, function(err, result) {
             if (err) throw err;
@@ -454,14 +476,23 @@ module.exports = function(server, con) {
                         client.publish(aquas_servo_topic, 'open');
                         setTimeout(function() {
                             client.publish(aquas_servo_topic, 'close');
-                        }, 5000)
+                        }, feeder_timeout)
                     }
                 }
+                growlight_light_limit = result[2][0]['limit']
+                setting = [String(hour), String(growlight_light_limit)]
+                send_setting_to_microcontroller(setting)
             }
         });
         //End feed automation process
 
-        client.publish(aquas_time_topic, String(hour)); //publish the current time to arduino
+
     }, 1000);
+
+
+    function send_setting_to_microcontroller(setting) {
+        client.publish(aquas_time_topic, setting[0]); //publish the current time to arduino
+        client.publish(growlight_light_limit_topic, setting[1]);
+    }
 
 }

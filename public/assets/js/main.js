@@ -30,7 +30,10 @@ var socket = io.connect("http://localhost:3000"), //connect to server websocket
     waktu_pakan_siang = $('#waktu_pakan_siang'),
     waktu_pakan_sore = $('#waktu_pakan_sore'),
     admins_data_table = $('#admins_data_table'),
-    btn_submit_feed_scheduled = $('#btn_submit_feed_scheduled')
+    btn_submit_feed_scheduled = $('#btn_submit_feed_scheduled'),
+    btn_submit_feeder_timeout = $('#btn_submit_feeder_timeout'),
+    feeder_timeout = $("#feeder_timeout"),
+    growlight_light_limit = $("#growlight_light_limit")
 
 
 //feed schedule wicked picker configuration
@@ -53,6 +56,11 @@ waktu_pakan_sore.wickedpicker({
     showSeconds: false,
 });
 
+//feeder timeout field
+feeder_timeout.TouchSpin();
+
+//growlight light limit field
+growlight_light_limit.TouchSpin();
 
 //Start servo toggle event emitter
 aquas_auto_feed_toggle.change(function() {
@@ -419,6 +427,16 @@ $(function() {
     })
 
     //End feed scheduled changed event listener
+
+    //Start feeder timeout changed event listener
+    btn_submit_feeder_timeout.on('click', function() {
+            socket.emit('feeder_timeout_changed', {
+                feeder_timeout: feeder_timeout.val(),
+            });
+        })
+        //End feeder timeout changed event listener
+
+
 
 
 });
